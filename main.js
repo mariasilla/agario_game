@@ -8,7 +8,7 @@ var radius;
 //function initiate the game
 function gameInit (){
       drawMultipleCircles();
-      drawCurrentPlayerCircle();
+      player();
 }
 
 //draw multiple random same-size circles  
@@ -35,7 +35,7 @@ function drawMultipleCircles () {
 }
 
 // draw the circle of current player 
-function drawCurrentPlayerCircle (){
+function player (){
       // ctx.clearRect(0,0,600,600);
       x = canvas.width/2;
       y = canvas.height/2;
