@@ -3,6 +3,7 @@ var ctx = canvas.getContext("2d");
 var button = document.getElementById("game_start");
 var x;
 var y;
+var player;
 var radius;
 var count;
 var circlesNum;
@@ -20,7 +21,7 @@ var mass;
 
 //function initiate the game
 function gameInit (){
-      drawPlayer();
+      player.drawPlayer();
       movePlayersCircle();
       drawFood();  
 }
