@@ -14,16 +14,16 @@ var mouseY = 0;
 var xPosition;
 var yPosition;
 var canvasPos;
+var mass;
 
 
 
 //function initiate the game
 function gameInit (){
       drawPlayer();
-      drawFood();
       movePlayersCircle();
+      drawFood();  
 }
-
 
 
 

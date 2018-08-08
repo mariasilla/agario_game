@@ -2,7 +2,8 @@
 function drawPlayer (){
     // x = canvas.width/2;
     // y = canvas.height/2;
-    ctx.clearRect(0, 0, canvas.clientWidth, canvas.height);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     x = mouseX;
     y = mouseY;
     radius = 16;
@@ -13,12 +14,17 @@ function drawPlayer (){
     ctx.fill();
     ctx.closePath();
     requestAnimationFrame(drawPlayer);
-    
 }
+
+
+// canvas.addEventListener("mouseover");
+// canvas.addEventListener("mouseout");
+
 
 function movePlayersCircle () {
     canvasPos = getPosition(canvas);
-    //listening to the mouse event
+     
+    //listening to the mousemove event
     canvas.addEventListener("mousemove", setMousePosition, false);
     
     function setMousePosition(e) {
@@ -42,5 +48,10 @@ function movePlayersCircle () {
           };
     
     }
+     return true;
 }
+
+
+
+
 
