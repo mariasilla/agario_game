@@ -1,6 +1,8 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
 var button = document.getElementById("game_start");
+
+
 var x;
 var y;
 var player;
@@ -16,16 +18,15 @@ var xPosition;
 var yPosition;
 var canvasPos;
 var mass;
-
+var foodCircles = [];
 
 
 //function initiate the game
 function gameInit (){
-      player.drawPlayer();
-      movePlayersCircle();
+      drawPlayer();
+      // movePlayersCircle();
       drawFood();  
 }
-
 
 
 button.addEventListener("click", gameInit, false);

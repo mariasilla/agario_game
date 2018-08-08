@@ -1,15 +1,18 @@
 
+// foodCircles = {
+
+// }
+
 //draw multiple random same-size diff color circles  
 function drawFood () {
-    // ctx.clearRect(0,0,600,600);
+    ctx.clearRect(0,0,600,600);
     circlesNum = 20;
-    for (var i=0; i<circlesNum; i++) {
-               
+    for (var i=0; i<circlesNum; i++) {            
    ranCircleCoordinates ();
    ranCircleColors ();
    createCircles();
-  
-    }    
+    }  
+   
 }
 
 //randomize circles coordinates 
@@ -33,5 +36,6 @@ ctx.arc(x,y,radius,Math.PI*2,0,false);
 ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ",1)";
 ctx.fill();
 ctx.closePath();
+
 }
 
