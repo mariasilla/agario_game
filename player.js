@@ -16,4 +16,31 @@ function drawPlayer (){
     
 }
 
+function movePlayersCircle () {
+    canvasPos = getPosition(canvas);
+    //listening to the mouse event
+    canvas.addEventListener("mousemove", setMousePosition, false);
+    
+    function setMousePosition(e) {
+        mouseX = e.clientX -canvasPos.x;
+        mouseY = e.clientY - canvasPos.y;
+    }
+    
+    //getting the exact mouse position 
+    function getPosition(el) {
+          xPosition = 0;
+          yPosition = 0;
+    
+          while (el) {
+              xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
+              yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
+              el = el.offsetParent;
+          }
+          return {
+                x: xPosition,
+                y: yPosition
+          };
+    
+    }
+}
 
