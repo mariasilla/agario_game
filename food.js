@@ -1,6 +1,6 @@
 
 //draw multiple random same-size diff color circles  
-function drawMultipleCircles () {
+function drawFood () {
     ctx.clearRect(0,0,600,600);
     circlesNum = 20;
     for (var i=0; i<circlesNum; i++) {
