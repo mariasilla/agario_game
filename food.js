@@ -4,37 +4,45 @@
 // }
 
 //draw multiple random same-size diff color circles  
-function drawFood () {
-    // ctx.clearRect(0,0,600,600);
-    circlesNum = 20;
-    for (var i=0; i<circlesNum; i++) {            
-        ranCircleCoordinates ();
-        ranCircleColors ();
-        createCircles();
-    }  
-   
+function drawFood() {
+
+    for (var i = 0; i < foodNum; i++) {
+        // ranCircleCoordinates();
+        // ranCircleColors();
+        foodCoords.x = Math.floor(Math.random() * 500);
+        foodCoords.y = Math.floor(Math.random() * 500);
+    
+        newCircle = new FoodCircle(foodCoords.x, foodCoords.y, foodCoords.r, Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255));
+        foodCirclesArr.push(newCircle);
+    }
+    // return foodCirclesArr;
+    console.log(foodCirclesArr);
+
 }
 
-//randomize circles coordinates 
-function ranCircleCoordinates () {  
-    x = Math.floor(Math.random()*500);
-    y = Math.floor(Math.random()*500);
-    radius = 9;
-}
+// //randomize circles coordinates 
+// function ranCircleCoordinates() {
+//     x = Math.floor(Math.random() * 500);
+//     y = Math.floor(Math.random() * 500);
+//     radius = 9;
+// }
 
 //randomize circles color
-function ranCircleColors () {
-    r = Math.floor(Math.random()*255);
-    g = Math.floor(Math.random()*255);
-    b = Math.floor(Math.random()*255);
-}
+// function ranCircleColors() {
+//     red = Math.floor(Math.random() * 255);
+//     green = Math.floor(Math.random() * 255);
+//     blue = Math.floor(Math.random() * 255);
+// }
 
-//create circles 
-function createCircles () {
+//create food circle 
+function FoodCircle(x, y, r, red, green, blue) {
+
     ctx.beginPath();
-    ctx.arc(x,y,radius,Math.PI*2,0,false);
-    ctx.fillStyle = "rgba(" + r + "," + g + "," + b + ",1)";
+    ctx.arc(x, y, r, Math.PI * 2, 0, false);
+    ctx.fillStyle = "rgba(" + red + "," + green + "," + blue + ",1)";
     ctx.fill();
     ctx.closePath();
+
 }
+
 

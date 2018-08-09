@@ -1,4 +1,0 @@
-function getMousePos (canvas, e) {
-   
-
-}

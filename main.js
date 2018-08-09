@@ -6,37 +6,47 @@ var button = document.getElementById("game_start");
 var x;
 var y;
 var player;
-var radius;
+// var radius;
 var count;
-var circlesNum;
-var r;
-var g;
-var b;
+var foodNum = 20;
+var red;
+var green;
+var blue;
 var mouseX = 0;
 var mouseY = 0;
 var xPosition;
 var yPosition;
 var canvasPos;
 var mass;
-var foodCircles = [];
+var foodCirclesArr = [];
+var newCircle;
 
 const canvasWidth = canvas.width;
 const canvasHeight = canvas.height;
 
 let playerCoords = {
-      x: canvasWidth/2,
-      y: canvasHeight/2,
+      x: canvasWidth / 2,
+      y: canvasHeight / 2,
       r: 16
+      // defaultMass: 50
 };
 
 
-//function initiate the game
+let foodCoords = {
+      x: x,
+      y: y,
+      r: 9
+}
+
+//function to initiate the game
 function gameInit() {
-      new drawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
-      // movePlayersCircle();
+      new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
       drawFood();
 }
 
+
+
+// add event listeners  
 canvas.addEventListener("mousemove", movePlayer, false);
 
 function movePlayer(e) {
@@ -46,26 +56,56 @@ function movePlayer(e) {
 
       playerCoords.x = mousePos.x;
       playerCoords.y = mousePos.y;
-      drawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
+
+      new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
 }
+
 
 function setMousePosition(e) {
       const rect = canvas.getBoundingClientRect();
       return {
-            x : e.clientX - rect.top,
+            x: e.clientX - rect.top,
             y: e.clientY - rect.left
       }
 }
 
+
+//delete current player position
 function deleteCurrentPlayerPos() {
       ctx.save();
-      // c.arc(x, y, radius, 0, 2*Math.PI, true);
+      // ctx.arc(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r, 0, 2*Math.PI, false);
       ctx.rect(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r + playerCoords.r, playerCoords.r + playerCoords.r);
       ctx.clip();
       // ctx.clearRect(0, 0, canvasWidth, canvasWidth);
-      ctx.clearRect(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r*2, playerCoords.r*2);
+      ctx.clearRect(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r * 2, playerCoords.r * 2);
       ctx.restore();
 }
+
+
+// collision detection function 
+// create a function that will loop through all the food items and compare every single food items coordinates with playerCoords
+
+
+let dx;
+let dy;
+let distance;
+
+function handleCollision() {
+      dx = playerCoords.x - foodCoords.x;
+      dy = playerCoords.y - foodCoords.y;
+      distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < playerCoords.r + foodCoords.r) {
+             // collision detected 
+             // add mass to Player  
+             // remove foodItem 
+      }
+
+}
+
+
+
+
 
 gameInit();
 
