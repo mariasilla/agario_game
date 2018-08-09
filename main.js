@@ -51,13 +51,11 @@ canvas.addEventListener("mousemove", movePlayer, false);
 
 function movePlayer(e) {
       const mousePos = setMousePosition(e);
-
       deleteCurrentPlayerPos();
-
       playerCoords.x = mousePos.x;
       playerCoords.y = mousePos.y;
-
       new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
+      handleCollision();
 }
 
 
@@ -85,29 +83,30 @@ function deleteCurrentPlayerPos() {
 // collision detection function 
 // create a function that will loop through all the food items and compare every single food items coordinates with playerCoords
 
-
 let dx;
 let dy;
 let distance;
+
 
 function handleCollision() {
       dx = playerCoords.x - foodCoords.x;
       dy = playerCoords.y - foodCoords.y;
       distance = Math.sqrt(dx * dx + dy * dy);
+      console.log("playerX:" + playerCoords.x, "playerY:" + playerCoords.y, "foodX:" + foodCoords.x, "foodY:" + foodCoords.y, "playerR:" + playerCoords.r, "foodR:" + foodCoords.r);
 
       if (distance < playerCoords.r + foodCoords.r) {
-             // collision detected 
-             // add mass to Player  
-             // remove foodItem 
+
+            console.log("Collision detected!");
+
+            // collision detected 
+            // add mass to Player  
+            // remove foodItem 
       }
 
 }
 
-
-
-
-
 gameInit();
+
 
 
 

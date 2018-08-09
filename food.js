@@ -3,20 +3,26 @@
 
 // }
 
+
+
 //draw multiple random same-size diff color circles  
 function drawFood() {
 
     for (var i = 0; i < foodNum; i++) {
         // ranCircleCoordinates();
         // ranCircleColors();
-        foodCoords.x = Math.floor(Math.random() * 500);
-        foodCoords.y = Math.floor(Math.random() * 500);
+        // foodCoords.x = Math.floor(Math.random() * 500);
+        // foodCoords.y = Math.floor(Math.random() * 500);
+
+        foodCoords.x = random(0 + foodCoords.r,canvasWidth - foodCoords.r);
+        foodCoords.y = random(0 + foodCoords.r,canvasWidth - foodCoords.r);
+
     
-        newCircle = new FoodCircle(foodCoords.x, foodCoords.y, foodCoords.r, Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255));
-        foodCirclesArr.push(newCircle);
+        newCircle = new FoodCircle(foodCoords.x, foodCoords.y, foodCoords.r, random(0,255), random(0,255), random(0,255));
+        // foodCirclesArr.push(newCircle);
     }
-    // return foodCirclesArr;
-    console.log(foodCirclesArr);
+
+    // console.log(foodCirclesArr);
 
 }
 
@@ -42,7 +48,10 @@ function FoodCircle(x, y, r, red, green, blue) {
     ctx.fillStyle = "rgba(" + red + "," + green + "," + blue + ",1)";
     ctx.fill();
     ctx.closePath();
-
 }
 
 
+function random(min, max) {
+    var num = Math.floor(Math.random() * (max - min + 1)) + min;
+    return num;
+}
