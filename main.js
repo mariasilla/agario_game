@@ -37,7 +37,7 @@ function gameInit() {
       drawFood();
 }
 
-canvas.addEventListener("click", movePlayer, false);
+canvas.addEventListener("mousemove", movePlayer, false);
 
 function movePlayer(e) {
       const mousePos = setMousePosition(e);
