@@ -20,13 +20,13 @@
 
 
 // draw the circle of current player 
-function DrawPlayer(x, y, r) {
-    ctx.beginPath();
-    ctx.arc(x, y, r, Math.PI * 2, 0, false);
-    ctx.fillStyle = "rgba(255,0,0,1)";
-    ctx.fill();
-    ctx.closePath();
-}
+// function DrawPlayer(x, y, r) {
+//     ctx.beginPath();
+//     ctx.arc(x, y, r, Math.PI * 2, 0, false);
+//     ctx.fillStyle = "rgba(255,0,0,1)";
+//     ctx.fill();
+//     ctx.closePath();
+// }
 
 
 // canvas.addEventListener("mouseover");

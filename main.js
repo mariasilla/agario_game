@@ -20,16 +20,17 @@ var canvasPos;
 var mass;
 var foodCirclesArr = [];
 var newCircle;
+var foodItemCoords;
 
 const canvasWidth = canvas.width;
 const canvasHeight = canvas.height;
 
-let playerCoords = {
-      x: canvasWidth / 2,
-      y: canvasHeight / 2,
-      r: 16
-      // defaultMass: 50
-};
+// let playerCoords = {
+//       x: canvasWidth / 2,
+//       y: canvasHeight / 2,
+//       r: 16
+//       // defaultMass: 50
+// };
 
 
 let foodCoords = {
@@ -40,43 +41,10 @@ let foodCoords = {
 
 //function to initiate the game
 function gameInit() {
-      new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
-      drawFood();
-}
-
-
-
-// add event listeners  
-canvas.addEventListener("mousemove", movePlayer, false);
-
-function movePlayer(e) {
-      const mousePos = setMousePosition(e);
-      deleteCurrentPlayerPos();
-      playerCoords.x = mousePos.x;
-      playerCoords.y = mousePos.y;
-      new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
-      handleCollision();
-}
-
-
-function setMousePosition(e) {
-      const rect = canvas.getBoundingClientRect();
-      return {
-            x: e.clientX - rect.top,
-            y: e.clientY - rect.left
-      }
-}
-
-
-//delete current player position
-function deleteCurrentPlayerPos() {
-      ctx.save();
-      // ctx.arc(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r, 0, 2*Math.PI, false);
-      ctx.rect(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r + playerCoords.r, playerCoords.r + playerCoords.r);
-      ctx.clip();
-      // ctx.clearRect(0, 0, canvasWidth, canvasWidth);
-      ctx.clearRect(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r * 2, playerCoords.r * 2);
-      ctx.restore();
+      // new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
+      playerCoords.draw();
+      // drawFood();
+      makeFood();
 }
 
 
@@ -88,22 +56,56 @@ let dy;
 let distance;
 
 
-function handleCollision() {
-      dx = playerCoords.x - foodCoords.x;
-      dy = playerCoords.y - foodCoords.y;
-      distance = Math.sqrt(dx * dx + dy * dy);
-      console.log("playerX:" + playerCoords.x, "playerY:" + playerCoords.y, "foodX:" + foodCoords.x, "foodY:" + foodCoords.y, "playerR:" + playerCoords.r, "foodR:" + foodCoords.r);
+// function handleCollision() {
+//       dx = playerCoords.x - foodItemCoords.x;
+//       dy = playerCoords.y - foodItemCoords.y;
+//       distance = Math.sqrt(dx * dx + dy * dy);
+//       mass = playerCoords.r/2;
+//       console.log("playerX:" + playerCoords.x, "playerY:" + playerCoords.y, "foodX:" + foodItemCoords.x, "foodY:" + foodItemCoords.y, "playerR:" + playerItemCoords.r, "foodR:" + foodItemCoords.r);
+     
+//       if (distance < playerCoords.r + foodItemCoords.r) {
 
-      if (distance < playerCoords.r + foodCoords.r) {
+//             console.log("Collision detected!");
+//             //  playerCoords.r = mass + playerCoords.r;
+//             // collision detected 
+//             // add mass to Player   new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
+//             // remove foodItem 
+//       }
 
-            console.log("Collision detected!");
+// }
 
-            // collision detected 
-            // add mass to Player  
-            // remove foodItem 
-      }
+
+function updatePlayer () {
 
 }
+
+function updateFood () {
+
+}
+
+
+var playerCoords = new Ball(canvasWidth / 2, canvasHeight / 2, 16, "rgba(255,0,0,1)");
+
+function Ball(x, y, r, color) {
+      this.x = x;
+      this.y = y;
+      this.r = r;
+      this.color = color;
+    }
+  
+  
+    Ball.prototype.draw = function() {
+      ctx.beginPath();
+      ctx.fillStyle = this.color;
+      ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+      ctx.fill();
+    }
+    
+
+
+//     var testBall = new Ball(50, 100, 40, 'blue');
+//     testBall.draw()
+
 
 gameInit();
 

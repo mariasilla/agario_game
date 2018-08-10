@@ -6,25 +6,26 @@
 
 
 //draw multiple random same-size diff color circles  
-function drawFood() {
+// function drawFood() {
 
-    for (var i = 0; i < foodNum; i++) {
-        // ranCircleCoordinates();
-        // ranCircleColors();
-        // foodCoords.x = Math.floor(Math.random() * 500);
-        // foodCoords.y = Math.floor(Math.random() * 500);
+//     for (var i = 0; i < foodNum; i++) {
+//         // ranCircleCoordinates();
+//         // ranCircleColors();
+//         // foodCoords.x = Math.floor(Math.random() * 500);
+//         // foodCoords.y = Math.floor(Math.random() * 500);
 
-        foodCoords.x = random(0 + foodCoords.r,canvasWidth - foodCoords.r);
-        foodCoords.y = random(0 + foodCoords.r,canvasWidth - foodCoords.r);
+//         foodCoords.x = random(0 + foodCoords.r,canvasWidth - foodCoords.r);
+//         foodCoords.y = random(0 + foodCoords.r,canvasWidth - foodCoords.r);
 
+
+//         newCircle = new FoodCircle(foodCoords.x, foodCoords.y, foodCoords.r, random(0,255), random(0,255), random(0,255));
+//         // foodCirclesArr.push(newCircle);
     
-        newCircle = new FoodCircle(foodCoords.x, foodCoords.y, foodCoords.r, random(0,255), random(0,255), random(0,255));
-        // foodCirclesArr.push(newCircle);
-    }
+//     }
+    
+//         // console.log(foodCirclesArr);
 
-    // console.log(foodCirclesArr);
-
-}
+// }
 
 // //randomize circles coordinates 
 // function ranCircleCoordinates() {
@@ -41,17 +42,41 @@ function drawFood() {
 // }
 
 //create food circle 
-function FoodCircle(x, y, r, red, green, blue) {
+// function FoodCircle(x, y, r, red, green, blue) {
 
-    ctx.beginPath();
-    ctx.arc(x, y, r, Math.PI * 2, 0, false);
-    ctx.fillStyle = "rgba(" + red + "," + green + "," + blue + ",1)";
-    ctx.fill();
-    ctx.closePath();
-}
+//     ctx.beginPath();
+//     ctx.arc(x, y, r, Math.PI * 2, 0, false);
+//     ctx.fillStyle = "rgba(" + red + "," + green + "," + blue + ",1)";
+//     ctx.fill();
+//     ctx.closePath();
+// }
 
 
 function random(min, max) {
     var num = Math.floor(Math.random() * (max - min + 1)) + min;
     return num;
 }
+
+
+// foodItemCoords = new Ball(random(0 + r,canvasWidth - r), random(0 + r,canvasHeight - r), 9, 'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')');
+
+function makeFood() {
+
+    while (foodCirclesArr.length < 25) {
+    
+        foodItemCoords = new Ball(Math.floor(Math.random() * 500),Math.floor(Math.random() * 500), 9, 'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')');
+        foodCirclesArr.push(foodItemCoords);
+      }
+
+      for (var i = 0; i < foodCirclesArr.length; i++) {
+        foodCirclesArr[i].draw();
+        // foodCirclesArr[i].update();
+
+      }
+      console.log(foodCirclesArr);
+      
+
+}
+
+
+  
