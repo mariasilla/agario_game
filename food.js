@@ -4,6 +4,10 @@ function random(min, max) {
     return num;
 }
 
+// function random(min, max) {
+//     var num = Math.floor(Math.random() * (max - min + 1)) + min;
+//     return (num === canvasWidth / 2 || canvasHeight / 2) ? random(min, max) : num;
+// }
 
 // foodItemCoords = new Ball(random(0 + r,canvasWidth - r), random(0 + r,canvasHeight - r), 9, 'rgb(' + random(0,255) + ',' + random(0,255) + ',' + random(0,255) +')');
 
@@ -11,23 +15,57 @@ function makeFood() {
 
     while (foodCirclesArr.length < 25) {
 
-        foodItemCoords = new Ball(Math.floor(Math.random() * 500), Math.floor(Math.random() * 500), 9, 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+        foodItemCoords = new Ball(
+            Math.floor(Math.random() * 600),
+            Math.floor(Math.random() * 600),
+            9,
+            'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
+            random(-7, 7),
+            random(-7, 7)
+        );
+
         foodCirclesArr.push(foodItemCoords);
     }
 
-    for (var i = 0; i < foodCirclesArr.length; i++) {
+
+    for (let i = 0; i < foodCirclesArr.length; i++) {
+
+        // ctx.save();
+        // ctx.globalCompositeOperation = 'destination-out';
+        // ctx.beginPath();
+        // ctx.arc(foodCirclesArr[i].x, foodCirclesArr[i].y, foodCirclesArr[i].r + 1, 0, 2 * Math.PI, false);
+        // ctx.clip();
+        // ctx.fill();
+        // ctx.restore();
+
         foodCirclesArr[i].draw();
         // foodCirclesArr[i].update();
-
+        // foodCirclesArr[i].collisionDetectFood();
     }
-    console.log(foodCirclesArr);
 
+    // requestAnimationFrame(makeFood);
 }
 
 
-// foodCircles = {
 
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
