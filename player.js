@@ -1,68 +1,50 @@
-//create player object 
 
-// player = {
-//     x: canvas.width/2,
-//     y: canvas.height/2,
-//     radius: 16,
-//     color: "rgba(255,0,0,1)",
-//     drawPlayer: function(){
-//         ctx.clearRect(0, 0, canvas.width, canvas.height);
-//         // x = mouseX;
-//         // y = mouseY;
-//         ctx.beginPath();
-//         ctx.arc(x, y, this.radius, Math.PI*2, 0, false);
-//         ctx.fillStyle = "rgba(255,0,0,1)";
-//         ctx.fill();
-//         ctx.closePath();
-//         requestAnimationFrame(player.drawPlayer);
-//     }
-// }
+//function to grow player's mass 
+function growPlayerMass() {
+    playerCoords.r += extraMass;
+    playerCoords.draw(playerCoords.r);
+    console.log("extraMass:" + extraMass, "current Mass:" + playerCoords.r);
+}
 
 
-// draw the circle of current player 
-// function DrawPlayer(x, y, r) {
-//     ctx.beginPath();
-//     ctx.arc(x, y, r, Math.PI * 2, 0, false);
-//     ctx.fillStyle = "rgba(255,0,0,1)";
-//     ctx.fill();
-//     ctx.closePath();
-// }
+// add player event listeners  
+canvas.addEventListener("mousemove", movePlayer, false);
+
+function movePlayer(e) {
+      const mousePos = setMousePosition(e);
+      deleteCurrentPlayerPos();
+      playerCoords.x = mousePos.x;
+      playerCoords.y = mousePos.y;
+      //   new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
+      playerCoords.draw();
+      handleCollision();
+}
 
 
-// canvas.addEventListener("mouseover");
-// canvas.addEventListener("mouseout");
+function setMousePosition(e) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+            x: e.clientX - rect.top,
+            y: e.clientY - rect.left
+      }
+}
 
+//delete current player position
+function deleteCurrentPlayerPos() {
 
-// function movePlayersCircle () {
-//     canvasPos = getPosition(canvas);
+      ctx.save();
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(playerCoords.x, playerCoords.y, playerCoords.r + 1, 0, 2 * Math.PI, false);
+      ctx.clip();
+      ctx.fill();
+      ctx.restore();
 
-//     //listening to the mousemove event
-//     canvas.addEventListener("mousemove", setMousePosition, false);
-
-//     function setMousePosition(e) {
-//         mouseX = e.clientX -canvasPos.x;
-//         mouseY = e.clientY - canvasPos.y;
-//     }
-
-//     //getting the exact mouse position 
-//     function getPosition(el) {
-//           xPosition = 0;
-//           yPosition = 0;
-
-//           while (el) {
-//               xPosition += (el.offsetLeft - el.scrollLeft + el.clientLeft);
-//               yPosition += (el.offsetTop - el.scrollTop + el.clientTop);
-//               el = el.offsetParent;
-//           }
-//           return {
-//                 x: xPosition,
-//                 y: yPosition
-//           };
-
-//     }
-// }
-
-
-
-
-
+      // ctx.save();
+      // // ctx.arc(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r, 0, 2*Math.PI, false);
+      // ctx.rect(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r + playerCoords.r, playerCoords.r + playerCoords.r);
+      // ctx.clip();
+      // // ctx.clearRect(0, 0, canvasWidth, canvasWidth);
+      // ctx.clearRect(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r * 2, playerCoords.r * 2);
+      // ctx.restore();
+}

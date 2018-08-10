@@ -1,5 +1,4 @@
 // collision detection function 
-// create a function that will loop through all the food items and compare every single food items coordinates with playerCoords
 
 function handleCollision() {
 
@@ -9,10 +8,8 @@ function handleCollision() {
         dx = playerCoords.x - foodCirclesArr[i].x;
         dy = playerCoords.y - foodCirclesArr[i].y;
         distance = Math.sqrt(dx * dx + dy * dy);
-        // console.log("playerX:" + playerCoords.x, "playerY:" + playerCoords.y, "foodX:" + foodItemCoords.x, "foodY:" + foodItemCoords.y, "playerR:" + playerCoords.r, "foodR:" + foodItemCoords.r);
+        
         function removeFoodItem() {
-
-            //remove circle
             ctx.save();
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath();
@@ -35,39 +32,9 @@ function handleCollision() {
 
             console.log("Collision detected!");
             // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
-            console.log(i);
+            console.log("foodItem Index:" + i);
         }
 
     }
 }
-
-
-//function to grow player's mass 
-function growPlayerMass() {
-
-    mass = 1;
-    playerCoords.r += mass;
-    // ctx.globalCompositeOperation = 'destination-out';
-    playerCoords.draw(playerCoords.r);
-}
-
-
-
-// function removeFoodItem() {
-
-            // clear rectangle 
-            // ctx.save();
-            // // ctx.globalCompositeOperation = 'destination-out';
-            // ctx.rect(foodCirclesArr[i].x - foodCirclesArr[i].r, foodCirclesArr[i].y - foodCirclesArr[i].r, foodCirclesArr[i].r + foodCirclesArr[i].r, foodCirclesArr[i].r + foodCirclesArr[i].r);
-            // ctx.clip();
-            // ctx.clearRect(foodCirclesArr[i].x - foodCirclesArr[i].r, foodCirclesArr[i].y - foodCirclesArr[i].r, foodCirclesArr[i].r * 2, foodCirclesArr[i].r * 2);
-            // ctx.restore();
-
-        // ctx.save();
-        // ctx.rect(foodCirclesArr[i].x - foodCirclesArr[i].r, foodCirclesArr[i].y - foodCirclesArr[i].r, foodCirclesArr[i].r + foodCirclesArr[i].r, foodCirclesArr[i].r + foodCirclesArr[i].r);
-        // ctx.clip();
-        // ctx.clearRect(foodCirclesArr[i].x - foodCirclesArr[i].r, foodCirclesArr[i].y - foodCirclesArr[i].r, foodCirclesArr[i].r * 2, foodCirclesArr[i].r * 2);
-        // ctx.restore();
-
-// }
 

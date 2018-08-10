@@ -4,9 +4,9 @@ let button = document.getElementById("game_start");
 let mouseX = 0;
 let mouseY = 0;
 let canvasPos;
-let mass;
+let extraMass = 2;
 let foodCirclesArr = [];
-
+let score = 0;
 let foodItemCoords;
 
 const canvasWidth = canvas.width;
@@ -104,6 +104,7 @@ function gameInit() {
 function updatePlayer() {
 
 }
+
 
 function updateFood() {
 
