@@ -12,7 +12,6 @@ let foodItemCoords;
 const canvasWidth = canvas.width;
 const canvasHeight = canvas.height;
 
-
 let dx;
 let dy;
 let distance;
@@ -35,6 +34,7 @@ Ball.prototype.draw = function () {
       ctx.fill();
 }
 
+//ball animation update
 Ball.prototype.update = function () {
       if ((this.x + this.r) >= canvasWidth) {
             this.velX = -(this.velX);
@@ -56,6 +56,7 @@ Ball.prototype.update = function () {
       this.y += this.velY;
       
 }
+
 
 //Food collision detection
 Ball.prototype.collisionDetectFood = function() {
@@ -88,14 +89,12 @@ Ball.prototype.collisionDetectFood = function() {
 // }
 
 
-
 //function to initiate the game
 function gameInit() {
       // new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
       playerCoords.draw();
       makeFood();
 }
-
 
 
 
