@@ -4,7 +4,7 @@ const http = require('http').Server(app);
 const socket = require('socket.io-client')('http://localhost');
 const path = require('path');
 
-// app.use(express.static(path.join(__dirname, 'dist')));
+// app.use(express.static(path.join(__dirname, 'src')));
 
 app.get('/dist/build.js', function(req, res) {
     res.sendFile(path.join(__dirname + '/build.js'));
