@@ -1,4 +1,4 @@
-import { ctx, playerCoords, foodCirclesArr, extraMass } from '../main.js';
+import { ctx, playerCoords, foodCirclesArr, extraMass } from '../index.js';
 
 let dx;
 let dy;

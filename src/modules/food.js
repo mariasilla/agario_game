@@ -1,5 +1,5 @@
-import { foodCirclesArr } from '../main.js';
-import Ball from '../main.js';
+import { foodCirclesArr } from '../index.js';
+import Ball from '../index.js';
 
 let foodItemCoords;
 
