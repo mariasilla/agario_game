@@ -1,4 +1,4 @@
-import { canvas, ctx, playerCoords } from '../index.js';
+import { canvas, ctx, playerCoords } from '../main.js';
 import handleCollision from './handleCollision.js';
 
 export default function movePlayer(e) {
