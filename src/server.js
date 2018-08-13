@@ -1,8 +1,13 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var socket = require('socket.io-client')('http://localhost');
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const socket = require('socket.io-client')('http://localhost');
+const path = require('path');
 
-app.get('/', function (reg, res) {
+app.use(express.static(path.join(__dirname, 'dist')));
+
+
+app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');
 });
 
