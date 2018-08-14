@@ -15,13 +15,16 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+let socketPlayersArrCoords = [];
+
+//Socket.IO starts here
 io.on('connection', function (socket) {
     //print connected user's id to console
     console.log('a user connceted: ' + socket.id);
 
     //print disconnected user's id to console
     socket.on('disconnect', function () {
-        console.log('user disconnected: '+ socket.id);
+        console.log('user disconnected: ' + socket.id);
     });
 
     //print out the chat message event
@@ -30,13 +33,17 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('chat message', msg);
     });
 
-    socket.on('coordinates', function (data){
+    socket.on('coordinates', function (data) {
         // socket.emit('ball', data);
         // socket.broadcast.emit('ball', data);
-        console.log(data);
+        socketPlayersArrCoords.push(data);
+        console.log(socketPlayersArrCoords);
+        // console.log(data);
         
     })
 });
+//Socket.IO ends here
+
 
 http.listen(3000, function () {
     console.log('listening on *:3000');

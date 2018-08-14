@@ -1,4 +1,4 @@
-import { canvas, ctx, playerCoords } from '../index.js';
+import { canvas, ctx, playerCoords, socket } from '../index.js';
 import handleCollision from './handleCollision.js';
 
 export default function movePlayer(e) {
@@ -9,8 +9,8 @@ export default function movePlayer(e) {
     //   new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
     playerCoords.draw();
     handleCollision();
+    socket.emit('coordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
 }
-
 
 function setMousePosition(e) {
     const rect = canvas.getBoundingClientRect();

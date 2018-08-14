@@ -7,34 +7,34 @@ import movePlayer from './scripts/player.js';
 
 //Socket.IO
 // $(function () {
-      let socket = io();
+export let socket = io();
 
-      // document.getElementById('chat_form').submit(function () {
-      //       socket.emit('chat message', document.getElementById('m').val);
-      //       document.getElementById('id').val = "";
-      //       return false;
-      // });
-      // socket.on('chat message', function (msg) {
-      //       document.getElementById('messages').appendChild(document.createElement('li')).innerHTML = msg;
-      // });
-
-
-      // $('form').submit(function () {
-      //       socket.emit('chat message', $('#m').val());
-      //       $('#m').val("");
-      //       return false;
-      // });
-      // socket.on('chat message', function (msg) {
-      //       $('#messages').append($('<li>').text(msg));
-      // });
+// document.getElementById('chat_form').submit(function () {
+//       socket.emit('chat message', document.getElementById('m').val);
+//       document.getElementById('id').val = "";
+//       return false;
+// });
+// socket.on('chat message', function (msg) {
+//       document.getElementById('messages').appendChild(document.createElement('li')).innerHTML = msg;
+// });
 
 
-      socket.on('connect', function () {
-            socket.emit('coordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r });
-      });
-      // socket.on('ball', function (data) {
-      //       playerCoords.draw();
-      // });
+// $('form').submit(function () {
+//       socket.emit('chat message', $('#m').val());
+//       $('#m').val("");
+//       return false;
+// });
+// socket.on('chat message', function (msg) {
+//       $('#messages').append($('<li>').text(msg));
+// });
+
+
+socket.on('connect', function () {
+      socket.emit('coordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
+});
+// socket.on('ball', function (data) {
+//       playerCoords.draw();
+// });
 // });
 
 
