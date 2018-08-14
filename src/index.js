@@ -1,21 +1,45 @@
 // import './style.css';
-// import io from 'socket.io-client';
+// import io from 'socket.io';
+import io from 'socket.io-client';
 import makeFood from './modules/food.js';
 import movePlayer from './modules/player.js';
 // export const socket = io('http://localhost'); 
 
 //Socket.IO
-$(function () {
+// $(function () {
       let socket = io();
-      $('form').submit(function () {
-            socket.emit('chat message', $('#m').val());
-            $('#m').val("");
-            return false;
+
+      // document.getElementById('chat_form').submit(function () {
+      //       socket.emit('chat message', document.getElementById('m').val);
+      //       document.getElementById('id').val = "";
+      //       return false;
+      // });
+      // socket.on('chat message', function (msg) {
+      //       document.getElementById('messages').appendChild(document.createElement('li')).innerHTML = msg;
+      // });
+
+
+      // $('form').submit(function () {
+      //       socket.emit('chat message', $('#m').val());
+      //       $('#m').val("");
+      //       return false;
+      // });
+      // socket.on('chat message', function (msg) {
+      //       $('#messages').append($('<li>').text(msg));
+      // });
+
+
+      socket.on('connect', function () {
+            socket.emit('coordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r });
       });
-      socket.on('chat message', function (msg) {
-            $('#messages').append($('<li>').text(msg));
-      });
-});
+
+      // socket.on('ball', function (data) {
+      //       playerCoords.draw();
+      // });
+
+// });
+
+
 
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");

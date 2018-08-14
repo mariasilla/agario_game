@@ -16,14 +16,26 @@ app.get('/', function (req, res) {
 });
 
 io.on('connection', function (socket) {
-    // console.log('a user connceted');
-    // socket.on('disconnect', function () {
-    //     console.log('user disconnected');
-    // });
-    socket.on('chat message', function (msg) {
-        // socket.broadcast.emit('broadcast', msg);
-        io.emit('chat message', msg);
+    //print connected user's id to console
+    console.log('a user connceted: ' + socket.id);
+
+    //print disconnected user's id to console
+    socket.on('disconnect', function () {
+        console.log('user disconnected: '+ socket.id);
     });
+
+    //print out the chat message event
+    socket.on('chat message', function (msg) {
+        // sending to all clients except sender
+        socket.broadcast.emit('chat message', msg);
+    });
+
+    socket.on('coordinates', function (data){
+        // socket.emit('ball', data);
+        // socket.broadcast.emit('ball', data);
+        console.log(data);
+        
+    })
 });
 
 http.listen(3000, function () {

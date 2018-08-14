@@ -7,9 +7,10 @@
     <title>agario</title>
     <!-- <link rel="stylesheet" href="./style.css"> -->
     <style>
-        body {
-            margin: 0px;
-            overflow: hidden;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         #score {
@@ -20,14 +21,10 @@
             background-color: rgba(211, 211, 211, 1);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font: 13px Helvetica, Arial;
+            margin: 0px;
+            overflow: hidden;
         }
 
         form {
@@ -79,8 +76,7 @@
         <input id="m" autocomplete="off" />
         <button>Send</button>
     </form>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-1.11.1.js"></script> -->
     <script src="../dist/build.js"></script>
 </body>
 
