@@ -4,6 +4,19 @@ import makeFood from './modules/food.js';
 import movePlayer from './modules/player.js';
 // export const socket = io('http://localhost'); 
 
+//Socket.IO
+$(function () {
+      let socket = io();
+      $('form').submit(function () {
+            socket.emit('chat message', $('#m').val());
+            $('#m').val("");
+            return false;
+      });
+      socket.on('chat message', function (msg) {
+            $('#messages').append($('<li>').text(msg));
+      });
+});
+
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");
 export let button = document.getElementById("game_start");
