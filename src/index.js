@@ -1,8 +1,8 @@
 // import './style.css';
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import makeFood from './modules/food.js';
 import movePlayer from './modules/player.js';
-export const socket = io('http://localhost'); 
+// export const socket = io('http://localhost'); 
 
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");
