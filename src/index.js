@@ -5,7 +5,7 @@ import makeFood from './scripts/food.js';
 import movePlayer from './scripts/player.js';
 // export const socket = io('http://localhost'); 
 
-//Socket.IO
+//Socket.IO starts here
 // $(function () {
 export let socket = io();
 
@@ -32,12 +32,13 @@ export let socket = io();
 socket.on('connect', function () {
       socket.emit('coordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
 });
-// socket.on('ball', function (data) {
-//       playerCoords.draw();
-// });
-// });
 
+socket.on('draw', function (data) {
+      playerCoords.draw();
+});
 
+// });
+//Socket.IO ends here
 
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");

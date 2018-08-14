@@ -19,6 +19,7 @@ let socketPlayersArrCoords = [];
 
 //Socket.IO starts here
 io.on('connection', function (socket) {
+
     //print connected user's id to console
     console.log('a user connceted: ' + socket.id);
 
@@ -27,20 +28,22 @@ io.on('connection', function (socket) {
         console.log('user disconnected: ' + socket.id);
     });
 
-    //print out the chat message event
-    socket.on('chat message', function (msg) {
-        // sending to all clients except sender
-        socket.broadcast.emit('chat message', msg);
-    });
+    // //print out the chat message event
+    // socket.on('chat message', function (msg) {
+    //     // sending to all clients except sender
+    //     socket.broadcast.emit('chat message', msg);
+    // });
 
     socket.on('coordinates', function (data) {
-        // socket.emit('ball', data);
-        // socket.broadcast.emit('ball', data);
         socketPlayersArrCoords.push(data);
         console.log(socketPlayersArrCoords);
         // console.log(data);
-        
-    })
+
+    });
+    socket.on('draw', function (data) {
+        socket.broadcast.emit('draw', data);
+    });
+
 });
 //Socket.IO ends here
 
