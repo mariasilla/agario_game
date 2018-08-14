@@ -1,8 +1,8 @@
 // import './style.css';
 // import io from 'socket.io';
 import io from 'socket.io-client';
-import makeFood from './modules/food.js';
-import movePlayer from './modules/player.js';
+import makeFood from './scripts/food.js';
+import movePlayer from './scripts/player.js';
 // export const socket = io('http://localhost'); 
 
 //Socket.IO
@@ -32,11 +32,9 @@ import movePlayer from './modules/player.js';
       socket.on('connect', function () {
             socket.emit('coordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r });
       });
-
       // socket.on('ball', function (data) {
       //       playerCoords.draw();
       // });
-
 // });
 
 
