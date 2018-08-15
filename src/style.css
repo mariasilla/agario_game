@@ -1,11 +1,28 @@
-body {
-    margin: 0px;
-    overflow: hidden;
-}
-#score{
-    color: #1cdcbd;
-}
-#canvas{
-    background-color:rgba(211,211,211,1);
+* {
+    margin: 0;
+    padding: 0;
+    /* box-sizing: border-box; */
 }
 
+body {
+    margin: 0px;
+    /* overflow: hidden; */
+}
+
+#score {
+    font: 20px Helvetica, Arial;
+    color: #1cdcbd;
+    position: absolute;
+    left: 50%;
+    margin-top: 25px;
+}
+
+#canvas {
+    background-color: rgba(211, 211, 211, 1);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
