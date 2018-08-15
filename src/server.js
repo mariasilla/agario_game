@@ -19,6 +19,7 @@ let socketPlayersArrCoords = [];
 
 //Socket.IO starts here
 (function() {
+
     io.on('connection', function(socket) {
       socket.on('coordinates', function(data) {
         socket.broadcast.emit('draw', {
@@ -26,10 +27,16 @@ let socketPlayersArrCoords = [];
           y: data.y,
           r: data.r
         });
+        // socket.broadcast.emit('deletePlayersPos', {
+        //     x: data.x,
+        //     y: data.y,
+        //     r: data.r
+        //   });
         socketPlayersArrCoords.push(data);
         console.log(socketPlayersArrCoords);
       });
     });
+    
   }).call(this);
 
 

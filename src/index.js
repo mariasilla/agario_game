@@ -10,44 +10,45 @@ import movePlayer from './scripts/player.js';
 // $(function () {
 export let socket = io();
 
-// document.getElementById('chat_form').submit(function () {
-//       socket.emit('chat message', document.getElementById('m').val);
-//       document.getElementById('id').val = "";
-//       return false;
-// });
-// socket.on('chat message', function (msg) {
-//       document.getElementById('messages').appendChild(document.createElement('li')).innerHTML = msg;
-// });
+(function () {
+      // document.getElementById('chat_form').submit(function () {
+      //       socket.emit('chat message', document.getElementById('m').val);
+      //       document.getElementById('id').val = "";
+      //       return false;
+      // });
+      // socket.on('chat message', function (msg) {
+      //       document.getElementById('messages').appendChild(document.createElement('li')).innerHTML = msg;
+      // });
 
 
-// $('form').submit(function () {
-//       socket.emit('chat message', $('#m').val());
-//       $('#m').val("");
-//       return false;
-// });
-// socket.on('chat message', function (msg) {
-//       $('#messages').append($('<li>').text(msg));
-// });
+      // $('form').submit(function () {
+      //       socket.emit('chat message', $('#m').val());
+      //       $('#m').val("");
+      //       return false;
+      // });
+      // socket.on('chat message', function (msg) {
+      //       $('#messages').append($('<li>').text(msg));
+      // });
+      socket.on('connect', function () {
+            socket.emit('coordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
+      });
 
+      socket.on('draw', function (data) {
+            let newPlayerCoords = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
+            function deleteCurrentPlayerPos() {
+                  ctx.save();
+                  ctx.globalCompositeOperation = 'destination-out';
+                  ctx.beginPath();
+                  ctx.arc(data.x, data.y, data.r + 1, 0, 2 * Math.PI, false);
+                  ctx.clip();
+                  ctx.fill();
+                  ctx.restore();
+            }
+            deleteCurrentPlayerPos();
+            newPlayerCoords.draw();
+      });
 
-socket.on('connect', function () {
-      socket.emit('coordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
-});
-
-socket.on('draw', function (data) {
-      let newPlayerCoords = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
-      function deleteCurrentPlayerPos() {
-            ctx.save();
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(data.x, data.y, data.r + 1, 0, 2 * Math.PI, false);
-            ctx.clip();
-            ctx.fill();
-            ctx.restore();
-      }
-      deleteCurrentPlayerPos();
-      newPlayerCoords.draw();
-});
+}).call(this);
 
 // });
 //Socket.IO ends here
@@ -57,6 +58,8 @@ export const ctx = canvas.getContext("2d");
 export let button = document.getElementById("game_start");
 export let extraMass = 1.5;
 export let foodCirclesArr = [];
+canvas.width = window.innerWidth * .8;
+canvas.height = window.innerHeight * .8;
 export const canvasWidth = canvas.width;
 export const canvasHeight = canvas.height;
 
