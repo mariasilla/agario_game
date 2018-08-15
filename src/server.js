@@ -15,6 +15,7 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+//Object to keep track of all the players that are currently in the game
 let players = {};
 
 //Socket.IO starts here
@@ -23,48 +24,52 @@ let players = {};
 io.on('connection', function (socket) {
 
     //print connected user's id to console
-    console.log('a user connceted: ' + socket.id);
+    console.log('a user connected: ' + socket.id);
 
-    // create a new player and add it to our players object
+    // create a new player and add it to the players object
     players[socket.id] = {
-        x: Math.floor(Math.random() * 700) + 50,
-        y: Math.floor(Math.random() * 500) + 50,
+        x: 0,
+        y: 0,
         r: 12,
         playerId: socket.id
     };
 
-    // send the players object to the new player
+    // send the players object(all players info) to the new player
     socket.emit('currentPlayers', players);
-    // update all other players of the new player
+
+    //send new player's info to all other players 
     socket.broadcast.emit('newPlayer', players[socket.id]);
+    // console.log("PlayerID: " + players[socket.id].playerId + " PlayerX: " + players[socket.id].x);
     console.log(players);
+    // console.log(players[socket.id]);
 
 
-    socket.on('coordinates', function (data) {
+    socket.on('movePlayerCoordinates', function (data) {
         socket.broadcast.emit('draw', {
             x: data.x,
             y: data.y,
             r: data.r
         });
-        // let id = socket.id;
-        // let newPlayer = new Player(data.x, data.y, data.r, id);
-        // players.push(newPlayer);
-        // console.log(newPlayer);
     });
+
+    // when a player disconnects, remove them from the players object
+    socket.on('disconnect', function () {
+        console.log('user disconnected: ' + socket.id);
+        // remove this player from the players object
+        delete players[socket.id];
+        // emit a message to all players to remove this player
+        io.emit('disconnect', socket.id);
+        // console.log(players);
+    });
+
 });
+
+
 
 //   }).call(this);
 
 
-
-
-
 // io.on('connection', function (socket) {
-
-//     //print disconnected user's id to console
-//     socket.on('disconnect', function () {
-//         console.log('user disconnected: ' + socket.id);
-//     });
 
 //     // //print out the chat message event
 //     // socket.on('chat message', function (msg) {

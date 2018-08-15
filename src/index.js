@@ -1,37 +1,45 @@
-// import './style.css';
-// import io from 'socket.io';
+import './style.css';
 import io from 'socket.io-client';
 import makeFood from './scripts/food.js';
 import movePlayer from './scripts/player.js';
-// import deleteCurrentPlayerPos from './scripts/player.js';
-// export const socket = io('http://localhost'); 
+
+
 
 //Socket.IO starts here
-// $(function () {
 export let socket = io();
 
+let allPlayersArray = [];
+
 (function () {
-      // document.getElementById('chat_form').submit(function () {
-      //       socket.emit('chat message', document.getElementById('m').val);
-      //       document.getElementById('id').val = "";
-      //       return false;
-      // });
-      // socket.on('chat message', function (msg) {
-      //       document.getElementById('messages').appendChild(document.createElement('li')).innerHTML = msg;
+
+      // socket.on('connect', function () {
+      //       socket.emit('movePlayerCoordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
       // });
 
+      socket.on('currentPlayers', function (players) {
 
-      // $('form').submit(function () {
-      //       socket.emit('chat message', $('#m').val());
-      //       $('#m').val("");
-      //       return false;
-      // });
-      // socket.on('chat message', function (msg) {
-      //       $('#messages').append($('<li>').text(msg));
-      // });
-      socket.on('connect', function () {
-            socket.emit('coordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
+            Object.keys(players).forEach(function (id) {
+                  allPlayersArray.push(players[id]);
+                  // if (players[id].playerId === socket.id) {
+                  //       let newPlayerCoords = new Ball(players[id].x, players[id].y, players[id].r, "rgba(255,0,0,1)"); 
+                  //       newPlayerCoords.draw(); 
+                  // } else {
+                  // }
+            });
+            console.log(allPlayersArray);
+            
+            // for (let i = 0; i < allPlayersArray.length; i++) {
+            //       let newPlayerCoords = new Ball(allPlayersArray[i].x, allPlayersArray[i].y, allPlayersArray[i].r, "rgba(255,0,0,1)");
+            //       newPlayerCoords.draw();
+            // }
       });
+
+
+      // socket.on('newPlayer', function (players) {
+      //   let newPlayerCoords = new Ball(allPlayersArray[i].x, allPlayersArray[i].y, allPlayersArray[i].r, "rgba(255,0,0,1)");
+      //             newPlayerCoords.draw();
+      // });
+
 
       socket.on('draw', function (data) {
             let newPlayerCoords = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
@@ -50,7 +58,6 @@ export let socket = io();
 
 }).call(this);
 
-// });
 //Socket.IO ends here
 
 export const canvas = document.getElementById("canvas");
@@ -80,6 +87,27 @@ Ball.prototype.draw = function () {
       ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
       ctx.fill();
 }
+
+// add player event listeners  
+canvas.addEventListener("mousemove", movePlayer, false);
+
+
+//function to initiate the game
+function gameInit() {
+      playerCoords.draw();
+      makeFood();
+}
+
+//if mouse is over middle of canvas, start the game 
+gameInit();
+
+
+
+
+
+
+
+
 
 // //ball animation update
 // Ball.prototype.update = function () {
@@ -121,18 +149,7 @@ Ball.prototype.draw = function () {
 // }
 
 
-// add player event listeners  
-canvas.addEventListener("mousemove", movePlayer, false);
 
-
-//function to initiate the game
-function gameInit() {
-      playerCoords.draw();
-      makeFood();
-}
-
-//if mouse is over middle of canvas, start the game 
-gameInit();
 
 
 

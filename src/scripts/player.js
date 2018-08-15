@@ -1,13 +1,6 @@
 import { canvas, ctx, playerCoords, socket } from '../index.js';
 import handleCollision from './handleCollision.js';
 
-// socket.on('draw', function (data) {
-//     let newPlayerCoords = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
-//     newPlayerCoords.draw();
-//     deleteCurrentPlayerPos();
-// });
-
-
 export default function movePlayer(e) {
     const mousePos = setMousePosition(e);
     deleteCurrentPlayerPos();
@@ -16,7 +9,7 @@ export default function movePlayer(e) {
     //   new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
     playerCoords.draw();
     handleCollision();
-    socket.emit('coordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
+    socket.emit('movePlayerCoordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
 }
 
 function setMousePosition(e) {
@@ -37,7 +30,6 @@ function deleteCurrentPlayerPos() {
     ctx.clip();
     ctx.fill();
     ctx.restore();
-
 
     // ctx.save();
     // // ctx.arc(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r, 0, 2*Math.PI, false);
