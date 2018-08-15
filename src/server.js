@@ -15,39 +15,51 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-let socketPlayersArrCoords = [];
+let players = {};
 
 //Socket.IO starts here
-(function() {
+// (function() {
 
-    io.on('connection', function(socket) {
-      socket.on('coordinates', function(data) {
+io.on('connection', function (socket) {
+
+    //print connected user's id to console
+    console.log('a user connceted: ' + socket.id);
+
+    // create a new player and add it to our players object
+    players[socket.id] = {
+        x: Math.floor(Math.random() * 700) + 50,
+        y: Math.floor(Math.random() * 500) + 50,
+        r: 12,
+        playerId: socket.id
+    };
+
+    // send the players object to the new player
+    socket.emit('currentPlayers', players);
+    // update all other players of the new player
+    socket.broadcast.emit('newPlayer', players[socket.id]);
+    console.log(players);
+
+
+    socket.on('coordinates', function (data) {
         socket.broadcast.emit('draw', {
-          x: data.x,
-          y: data.y,
-          r: data.r
+            x: data.x,
+            y: data.y,
+            r: data.r
         });
-        // socket.broadcast.emit('deletePlayersPos', {
-        //     x: data.x,
-        //     y: data.y,
-        //     r: data.r
-        //   });
-        socketPlayersArrCoords.push(data);
-        console.log(socketPlayersArrCoords);
-      });
+        // let id = socket.id;
+        // let newPlayer = new Player(data.x, data.y, data.r, id);
+        // players.push(newPlayer);
+        // console.log(newPlayer);
     });
-    
-  }).call(this);
+});
+
+//   }).call(this);
 
 
 
 
 
 // io.on('connection', function (socket) {
-
-
-//     //print connected user's id to console
-//     console.log('a user connceted: ' + socket.id);
 
 //     //print disconnected user's id to console
 //     socket.on('disconnect', function () {

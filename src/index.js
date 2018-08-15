@@ -81,45 +81,44 @@ Ball.prototype.draw = function () {
       ctx.fill();
 }
 
-//ball animation update
-Ball.prototype.update = function () {
-      if ((this.x + this.r) >= canvasWidth) {
-            this.velX = -(this.velX);
-      }
+// //ball animation update
+// Ball.prototype.update = function () {
+//       if ((this.x + this.r) >= canvasWidth) {
+//             this.velX = -(this.velX);
+//       }
 
-      if ((this.x - this.r) <= 0) {
-            this.velX = -(this.velX);
-      }
+//       if ((this.x - this.r) <= 0) {
+//             this.velX = -(this.velX);
+//       }
 
-      if ((this.y + this.r) >= canvasHeight) {
-            this.velY = -(this.velY);
-      }
+//       if ((this.y + this.r) >= canvasHeight) {
+//             this.velY = -(this.velY);
+//       }
 
-      if ((this.y - this.r) <= 0) {
-            this.velY = -(this.velY);
-      }
+//       if ((this.y - this.r) <= 0) {
+//             this.velY = -(this.velY);
+//       }
 
-      this.x += this.velX;
-      this.y += this.velY;
+//       this.x += this.velX;
+//       this.y += this.velY;
 
-}
+// }
 
 
-//Food collision detection
-Ball.prototype.collisionDetectFood = function () {
-      for (let j = 0; j < foodCirclesArr.length; j++) {
-            if (!(this === foodCirclesArr[j])) {
-                  let dx = this.x - foodCirclesArr[j].x;
-                  let dy = this.y - foodCirclesArr[j].y;
-                  let distance = Math.sqrt(dx * dx + dy * dy);
+// //Food collision detection
+// Ball.prototype.collisionDetectFood = function () {
+//       for (let j = 0; j < foodCirclesArr.length; j++) {
+//             if (!(this === foodCirclesArr[j])) {
+//                   let dx = this.x - foodCirclesArr[j].x;
+//                   let dy = this.y - foodCirclesArr[j].y;
+//                   let distance = Math.sqrt(dx * dx + dy * dy);
 
-                  if (distance < this.r + foodCirclesArr[j].r) {
-                        foodCirclesArr[j].color = this.color = 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')';
-                  }
-            }
-      }
-}
-
+//                   if (distance < this.r + foodCirclesArr[j].r) {
+//                         foodCirclesArr[j].color = this.color = 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')';
+//                   }
+//             }
+//       }
+// }
 
 
 // add player event listeners  
@@ -128,12 +127,11 @@ canvas.addEventListener("mousemove", movePlayer, false);
 
 //function to initiate the game
 function gameInit() {
-      // new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
       playerCoords.draw();
       makeFood();
 }
 
-
+//if mouse is over middle of canvas, start the game 
 gameInit();
 
 

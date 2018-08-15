@@ -38,6 +38,7 @@ function deleteCurrentPlayerPos() {
     ctx.fill();
     ctx.restore();
 
+
     // ctx.save();
     // // ctx.arc(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r, 0, 2*Math.PI, false);
     // ctx.rect(playerCoords.x - playerCoords.r, playerCoords.y - playerCoords.r, playerCoords.r + playerCoords.r, playerCoords.r + playerCoords.r);
