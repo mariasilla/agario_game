@@ -3,6 +3,7 @@
 import io from 'socket.io-client';
 import makeFood from './scripts/food.js';
 import movePlayer from './scripts/player.js';
+// import deleteCurrentPlayerPos from './scripts/player.js';
 // export const socket = io('http://localhost'); 
 
 //Socket.IO starts here
@@ -34,7 +35,18 @@ socket.on('connect', function () {
 });
 
 socket.on('draw', function (data) {
-      playerCoords.draw();
+      let newPlayerCoords = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
+      function deleteCurrentPlayerPos() {
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(data.x, data.y, data.r + 1, 0, 2 * Math.PI, false);
+            ctx.clip();
+            ctx.fill();
+            ctx.restore();
+      }
+      deleteCurrentPlayerPos();
+      newPlayerCoords.draw();
 });
 
 // });
