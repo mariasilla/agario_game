@@ -43,22 +43,14 @@ io.on('connection', function (socket) {
     socket.broadcast.emit('newPlayer', players[socket.id]);
     // console.log("PlayerID: " + players[socket.id].playerId + " PlayerX: " + players[socket.id].x);
     // console.log(players[socket.id]);
-   
-    // socket.on('newPlayerCoords', function (data) {
+
+    // socket.on('movePlayerCoordinates', function (data) {
     //     socket.broadcast.emit('draw', {
     //         x: data.x,
     //         y: data.y,
     //         r: data.r
     //     });
-    // });   
-
-    socket.on('movePlayerCoordinates', function (data) {
-        socket.broadcast.emit('draw', {
-            x: data.x,
-            y: data.y,
-            r: data.r
-        });
-    });
+    // });
 
     // when a player disconnects, remove them from the players object
     socket.on('disconnect', function () {

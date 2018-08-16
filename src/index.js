@@ -2,26 +2,37 @@ import './style.css';
 import io from 'socket.io-client';
 import makeFood from './scripts/food.js';
 import movePlayer from './scripts/player.js';
+import { log } from 'util';
 
 //Socket.IO starts here
 export let socket = io();
 
 let allPlayersArray = [];
+let currentPlayer;
 
-(function () {
+// (function () {
 
+      //All existing players info sent to a new player// draw all other players balls here
       socket.on('currentPlayers', function (players) {
-
             Object.keys(players).forEach(function (id) {
                   if (players[id].playerId === socket.id) {
-                        allPlayersArray.push(players[id]);
+                        // allPlayersArray.push(players[id]);
                         // socket.emit('newPlayerCoords', { x: players[id].x, y: players[id].y, r: players[id].r, id: socket.id });
+                        currentPlayer = new Ball(players[id].x, players[id].y,players[id].r,"rgba(255,0,0,1)");
+                        currentPlayer.draw();
                   }
             });
-            console.log(allPlayersArray);
+            // console.log(allPlayersArray);
             // for (let i = 0; i < allPlayersArray.length; i++) {
             //       socket.emit('newPlayerCoords', { x: allPlayersArray[i].x, y: allPlayersArray[i].y, r: allPlayersArray[i].r, id: socket.id });
             // }
+      });
+
+
+      //New Player info sent to all existing players//draw new player's ball here
+      socket.on('newPlayer', function (player) {
+            allPlayersArray.push(player);
+            console.log(allPlayersArray);
       });
 
 
@@ -31,22 +42,22 @@ let allPlayersArray = [];
       // });
 
 
-      socket.on('draw', function (data) {
-            let newPlayer = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
-            function deleteCurrentPlayerPos() {
-                  ctx.save();
-                  ctx.globalCompositeOperation = 'destination-out';
-                  ctx.beginPath();
-                  ctx.arc(data.x, data.y, data.r + 1, 0, 2 * Math.PI, false);
-                  ctx.clip();
-                  ctx.fill();
-                  ctx.restore();
-            }
-            deleteCurrentPlayerPos();
-            newPlayer.draw();
-      });
+      // socket.on('draw', function (data) {
+      //       let newPlayer = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
+      //       function deleteCurrentPlayerPos() {
+      //             ctx.save();
+      //             ctx.globalCompositeOperation = 'destination-out';
+      //             ctx.beginPath();
+      //             ctx.arc(data.x, data.y, data.r + 1, 0, 2 * Math.PI, false);
+      //             ctx.clip();
+      //             ctx.fill();
+      //             ctx.restore();
+      //       }
+      //       deleteCurrentPlayerPos();
+      //       newPlayer.draw();
+      // });
 
-}).call(this);
+// }).call(this);
 
 //Socket.IO ends here
 
