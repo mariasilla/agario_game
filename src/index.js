@@ -2,38 +2,47 @@ import './style.css';
 import io from 'socket.io-client';
 import makeFood from './scripts/food.js';
 import movePlayer from './scripts/player.js';
-import { log } from 'util';
 
 //Socket.IO starts here
 export let socket = io();
 
 let allPlayersArray = [];
-let currentPlayer;
 
 // (function () {
-
-      //All existing players info sent to a new player// draw all other players balls here
-      socket.on('currentPlayers', function (players) {
+function gameCreate() {
+      let self = this;
+      //socket.on listens to the currentPlayers event, and when this event is triggered
+      //the function will be called with the players object passed from the server 
+      //send the players object(all players info) to the new player
+      this.socket.on('currentPlayers', function (players) {
             Object.keys(players).forEach(function (id) {
-                  if (players[id].playerId === socket.id) {
-                        // allPlayersArray.push(players[id]);
+                  // check to see if that player’s id matches the current player’s socket id
+                  if (players[id].playerId === self.socket.id) {
+                        //Add new Current Player to Canvas and pass the current player’s information
+
                         // socket.emit('newPlayerCoords', { x: players[id].x, y: players[id].y, r: players[id].r, id: socket.id });
-                        currentPlayer = new Ball(players[id].x, players[id].y,players[id].r,"rgba(255,0,0,1)");
-                        currentPlayer.draw();
+                        // currentPlayer = new Ball(players[id].x, players[id].y,players[id].r,"rgba(255,0,0,1)");
+                        // currentPlayer.draw();
+                        allPlayersArray.push(players[id]);
+                  } else {
+                        //Add Other Players
                   }
             });
-            // console.log(allPlayersArray);
-            // for (let i = 0; i < allPlayersArray.length; i++) {
-            //       socket.emit('newPlayerCoords', { x: allPlayersArray[i].x, y: allPlayersArray[i].y, r: allPlayersArray[i].r, id: socket.id });
+            // console.log(allPlayersArray);       
+      });
+
+
+      //send new player's info to all other current players 
+      this.socket.on('newPlayer', function (playerInfo) {
+            //Add Other Players to Canvas 
+
+      });
+
+      this.socket.on('disconnect', function (playerId) {
+            //Loop through allPlayersArray and if (playerId === allPlayersArray[i].playerId) {
+            //   remove allPlayersArray[i];
             // }
-      });
-
-
-      //New Player info sent to all existing players//draw new player's ball here
-      socket.on('newPlayer', function (player) {
-            allPlayersArray.push(player);
-            console.log(allPlayersArray);
-      });
+      })
 
 
       // socket.on('newPlayer', function (players) {
@@ -41,25 +50,32 @@ let currentPlayer;
       //             newPlayerCoords.draw();
       // });
 
+      this.socket.on('draw', function (data) {
+            let newPlayer = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
+            function deleteCurrentPlayerPos() {
+                  ctx.save();
+                  ctx.globalCompositeOperation = 'destination-out';
+                  ctx.beginPath();
+                  ctx.arc(data.x, data.y, data.r + 1, 0, 2 * Math.PI, false);
+                  ctx.clip();
+                  ctx.fill();
+                  ctx.restore();
+            }
+            deleteCurrentPlayerPos();
+            newPlayer.draw();
+      });
 
-      // socket.on('draw', function (data) {
-      //       let newPlayer = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
-      //       function deleteCurrentPlayerPos() {
-      //             ctx.save();
-      //             ctx.globalCompositeOperation = 'destination-out';
-      //             ctx.beginPath();
-      //             ctx.arc(data.x, data.y, data.r + 1, 0, 2 * Math.PI, false);
-      //             ctx.clip();
-      //             ctx.fill();
-      //             ctx.restore();
-      //       }
-      //       deleteCurrentPlayerPos();
-      //       newPlayer.draw();
-      // });
 
+}
+gameCreate();
 // }).call(this);
 
+
 //Socket.IO ends here
+
+// function addPlayer() {
+
+// };
 
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");

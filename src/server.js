@@ -28,15 +28,15 @@ io.on('connection', function (socket) {
 
     // create a new player and add it to the players object
     players[socket.id] = {
-        x: Math.floor(Math.random() * 700) + 50,
-        y: Math.floor(Math.random() * 700) + 50,
+        x: 0,
+        y: 0,
         r: 12,
         playerId: socket.id
     };
      
      
     // send the players object(all players info) to the new player
-    socket.emit('currentPlayers', players);
+    socket.emit('currentPlayers', players); 
     console.log(players);
 
     //send new player's info to all other current players 
@@ -44,13 +44,13 @@ io.on('connection', function (socket) {
     // console.log("PlayerID: " + players[socket.id].playerId + " PlayerX: " + players[socket.id].x);
     // console.log(players[socket.id]);
 
-    // socket.on('movePlayerCoordinates', function (data) {
-    //     socket.broadcast.emit('draw', {
-    //         x: data.x,
-    //         y: data.y,
-    //         r: data.r
-    //     });
-    // });
+    socket.on('movePlayerCoordinates', function (data) {
+        socket.broadcast.emit('draw', {
+            x: data.x,
+            y: data.y,
+            r: data.r
+        });
+    });
 
     // when a player disconnects, remove them from the players object
     socket.on('disconnect', function () {
@@ -61,10 +61,7 @@ io.on('connection', function (socket) {
         io.emit('disconnect', socket.id);
         console.log(players);
     });
-
 });
-
-
 
 //   }).call(this);
 
