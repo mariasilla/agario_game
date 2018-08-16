@@ -3,8 +3,6 @@ import io from 'socket.io-client';
 import makeFood from './scripts/food.js';
 import movePlayer from './scripts/player.js';
 
-
-
 //Socket.IO starts here
 export let socket = io();
 
@@ -12,25 +10,17 @@ let allPlayersArray = [];
 
 (function () {
 
-      // socket.on('connect', function () {
-      //       socket.emit('movePlayerCoordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
-      // });
-
       socket.on('currentPlayers', function (players) {
 
             Object.keys(players).forEach(function (id) {
-                  allPlayersArray.push(players[id]);
-                  // if (players[id].playerId === socket.id) {
-                  //       let newPlayerCoords = new Ball(players[id].x, players[id].y, players[id].r, "rgba(255,0,0,1)"); 
-                  //       newPlayerCoords.draw(); 
-                  // } else {
-                  // }
+                  if (players[id].playerId === socket.id) {
+                        allPlayersArray.push(players[id]);
+                        // socket.emit('newPlayerCoords', { x: players[id].x, y: players[id].y, r: players[id].r, id: socket.id });
+                  }
             });
             console.log(allPlayersArray);
-            
             // for (let i = 0; i < allPlayersArray.length; i++) {
-            //       let newPlayerCoords = new Ball(allPlayersArray[i].x, allPlayersArray[i].y, allPlayersArray[i].r, "rgba(255,0,0,1)");
-            //       newPlayerCoords.draw();
+            //       socket.emit('newPlayerCoords', { x: allPlayersArray[i].x, y: allPlayersArray[i].y, r: allPlayersArray[i].r, id: socket.id });
             // }
       });
 
@@ -42,7 +32,7 @@ let allPlayersArray = [];
 
 
       socket.on('draw', function (data) {
-            let newPlayerCoords = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
+            let newPlayer = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
             function deleteCurrentPlayerPos() {
                   ctx.save();
                   ctx.globalCompositeOperation = 'destination-out';
@@ -53,7 +43,7 @@ let allPlayersArray = [];
                   ctx.restore();
             }
             deleteCurrentPlayerPos();
-            newPlayerCoords.draw();
+            newPlayer.draw();
       });
 
 }).call(this);
@@ -100,9 +90,6 @@ function gameInit() {
 
 //if mouse is over middle of canvas, start the game 
 gameInit();
-
-
-
 
 
 

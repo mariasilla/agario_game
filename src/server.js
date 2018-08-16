@@ -18,31 +18,39 @@ app.get('/', function (req, res) {
 //Object to keep track of all the players that are currently in the game
 let players = {};
 
+
 //Socket.IO starts here
 // (function() {
 
 io.on('connection', function (socket) {
-
-    //print connected user's id to console
-    console.log('a user connected: ' + socket.id);
+    //print NEW connected user's id to console
+    console.log('a NEW user is connected: ' + socket.id);
 
     // create a new player and add it to the players object
     players[socket.id] = {
-        x: 0,
-        y: 0,
+        x: Math.floor(Math.random() * 700) + 50,
+        y: Math.floor(Math.random() * 700) + 50,
         r: 12,
         playerId: socket.id
     };
-
+     
+     
     // send the players object(all players info) to the new player
     socket.emit('currentPlayers', players);
+    console.log(players);
 
-    //send new player's info to all other players 
+    //send new player's info to all other current players 
     socket.broadcast.emit('newPlayer', players[socket.id]);
     // console.log("PlayerID: " + players[socket.id].playerId + " PlayerX: " + players[socket.id].x);
-    console.log(players);
     // console.log(players[socket.id]);
-
+   
+    // socket.on('newPlayerCoords', function (data) {
+    //     socket.broadcast.emit('draw', {
+    //         x: data.x,
+    //         y: data.y,
+    //         r: data.r
+    //     });
+    // });   
 
     socket.on('movePlayerCoordinates', function (data) {
         socket.broadcast.emit('draw', {
@@ -59,7 +67,7 @@ io.on('connection', function (socket) {
         delete players[socket.id];
         // emit a message to all players to remove this player
         io.emit('disconnect', socket.id);
-        // console.log(players);
+        console.log(players);
     });
 
 });
