@@ -28,31 +28,36 @@ io.on('connection', function (socket) {
 
     // create a new player and add it to the players object
     players[socket.id] = {
-        x: 0,
-        y: 0,
-        r: 12,
+        x: Math.floor(Math.random() * 700) + 50,
+        y: Math.floor(Math.random() * 700) + 50,
+        r: 16,
         playerId: socket.id
     };
-     
-     
+
     // send the players object(all players info) to the new player
-    socket.emit('currentPlayers', players); 
-    console.log(players);
+    socket.emit('currentPlayers', players);
 
     //send new player's info to all other current players 
     socket.broadcast.emit('newPlayer', players[socket.id]);
-    // console.log("PlayerID: " + players[socket.id].playerId + " PlayerX: " + players[socket.id].x);
-    // console.log(players[socket.id]);
 
-    socket.on('movePlayerCoordinates', function (data) {
-        socket.broadcast.emit('draw', {
-            x: data.x,
-            y: data.y,
-            r: data.r
-        });
+    //listen for new playerMovement event
+    // when a player MOVES, update the player data
+    socket.on('playerMovement', function (movementData) {
+        players[socket.id].x = movementData.x;
+        players[socket.id].y = movementData.y;
+        // emit a message to all players about the player that moved
+        socket.broadcast.emit('playerMoved', players[socket.id]);
     });
 
-    // when a player disconnects, remove them from the players object
+    // socket.on('movePlayerCoordinates', function (data) {
+    //     socket.broadcast.emit('draw', {
+    //         x: data.x,
+    //         y: data.y,
+    //         r: data.r
+    //     });
+    // });
+
+    // when a player Disconnects, remove them from the players object
     socket.on('disconnect', function () {
         console.log('user disconnected: ' + socket.id);
         // remove this player from the players object

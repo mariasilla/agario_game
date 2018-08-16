@@ -2,45 +2,70 @@ import './style.css';
 import io from 'socket.io-client';
 import makeFood from './scripts/food.js';
 import movePlayer from './scripts/player.js';
+import { log } from 'util';
 
 //Socket.IO starts here
 export let socket = io();
 
 let allPlayersArray = [];
+let otherPlayersArray = [];
+let currentPlayer;
+let otherPlayer;
 
 // (function () {
 function gameCreate() {
-      let self = this;
+      // let self = this;
       //socket.on listens to the currentPlayers event, and when this event is triggered
       //the function will be called with the players object passed from the server 
       //send the players object(all players info) to the new player
-      this.socket.on('currentPlayers', function (players) {
+      socket.on('currentPlayers', function (players) {
             Object.keys(players).forEach(function (id) {
+                  allPlayersArray.push(players[id]);
                   // check to see if that player’s id matches the current player’s socket id
-                  if (players[id].playerId === self.socket.id) {
+                  if (players[id].playerId === socket.id) {
                         //Add new Current Player to Canvas and pass the current player’s information
 
                         // socket.emit('newPlayerCoords', { x: players[id].x, y: players[id].y, r: players[id].r, id: socket.id });
-                        // currentPlayer = new Ball(players[id].x, players[id].y,players[id].r,"rgba(255,0,0,1)");
-                        // currentPlayer.draw();
-                        allPlayersArray.push(players[id]);
+                        currentPlayer = new Ball(players[id].x, players[id].y, players[id].r, "rgba(255,0,0,1)");
+                        currentPlayer.draw();
                   } else {
-                        //Add Other Players
-                  }
+                        //Add Other Players to Current Player's Canvas
+                        otherPlayer = new Ball(players[id].x, players[id].y, players[id].r, "rgba(255,0,0,1)");
+                        otherPlayer.draw();
+                        // for (let i = 0; i < allPlayersArray.length; i++) {
+                        //       let otherPlayer = new Ball(allPlayersArray[i].x, allPlayersArray[i].y, allPlayersArray[i].r, "rgba(255,0,0,1)");
+                        //       otherPlayer.draw();
+                        // }
+                  };
             });
-            // console.log(allPlayersArray);       
+            console.log(allPlayersArray);
       });
-
 
       //send new player's info to all other current players 
-      this.socket.on('newPlayer', function (playerInfo) {
-            //Add Other Players to Canvas 
+      socket.on('newPlayer', function (playerInfo) {
 
+            otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, "rgba(255,0,0,1)");
+            otherPlayer.playerId = playerInfo.playerId;
+            otherPlayer.draw();
+            
+            // allPlayersArray.push(playerInfo);
+            // console.log(playerInfo);
+            // for (let i = 0; i < allOtherPlayersArray.length; i++) {
+            //       otherPlayer = new Ball(allOtherPlayersArray[i].x, allOtherPlayersArray[i].y, allOtherPlayersArray[i].r, "rgba(255,0,0,1)");
+            //       otherPlayer.draw();
+            // }
       });
 
-      this.socket.on('disconnect', function (playerId) {
+      socket.on('disconnect', function (playerId) {
             //Loop through allPlayersArray and if (playerId === allPlayersArray[i].playerId) {
             //   remove allPlayersArray[i];
+            // }
+            // for (let i = allPlayersArray.length - 1; i >= 0; i--) {
+            //       if (playerId === allPlayersArray[i].playerId) {
+            //             if (i > -1) {
+            //                   allPlayersArray.splice(i, 1);
+            //             }
+            //       }
             // }
       })
 
@@ -50,21 +75,20 @@ function gameCreate() {
       //             newPlayerCoords.draw();
       // });
 
-      this.socket.on('draw', function (data) {
-            let newPlayer = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
-            function deleteCurrentPlayerPos() {
-                  ctx.save();
-                  ctx.globalCompositeOperation = 'destination-out';
-                  ctx.beginPath();
-                  ctx.arc(data.x, data.y, data.r + 1, 0, 2 * Math.PI, false);
-                  ctx.clip();
-                  ctx.fill();
-                  ctx.restore();
-            }
-            deleteCurrentPlayerPos();
-            newPlayer.draw();
-      });
-
+      // socket.on('draw', function (data) {
+      //       let newPlayer = new Ball(data.x, data.y, data.r, "rgba(255,0,0,1)");
+      //       function deleteCurrentPlayerPos() {
+      //             ctx.save();
+      //             ctx.globalCompositeOperation = 'destination-out';
+      //             ctx.beginPath();
+      //             ctx.arc(data.x, data.y, data.r + 1, 0, 2 * Math.PI, false);
+      //             ctx.clip();
+      //             ctx.fill();
+      //             ctx.restore();
+      //       }
+      //       deleteCurrentPlayerPos();
+      //       newPlayer.draw();
+      // });
 
 }
 gameCreate();
@@ -87,13 +111,14 @@ canvas.height = window.innerHeight * .8;
 export const canvasWidth = canvas.width;
 export const canvasHeight = canvas.height;
 
-export let playerCoords = new Ball(canvasWidth / 2, canvasHeight / 2, 12, "rgba(255,0,0,1)");
+export let playerCoords = new Ball(canvasWidth / 2, canvasHeight / 2, 16, "rgba(255,0,0,1)");
 
 export default function Ball(x, y, r, color, velX, velY) {
       this.x = x;
       this.y = y;
       this.r = r;
       this.color = color;
+      this.playerId = socket.id;
       this.velX = velX;
       this.velY = velY;
 }
