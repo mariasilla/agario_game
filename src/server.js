@@ -21,7 +21,6 @@ let players = {};
 
 //Socket.IO starts here
 // (function() {
-
 io.on('connection', function (socket) {
     //print NEW connected user's id to console
     console.log('a NEW user is connected: ' + socket.id);
@@ -46,7 +45,7 @@ io.on('connection', function (socket) {
         players[socket.id].x = movementData.x;
         players[socket.id].y = movementData.y;
         players[socket.id].r = movementData.r;
-
+        
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });

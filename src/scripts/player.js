@@ -1,5 +1,6 @@
 import { canvas, ctx, socket, currentPlayer } from '../index.js';
 import handleCollisionFood from './handleCollision.js';
+import handleOtherPlayersCollision from './handleCollision.js';
 
 export default function movePlayer(e) {
     const mousePos = setMousePosition(e);
@@ -11,6 +12,7 @@ export default function movePlayer(e) {
     // playerCoords.draw();
     currentPlayer.draw();
     handleCollisionFood();
+    handleOtherPlayersCollision();
     socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r});
 }
 

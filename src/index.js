@@ -19,7 +19,7 @@ function gameCreate() {
       //send the players object(all players info) to the new player
       socket.on('currentPlayers', function (players) {
             Object.keys(players).forEach(function (id) {
-                  allPlayersArray.push(players[id]);
+                  // allPlayersArray.push(players[id]);
                   // check to see if that player’s id matches the current player’s socket id
                   if (players[id].playerId === socket.id) {
                         //Add new Current Player to Canvas and pass the current player’s information
@@ -104,6 +104,8 @@ function gameCreate() {
       //NEED to CHANGE*********************************************** */
       // when a player moves, update the player data
       socket.on('playerMoved', function (playerInfo) {
+            // otherPlayersArray.push(playerInfo);
+            // console.log(otherPlayersArray);            
             for (let i = 0; i < otherPlayersArray.length; i++) {
                   if (playerInfo.playerId === otherPlayersArray[i].playerId) {
                         otherPlayersArray[i].x = playerInfo.x;

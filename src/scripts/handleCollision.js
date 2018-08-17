@@ -1,11 +1,51 @@
-import { ctx, foodCirclesArr, extraMass, currentPlayer } from '../index.js';
+import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer } from '../index.js';
 
 let dx;
 let dy;
 let distance;
 let score = 0;
 
-// collision detection function 
+// player and other players collision detection function 
+export function handleOtherPlayersCollision () {
+    for (let i = otherPlayersArray.length - 1; i >= 0; i--) {
+
+        dx = currentPlayer.x - otherPlayersArray[i].x;
+        dy = currentPlayer.y - otherPlayersArray[i].y;
+
+        distance = Math.sqrt(dx * dx + dy * dy);
+
+        function removeOtherPlayer() {
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(otherPlayersArray[i].x, otherPlayersArray[i].y, otherPlayersArray[i].r + 1, 0, 2 * Math.PI, false);
+            ctx.clip();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        if (distance < (currentPlayer.r + 1) + otherPlayersArray[i].r) {
+
+            if (currentPlayer.r + 1 > otherPlayersArray[i].r) {
+                removeOtherPlayer()
+                growPlayerMass();
+                //remove from array 
+                if (i > -1) {
+                    otherPlayersArray.splice(i, 1);
+                }
+            }
+
+            console.log("Collision detected!");
+            // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
+            // console.log("foodItem Index:" + i);
+        }
+
+    }
+       
+}
+
+
+// player and food collision detection function 
 export default function handleCollisionFood() {
 
     for (let i = foodCirclesArr.length - 1; i >= 0; i--) {
