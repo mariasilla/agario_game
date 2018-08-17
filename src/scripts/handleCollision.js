@@ -54,4 +54,5 @@ function growPlayerMass() {
     currentPlayer.r += extraMass;
     currentPlayer.draw(currentPlayer.r);
     console.log("extraMass:" + extraMass, "current Mass:" + currentPlayer.r);
+    // socket.emit('playerMass', {r: currentPlayer.r});
 }

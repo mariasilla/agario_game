@@ -36,7 +36,7 @@ function gameCreate() {
                         // }
                   };
             });
-            console.log(allPlayersArray);
+            // console.log(allPlayersArray);
       });
       // console.log(otherPlayersArray);
       //send new player's info to all other current players 
@@ -45,23 +45,15 @@ function gameCreate() {
             otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, "rgba(255,0,0,1)");
             otherPlayer.playerId = playerInfo.playerId;
             otherPlayer.draw();
-
-            // allPlayersArray.push(playerInfo);
-            // console.log(playerInfo);
-            // for (let i = 0; i < allOtherPlayersArray.length; i++) {
-            //       otherPlayer = new Ball(allOtherPlayersArray[i].x, allOtherPlayersArray[i].y, allOtherPlayersArray[i].r, "rgba(255,0,0,1)");
-            //       otherPlayer.draw();
-            // }
       });
 
       socket.on('disconnect', function (playerId) {
-            //Loop through otherPlayersArray and if (playerId === allPlayersArray[i].playerId) {
-            //   remove allPlayersArray[i];
-            // }
+            //Loop through otherPlayersArray 
+            // 
             for (let i = otherPlayersArray.length - 1; i >= 0; i--) {
                   console.log(playerId);
                   console.log(otherPlayersArray[i].playerId);
-                  if (playerId === otherPlayersArray[i].playerId) {                
+                  if (playerId === otherPlayersArray[i].playerId) {
                         ctx.save();
                         ctx.globalCompositeOperation = 'destination-out';
                         ctx.beginPath();
@@ -69,13 +61,14 @@ function gameCreate() {
                         ctx.clip();
                         ctx.fill();
                         ctx.restore();
-                        if (i > -1) {
-                              otherPlayersArray.splice(i, 1);
-                        }
+                        // if (i > -1) {
+                        //       otherPlayersArray.splice(i, 1);
+                        // }
                   }
                   // console.log(otherPlayersArray);
-                  
             }
+
+
 
             // for (let i = 0; i < otherPlayersArray.length; i++) {
             //       if (playerId === otherPlayersArray[i].playerId) {
@@ -88,6 +81,23 @@ function gameCreate() {
             //             ctx.restore();
             //       }
             // }
+
+            //****************************************************************************** */
+
+            // Object.keys(players).forEach(function (id) {
+            //       console.log(playerId);
+            //       console.log(players[id].x, players[id].y);
+            //       if (playerId === players[id].playerId) {
+            //             ctx.save();
+            //             ctx.globalCompositeOperation = 'destination-out';
+            //             ctx.beginPath();
+            //             ctx.arc(players[id].x, players[id].y, players[id].r + 1, 0, 2 * Math.PI, false);
+            //             ctx.clip();
+            //             ctx.fill();
+            //             ctx.restore();
+            //       }
+            // });
+
       })
 
       // when a player moves, update the player data
@@ -96,6 +106,7 @@ function gameCreate() {
                   if (playerInfo.playerId === otherPlayersArray[i].playerId) {
                         otherPlayersArray[i].x = playerInfo.x;
                         otherPlayersArray[i].y = playerInfo.y;
+                        otherPlayersArray[i].r = playerInfo.r;
                   }
             }
       });
@@ -120,7 +131,6 @@ function gameCreate() {
       //       deleteCurrentPlayerPos();
       //       newPlayer.draw();
       // });
-
 }
 
 // }).call(this);
@@ -160,7 +170,6 @@ Ball.prototype.draw = function () {
 
 // add player event listeners  
 canvas.addEventListener("mousemove", movePlayer, false);
-
 
 //function to initiate the game
 function gameInit() {

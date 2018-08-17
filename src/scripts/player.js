@@ -11,7 +11,7 @@ export default function movePlayer(e) {
     // playerCoords.draw();
     currentPlayer.draw();
     handleCollisionFood();
-    socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r, id: socket.id });
+    socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r});
 }
 
 function setMousePosition(e) {
