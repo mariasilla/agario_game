@@ -8,8 +8,8 @@ export default function makeFood() {
     while (foodCirclesArr.length < 25) {
 
         foodItemCoords = new Ball(
-            Math.floor(Math.random() * 1000),
-            Math.floor(Math.random() * 1000),
+            Math.floor(Math.random() * 600),
+            Math.floor(Math.random() * 600),
             9,
             'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
             random(-7, 7),
@@ -31,13 +31,6 @@ function random(min, max) {
     var num = Math.floor(Math.random() * (max - min + 1)) + min;
     return num;
 }
-
-
-
-
-
-
-
 
 
 

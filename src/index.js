@@ -8,7 +8,7 @@ import { log } from 'util';
 export let socket = io();
 
 export let allPlayersArray = [];
-let otherPlayersArray = [];
+export let otherPlayersArray = [];
 export let currentPlayer;
 export let otherPlayer;
 
@@ -26,6 +26,7 @@ function gameCreate() {
                         currentPlayer = new Ball(players[id].x, players[id].y, players[id].r, "rgba(255,0,0,1)");
                         currentPlayer.draw();
                   } else {
+                        otherPlayersArray.push(players[id]);
                         //Add Other Players to Current Player's Canvas
                         otherPlayer = new Ball(players[id].x, players[id].y, players[id].r, "rgba(255,0,0,1)");
                         otherPlayer.draw();
@@ -35,9 +36,9 @@ function gameCreate() {
                         // }
                   };
             });
-            // console.log(allPlayersArray);
+            console.log(allPlayersArray);
       });
-
+      // console.log(otherPlayersArray);
       //send new player's info to all other current players 
       socket.on('newPlayer', function (playerInfo) {
 
@@ -54,17 +55,50 @@ function gameCreate() {
       });
 
       socket.on('disconnect', function (playerId) {
-            //Loop through allPlayersArray and if (playerId === allPlayersArray[i].playerId) {
+            //Loop through otherPlayersArray and if (playerId === allPlayersArray[i].playerId) {
             //   remove allPlayersArray[i];
             // }
-            // for (let i = allPlayersArray.length - 1; i >= 0; i--) {
-            //       if (playerId === allPlayersArray[i].playerId) {
-            //             if (i > -1) {
-            //                   allPlayersArray.splice(i, 1);
-            //             }
+            for (let i = otherPlayersArray.length - 1; i >= 0; i--) {
+                  console.log(playerId);
+                  console.log(otherPlayersArray[i].playerId);
+                  if (playerId === otherPlayersArray[i].playerId) {                
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-out';
+                        ctx.beginPath();
+                        ctx.arc(otherPlayersArray[i].x, otherPlayersArray[i].y, otherPlayersArray[i].r + 1, 0, 2 * Math.PI, false);
+                        ctx.clip();
+                        ctx.fill();
+                        ctx.restore();
+                        if (i > -1) {
+                              otherPlayersArray.splice(i, 1);
+                        }
+                  }
+                  // console.log(otherPlayersArray);
+                  
+            }
+
+            // for (let i = 0; i < otherPlayersArray.length; i++) {
+            //       if (playerId === otherPlayersArray[i].playerId) {
+            //             ctx.save();
+            //             ctx.globalCompositeOperation = 'destination-out';
+            //             ctx.beginPath();
+            //             ctx.arc(otherPlayersArray[i].x, otherPlayersArray[i].y, otherPlayersArray[i].r + 1, 0, 2 * Math.PI, false);
+            //             ctx.clip();
+            //             ctx.fill();
+            //             ctx.restore();
             //       }
             // }
       })
+
+      // when a player moves, update the player data
+      socket.on('playerMoved', function (playerInfo) {
+            for (let i = 0; i < otherPlayersArray.length; i++) {
+                  if (playerInfo.playerId === otherPlayersArray[i].playerId) {
+                        otherPlayersArray[i].x = playerInfo.x;
+                        otherPlayersArray[i].y = playerInfo.y;
+                  }
+            }
+      });
 
 
       // socket.on('newPlayer', function (players) {
