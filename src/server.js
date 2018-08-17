@@ -40,7 +40,7 @@ io.on('connection', function (socket) {
     //send new player's info to all other current players 
     socket.broadcast.emit('newPlayer', players[socket.id]);
 
-    //listen for new playerMovement event
+    //Listen for new playerMovement event
     // when a player MOVES, update the player data
     socket.on('playerMovement', function (movementData) {
         players[socket.id].x = movementData.x;

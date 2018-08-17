@@ -7,14 +7,13 @@ import { log } from 'util';
 //Socket.IO starts here
 export let socket = io();
 
-let allPlayersArray = [];
+export let allPlayersArray = [];
 let otherPlayersArray = [];
-let currentPlayer;
-let otherPlayer;
+export let currentPlayer;
+export let otherPlayer;
 
 // (function () {
 function gameCreate() {
-      // let self = this;
       //socket.on listens to the currentPlayers event, and when this event is triggered
       //the function will be called with the players object passed from the server 
       //send the players object(all players info) to the new player
@@ -24,8 +23,6 @@ function gameCreate() {
                   // check to see if that player’s id matches the current player’s socket id
                   if (players[id].playerId === socket.id) {
                         //Add new Current Player to Canvas and pass the current player’s information
-
-                        // socket.emit('newPlayerCoords', { x: players[id].x, y: players[id].y, r: players[id].r, id: socket.id });
                         currentPlayer = new Ball(players[id].x, players[id].y, players[id].r, "rgba(255,0,0,1)");
                         currentPlayer.draw();
                   } else {
@@ -38,7 +35,7 @@ function gameCreate() {
                         // }
                   };
             });
-            console.log(allPlayersArray);
+            // console.log(allPlayersArray);
       });
 
       //send new player's info to all other current players 
@@ -47,7 +44,7 @@ function gameCreate() {
             otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, "rgba(255,0,0,1)");
             otherPlayer.playerId = playerInfo.playerId;
             otherPlayer.draw();
-            
+
             // allPlayersArray.push(playerInfo);
             // console.log(playerInfo);
             // for (let i = 0; i < allOtherPlayersArray.length; i++) {
@@ -91,15 +88,12 @@ function gameCreate() {
       // });
 
 }
-gameCreate();
+
 // }).call(this);
 
 
 //Socket.IO ends here
 
-// function addPlayer() {
-
-// };
 
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");
@@ -111,7 +105,7 @@ canvas.height = window.innerHeight * .8;
 export const canvasWidth = canvas.width;
 export const canvasHeight = canvas.height;
 
-export let playerCoords = new Ball(canvasWidth / 2, canvasHeight / 2, 16, "rgba(255,0,0,1)");
+// export let playerCoords = new Ball(canvasWidth / 2, canvasHeight / 2, 16, "rgba(255,0,0,1)");
 
 export default function Ball(x, y, r, color, velX, velY) {
       this.x = x;
@@ -136,12 +130,13 @@ canvas.addEventListener("mousemove", movePlayer, false);
 
 //function to initiate the game
 function gameInit() {
-      playerCoords.draw();
+      gameCreate();
       makeFood();
 }
 
 //if mouse is over middle of canvas, start the game 
 gameInit();
+
 
 
 

@@ -1,4 +1,4 @@
-import { ctx, playerCoords, foodCirclesArr, extraMass } from '../index.js';
+import { ctx, foodCirclesArr, extraMass, currentPlayer } from '../index.js';
 
 let dx;
 let dy;
@@ -6,13 +6,13 @@ let distance;
 let score = 0;
 
 // collision detection function 
-export default function handleCollision() {
+export default function handleCollisionFood() {
 
-    // for (var i = 0; i < foodCirclesArr.length; i++) {
     for (let i = foodCirclesArr.length - 1; i >= 0; i--) {
 
-        dx = playerCoords.x - foodCirclesArr[i].x;
-        dy = playerCoords.y - foodCirclesArr[i].y;
+        dx = currentPlayer.x - foodCirclesArr[i].x;
+        dy = currentPlayer.y - foodCirclesArr[i].y;
+
         distance = Math.sqrt(dx * dx + dy * dy);
 
         function removeFoodItem() {
@@ -25,13 +25,13 @@ export default function handleCollision() {
             ctx.restore();
         }
 
-        if (distance < (playerCoords.r + 1) + foodCirclesArr[i].r) {
+        if (distance < (currentPlayer.r + 1) + foodCirclesArr[i].r) {
 
-            if (playerCoords.r + 1 > foodCirclesArr[i].r) {
+            if (currentPlayer.r + 1 > foodCirclesArr[i].r) {
                 removeFoodItem()
                 growPlayerMass();
                 //update player's score
-               score+=5;
+                score += 5;
                 console.log(score);
 
                 document.getElementById('score').innerHTML = "Score: " + score;
@@ -49,9 +49,9 @@ export default function handleCollision() {
     }
 }
 
-//function to grow player's mass 
+//function to grow current player's mass 
 function growPlayerMass() {
-    playerCoords.r += extraMass;
-    playerCoords.draw(playerCoords.r);
-    console.log("extraMass:" + extraMass, "current Mass:" + playerCoords.r);
+    currentPlayer.r += extraMass;
+    currentPlayer.draw(currentPlayer.r);
+    console.log("extraMass:" + extraMass, "current Mass:" + currentPlayer.r);
 }

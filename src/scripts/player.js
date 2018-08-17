@@ -1,15 +1,17 @@
-import { canvas, ctx, playerCoords, socket } from '../index.js';
-import handleCollision from './handleCollision.js';
+import { canvas, ctx, socket, currentPlayer } from '../index.js';
+import handleCollisionFood from './handleCollision.js';
 
 export default function movePlayer(e) {
     const mousePos = setMousePosition(e);
     deleteCurrentPlayerPos();
-    playerCoords.x = mousePos.x;
-    playerCoords.y = mousePos.y;
-    //   new DrawPlayer(playerCoords.x, playerCoords.y, playerCoords.r);
-    playerCoords.draw();
-    handleCollision();
-    socket.emit('movePlayerCoordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
+    // playerCoords.x = mousePos.x;
+    // playerCoords.y = mousePos.y;
+    currentPlayer.x = mousePos.x;
+    currentPlayer.y = mousePos.y;
+    // playerCoords.draw();
+    currentPlayer.draw();
+    handleCollisionFood();
+    // socket.emit('movePlayerCoordinates', { x: playerCoords.x, y: playerCoords.y, r: playerCoords.r, id: socket.id });
 }
 
 function setMousePosition(e) {
@@ -26,7 +28,8 @@ function deleteCurrentPlayerPos() {
     ctx.save();
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
-    ctx.arc(playerCoords.x, playerCoords.y, playerCoords.r + 1, 0, 2 * Math.PI, false);
+    // ctx.arc(playerCoords.x, playerCoords.y, playerCoords.r + 1, 0, 2 * Math.PI, false);
+    ctx.arc(currentPlayer.x, currentPlayer.y, currentPlayer.r + 1, 0, 2 * Math.PI, false);
     ctx.clip();
     ctx.fill();
     ctx.restore();
