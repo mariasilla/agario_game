@@ -46,7 +46,8 @@ function gameCreate() {
             otherPlayer.playerId = playerInfo.playerId;
             otherPlayer.draw();
       });
-
+ 
+      //NEED to CHANGE*********************************************** */
       socket.on('disconnect', function (playerId) {
             //Loop through otherPlayersArray 
             // 
@@ -99,7 +100,8 @@ function gameCreate() {
             // });
 
       })
-
+    
+      //NEED to CHANGE*********************************************** */
       // when a player moves, update the player data
       socket.on('playerMoved', function (playerInfo) {
             for (let i = 0; i < otherPlayersArray.length; i++) {
