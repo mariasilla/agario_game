@@ -12,7 +12,7 @@ export default function movePlayer(e) {
     // playerCoords.draw();
     currentPlayer.draw();
     handleCollisionFood();
-    handleOtherPlayersCollision();
+    // handleOtherPlayersCollision();
     socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r});
 }
 

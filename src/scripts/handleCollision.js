@@ -6,47 +6,80 @@ let distance;
 let score = 0;
 
 // player and other players collision detection function 
-export function handleOtherPlayersCollision () {
-    for (let i = allPlayersArray.length - 1; i >= 0; i--) {
+export default function handleOtherPlayersCollision() {
+    // for (let i = allPlayersArray.length - 1; i >= 0; i--) {
 
-        dx = currentPlayer.x - allPlayersArray[i].x;
-        dy = currentPlayer.y - allPlayersArray[i].y;
+    //     dx = currentPlayer.x - allPlayersArray[i].x;
+    //     dy = currentPlayer.y - allPlayersArray[i].y;
 
-        distance = Math.sqrt(dx * dx + dy * dy);
+    //     distance = Math.sqrt(dx * dx + dy * dy);
 
-        function removeOtherPlayer() {
-            ctx.save();
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(allPlayersArray[i].x, allPlayersArray[i].y, allPlayersArray[i].r + 1, 0, 2 * Math.PI, false);
-            ctx.clip();
-            ctx.fill();
-            ctx.restore();
-        }
+    //     function removeOtherPlayer() {
+    //         ctx.save();
+    //         ctx.globalCompositeOperation = 'destination-out';
+    //         ctx.beginPath();
+    //         ctx.arc(allPlayersArray[i].x, allPlayersArray[i].y, allPlayersArray[i].r + 1, 0, 2 * Math.PI, false);
+    //         ctx.clip();
+    //         ctx.fill();
+    //         ctx.restore();
+    //     }
 
-        if (distance < (currentPlayer.r + 1) + allPlayersArray[i].r) {
+    //     if (distance < (currentPlayer.r + 1) + allPlayersArray[i].r) {
 
-            if (currentPlayer.r + 1 > allPlayersArray[i].r) {
-                removeOtherPlayer()
-                growPlayerMass();
-                //remove from array 
-                if (i > -1) {
-                    allPlayersArray.splice(i, 1);
-                }
+    //         if (currentPlayer.r + 1 > allPlayersArray[i].r) {
+    //             removeOtherPlayer()
+    //             growPlayerMass();
+    //             //remove from array 
+    //             if (i > -1) {
+    //                 allPlayersArray.splice(i, 1);
+    //             }
+    //         }
+
+    //         console.log("Collision detected!");
+    //         // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
+    //         // console.log("foodItem Index:" + i);
+    //     }
+
+    // }
+    /***************************************************************** */
+    // socket.on('currentPlayers', function (players) {
+        
+    //     Object.keys(players).forEach(function (id) {
+
+            dx = currentPlayer.x - otherPlayer.x;
+            dy = currentPlayer.y - otherPlayer.y;
+
+            distance = Math.sqrt(dx * dx + dy * dy);
+
+            function removeOtherPlayer() {
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(otherPlayer.x, otherPlayer.y, otherPlayer.r + 1, 0, 2 * Math.PI, false);
+                ctx.clip();
+                ctx.fill();
+                ctx.restore();
             }
 
-            console.log("Collision detected!");
-            // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
-            // console.log("foodItem Index:" + i);
-        }
+            if (distance < (currentPlayer.r + 1) + otherPlayer.r) {
 
-    }
-       
+                if (currentPlayer.r + 1 > otherPlayer.r) {
+                    removeOtherPlayer()
+                    growPlayerMass();
+                }
+
+                console.log("Collision detected!");
+                // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
+                // console.log("foodItem Index:" + i);
+            }
+        // });
+    // });
+
 }
 
 
 // player and food collision detection function 
-export default function handleCollisionFood() {
+export function handleCollisionFood() {
 
     for (let i = foodCirclesArr.length - 1; i >= 0; i--) {
 
