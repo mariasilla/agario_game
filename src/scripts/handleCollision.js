@@ -7,10 +7,10 @@ let score = 0;
 
 // player and other players collision detection function 
 export function handleOtherPlayersCollision () {
-    for (let i = otherPlayersArray.length - 1; i >= 0; i--) {
+    for (let i = allPlayersArray.length - 1; i >= 0; i--) {
 
-        dx = currentPlayer.x - otherPlayersArray[i].x;
-        dy = currentPlayer.y - otherPlayersArray[i].y;
+        dx = currentPlayer.x - allPlayersArray[i].x;
+        dy = currentPlayer.y - allPlayersArray[i].y;
 
         distance = Math.sqrt(dx * dx + dy * dy);
 
@@ -18,20 +18,20 @@ export function handleOtherPlayersCollision () {
             ctx.save();
             ctx.globalCompositeOperation = 'destination-out';
             ctx.beginPath();
-            ctx.arc(otherPlayersArray[i].x, otherPlayersArray[i].y, otherPlayersArray[i].r + 1, 0, 2 * Math.PI, false);
+            ctx.arc(allPlayersArray[i].x, allPlayersArray[i].y, allPlayersArray[i].r + 1, 0, 2 * Math.PI, false);
             ctx.clip();
             ctx.fill();
             ctx.restore();
         }
 
-        if (distance < (currentPlayer.r + 1) + otherPlayersArray[i].r) {
+        if (distance < (currentPlayer.r + 1) + allPlayersArray[i].r) {
 
-            if (currentPlayer.r + 1 > otherPlayersArray[i].r) {
+            if (currentPlayer.r + 1 > allPlayersArray[i].r) {
                 removeOtherPlayer()
                 growPlayerMass();
                 //remove from array 
                 if (i > -1) {
-                    otherPlayersArray.splice(i, 1);
+                    allPlayersArray.splice(i, 1);
                 }
             }
 

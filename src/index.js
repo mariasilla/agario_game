@@ -8,7 +8,7 @@ import { log } from 'util';
 export let socket = io();
 
 export let allPlayersArray = [];
-export let otherPlayersArray = [];
+// export let otherPlayersArray = [];
 export let currentPlayer;
 export let otherPlayer;
 
@@ -19,56 +19,81 @@ function gameCreate() {
       //send the players object(all players info) to the new player
       socket.on('currentPlayers', function (players) {
             Object.keys(players).forEach(function (id) {
-                  // allPlayersArray.push(players[id]);
+                  allPlayersArray.push(players[id]);
                   // check to see if that player’s id matches the current player’s socket id
                   if (players[id].playerId === socket.id) {
                         //Add new Current Player to Canvas and pass the current player’s information
                         currentPlayer = new Ball(players[id].x, players[id].y, players[id].r, "rgba(255,0,0,1)");
                         currentPlayer.draw();
                   } else {
-                        otherPlayersArray.push(players[id]);
                         //Add Other Players to Current Player's Canvas
                         otherPlayer = new Ball(players[id].x, players[id].y, players[id].r, "rgba(255,0,0,1)");
                         otherPlayer.draw();
-                        // for (let i = 0; i < allPlayersArray.length; i++) {
-                        //       let otherPlayer = new Ball(allPlayersArray[i].x, allPlayersArray[i].y, allPlayersArray[i].r, "rgba(255,0,0,1)");
-                        //       otherPlayer.draw();
-                        // }
                   };
             });
-            // console.log(allPlayersArray);
       });
-      // console.log(otherPlayersArray);
       //send new player's info to all other current players 
       socket.on('newPlayer', function (playerInfo) {
-
             otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, "rgba(255,0,0,1)");
             otherPlayer.playerId = playerInfo.playerId;
             otherPlayer.draw();
       });
- 
-      //NEED to CHANGE*********************************************** */
+
+      //NEED to CHANGE 
+      // when a player moves, update the player data
+      socket.on('playerMoved', function (playerInfo) {
+            
+            for (let i = 0; i < allPlayersArray.length; i++) {
+                  if (playerInfo.playerId === allPlayersArray[i].playerId) {
+                        allPlayersArray[i].x = playerInfo.x;
+                        allPlayersArray[i].y = playerInfo.y;
+                        allPlayersArray[i].r = playerInfo.r;
+                  }
+            }
+
+            // Object.keys(players).forEach(function (id) {
+            //       if (playerInfo.playerId === players[id].playerId) {
+            //             players[id].x = playerInfo.x;
+            //             players[id].y = playerInfo.y;
+            //             players[id].r = playerInfo.r;
+            //       }
+            // });
+      });
+
+      //NEED to CHANGE 
       socket.on('disconnect', function (playerId) {
-            //Loop through otherPlayersArray 
-            // 
-            for (let i = otherPlayersArray.length - 1; i >= 0; i--) {
-                  console.log(playerId);
-                  console.log(otherPlayersArray[i].playerId);
-                  if (playerId === otherPlayersArray[i].playerId) {
+            // debugger;
+            // //OPTION 1****************************************************************************** */
+            for (let i = allPlayersArray.length - 1; i >= 0; i--) {
+                  if (playerId === allPlayersArray[i].playerId) {
                         ctx.save();
                         ctx.globalCompositeOperation = 'destination-out';
                         ctx.beginPath();
-                        ctx.arc(otherPlayersArray[i].x, otherPlayersArray[i].y, otherPlayersArray[i].r + 1, 0, 2 * Math.PI, false);
+                        ctx.arc(allPlayersArray[i].x, allPlayersArray[i].y, allPlayersArray[i].r + 1, 0, 2 * Math.PI, false);
                         ctx.clip();
                         ctx.fill();
                         ctx.restore();
                         // if (i > -1) {
-                        //       otherPlayersArray.splice(i, 1);
+                        //       allPlayersArray.splice(i, 1);
                         // }
                   }
-                  // console.log(otherPlayersArray);
+                  console.log(allPlayersArray);
             }
 
+            //OPTION 2****************************************************************************** */
+            // Object.keys(players).reverse().forEach(function (id) {
+            //       if (socket.id === players[id].playerId) {
+            //             ctx.save();
+            //             ctx.globalCompositeOperation = 'destination-out';
+            //             ctx.beginPath();
+            //             ctx.arc(players[id].x, players[id].y, players[id].r + 1, 0, 2 * Math.PI, false);
+            //             ctx.clip();
+            //             ctx.fill();
+            //             ctx.restore();
+            //       }
+            // });
+
+            //OPTION 3****************************************************************************** */
 
 
             // for (let i = 0; i < otherPlayersArray.length; i++) {
@@ -83,37 +108,8 @@ function gameCreate() {
             //       }
             // }
 
-            //****************************************************************************** */
-
-            // Object.keys(players).forEach(function (id) {
-            //       console.log(playerId);
-            //       console.log(players[id].x, players[id].y);
-            //       if (playerId === players[id].playerId) {
-            //             ctx.save();
-            //             ctx.globalCompositeOperation = 'destination-out';
-            //             ctx.beginPath();
-            //             ctx.arc(players[id].x, players[id].y, players[id].r + 1, 0, 2 * Math.PI, false);
-            //             ctx.clip();
-            //             ctx.fill();
-            //             ctx.restore();
-            //       }
-            // });
-
-      })
-    
-      //NEED to CHANGE*********************************************** */
-      // when a player moves, update the player data
-      socket.on('playerMoved', function (playerInfo) {
-            // otherPlayersArray.push(playerInfo);
-            // console.log(otherPlayersArray);            
-            for (let i = 0; i < otherPlayersArray.length; i++) {
-                  if (playerInfo.playerId === otherPlayersArray[i].playerId) {
-                        otherPlayersArray[i].x = playerInfo.x;
-                        otherPlayersArray[i].y = playerInfo.y;
-                        otherPlayersArray[i].r = playerInfo.r;
-                  }
-            }
       });
+
 
 
       // socket.on('newPlayer', function (players) {
@@ -161,8 +157,6 @@ export default function Ball(x, y, r, color, velX, velY) {
       this.r = r;
       this.color = color;
       this.playerId = socket.id;
-      this.velX = velX;
-      this.velY = velY;
 }
 
 Ball.prototype.draw = function () {
@@ -178,7 +172,7 @@ canvas.addEventListener("mousemove", movePlayer, false);
 //function to initiate the game
 function gameInit() {
       gameCreate();
-      makeFood();
+      // makeFood();
 }
 
 //if mouse is over middle of canvas, start the game 
