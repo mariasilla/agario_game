@@ -11,6 +11,7 @@ export let allPlayersArray = [];
 // export let otherPlayersArray = [];
 export let currentPlayer;
 export let otherPlayer;
+export let playersClient = {};
 
 // (function () {
 function gameCreate() {
@@ -18,6 +19,7 @@ function gameCreate() {
       //the function will be called with the players object passed from the server 
       //send the players object(all players info) to the new player
       socket.on('currentPlayers', function (players) {
+            playersClient = players;
             Object.keys(players).forEach(function (id) {
                   // check to see if that player’s id matches the current player’s socket id
                   if (players[id].playerId === socket.id) {
@@ -83,7 +85,7 @@ function gameCreate() {
                         ctx.restore();
                         // }
                   });
-                  // debugger;
+                 
                   // //OPTION 2****************************************************************************** */
                   // for (let i = allPlayersArray.length - 1; i >= 0; i--) {
                   //       if (playerId === allPlayersArray[i].playerId) {

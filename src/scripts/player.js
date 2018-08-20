@@ -1,5 +1,5 @@
 import { canvas, ctx, socket, currentPlayer } from '../index.js';
-import handleCollisionFood from './handleCollision.js';
+// import handleCollisionFood from './handleCollision.js';
 import handleOtherPlayersCollision from './handleCollision.js';
 
 export default function movePlayer(e) {

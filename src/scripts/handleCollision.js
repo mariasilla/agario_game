@@ -1,4 +1,4 @@
-import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer } from '../index.js';
+import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer, playersClient } from '../index.js';
 
 let dx;
 let dy;
@@ -43,37 +43,36 @@ export default function handleOtherPlayersCollision() {
     // }
     /***************************************************************** */
     // socket.on('currentPlayers', function (players) {
+    
+    Object.keys(playersClient).forEach(function (id) {
+        console.log(Object.keys(playersClient));
+        // console.log("Other Player X: " + otherPlayer.x, "Other Player Y: " + otherPlayer.y);
 
-    //     Object.keys(players).forEach(function (id) {
-    console.log("Other Player X: " + otherPlayer.x, "Other Player Y: " + otherPlayer.y);
+        dx = currentPlayer.x - playersClient[id].x;
+        dy = currentPlayer.y - playersClient[id].y;
 
-    dx = currentPlayer.x - otherPlayer.x;
-    dy = currentPlayer.y - otherPlayer.y;
+        distance = Math.sqrt(dx * dx + dy * dy);
 
-    distance = Math.sqrt(dx * dx + dy * dy);
-
-    function removeOtherPlayer() {
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(otherPlayer.x, otherPlayer.y, otherPlayer.r + 1, 0, 2 * Math.PI, false);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
-    }
-
-    if (distance < (currentPlayer.r + 1) + otherPlayer.r) {
-
-        if (currentPlayer.r + 1 > otherPlayer.r) {
-            removeOtherPlayer()
-            growPlayerMass();
+        function removeOtherPlayer() {
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(playersClient[id].x, playersClient[id].y, playersClient[id].r + 1, 0, 2 * Math.PI, false);
+            ctx.clip();
+            ctx.fill();
+            ctx.restore();
         }
 
-        console.log("Collision detected!");
-        // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
-        // console.log("foodItem Index:" + i);
-    }
-}
+        if (distance < (currentPlayer.r + 1) + playersClient[id].r) {
+
+            if (currentPlayer.r + 1 > playersClient[id].r) {
+                removeOtherPlayer()
+                growPlayerMass();
+            }
+            console.log("Collision detected!");
+        }
+    })
+}; 
 
 
 // player and food collision detection function 
