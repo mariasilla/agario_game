@@ -11,8 +11,8 @@ export default function movePlayer(e) {
     currentPlayer.y = mousePos.y;
     // playerCoords.draw();
     currentPlayer.draw();
-    handleCollisionFood();
-    // handleOtherPlayersCollision();
+    // handleCollisionFood();
+    handleOtherPlayersCollision();
     socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r});
 }
 

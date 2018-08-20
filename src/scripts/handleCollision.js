@@ -43,38 +43,36 @@ export default function handleOtherPlayersCollision() {
     // }
     /***************************************************************** */
     // socket.on('currentPlayers', function (players) {
-        
+
     //     Object.keys(players).forEach(function (id) {
+    console.log("Other Player X: " + otherPlayer.x, "Other Player Y: " + otherPlayer.y);
 
-            dx = currentPlayer.x - otherPlayer.x;
-            dy = currentPlayer.y - otherPlayer.y;
+    dx = currentPlayer.x - otherPlayer.x;
+    dy = currentPlayer.y - otherPlayer.y;
 
-            distance = Math.sqrt(dx * dx + dy * dy);
+    distance = Math.sqrt(dx * dx + dy * dy);
 
-            function removeOtherPlayer() {
-                ctx.save();
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath();
-                ctx.arc(otherPlayer.x, otherPlayer.y, otherPlayer.r + 1, 0, 2 * Math.PI, false);
-                ctx.clip();
-                ctx.fill();
-                ctx.restore();
-            }
+    function removeOtherPlayer() {
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(otherPlayer.x, otherPlayer.y, otherPlayer.r + 1, 0, 2 * Math.PI, false);
+        ctx.clip();
+        ctx.fill();
+        ctx.restore();
+    }
 
-            if (distance < (currentPlayer.r + 1) + otherPlayer.r) {
+    if (distance < (currentPlayer.r + 1) + otherPlayer.r) {
 
-                if (currentPlayer.r + 1 > otherPlayer.r) {
-                    removeOtherPlayer()
-                    growPlayerMass();
-                }
+        if (currentPlayer.r + 1 > otherPlayer.r) {
+            removeOtherPlayer()
+            growPlayerMass();
+        }
 
-                console.log("Collision detected!");
-                // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
-                // console.log("foodItem Index:" + i);
-            }
-        // });
-    // });
-
+        console.log("Collision detected!");
+        // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
+        // console.log("foodItem Index:" + i);
+    }
 }
 
 
