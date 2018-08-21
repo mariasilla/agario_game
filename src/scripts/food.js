@@ -1,39 +1,37 @@
-import { foodCirclesArr } from '../index.js';
+import { foodCirclesArr, socket } from '../index.js';
 import Ball from '../index.js';
 
 let foodItemCoords;
 
 export default function makeFood() {
 
-    while (foodCirclesArr.length < 25) {
+    // socket.on('foodCoords', function (food) {
 
-        foodItemCoords = new Ball(
-            Math.floor(Math.random() * 600),
-            Math.floor(Math.random() * 600),
-            9,
-            'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
-            random(-7, 7),
-            random(-7, 7)
-        );
-        foodCirclesArr.push(foodItemCoords);
-    }
+        while (foodCirclesArr.length < 25) {
 
-    for (let i = 0; i < foodCirclesArr.length; i++) {
-        foodCirclesArr[i].draw();
-        // foodCirclesArr[i].update();
-        // foodCirclesArr[i].collisionDetectFood();
-    }
-    // requestAnimationFrame(makeFood);
-}
+            foodItemCoords = new Ball(
+                Math.floor(Math.random() * 600),
+                Math.floor(Math.random() * 600),
+                9,
+                'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
+                random(-7, 7),
+                random(-7, 7)
+            );
+            foodCirclesArr.push(foodItemCoords);
+        }
+
+        for (let i = 0; i < foodCirclesArr.length; i++) {
+            foodCirclesArr[i].draw();
+            // socket.emit('foodCoords', { x: foodCirclesArr[i].x, y: foodCirclesArr[i].y, r: foodCirclesArr[i].r});
+        }
+    // });
+};
 
 //randomize function 
 function random(min, max) {
     var num = Math.floor(Math.random() * (max - min + 1)) + min;
     return num;
 }
-
-
-
 
 
 //draw multiple random same-size diff color circles  

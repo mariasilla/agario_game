@@ -23,7 +23,6 @@ let food = {
     r: 9
 };
 
-
 //Socket.IO starts here
 io.on('connection', function (socket) {
     //print NEW connected user's id to console
@@ -42,24 +41,34 @@ io.on('connection', function (socket) {
     // console.log(players);
 
     //send new player's info to all other current players 
-    socket.broadcast.emit('newPlayer', players[socket.id]);
+    socket.broadcast.emit('newPlayer', players[socket.id]); //CURRENT PLAYER 
 
     //Listen for new playerMovement event
     // when a player MOVES, update the player data
     socket.on('playerMovement', function (movementData) {
-        // console.log(movementData);
+        // console.log(players[socket.id].x);
         players[socket.id].x = movementData.x;
         players[socket.id].y = movementData.y;
         players[socket.id].r = movementData.r;
+        Object.keys(players).forEach(function (id) {
+            console.log("Current Player ID: " + players[socket.id].playerId, "Other Player ID: " + players[id].playerId);
+        }) // loop ends here
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });
 
+    // socket.on('foodCoords', function (data) {
+    //    food.x = data.x;
+    //    food.y = data.y;
+    //    food.r= data.r;
+    // //    socket.broadcast.emit('playerMoved', players[socket.id]);
+    // });
+
     // send the food object to the new player
-    socket.emit('foodCoords', food);
+    // socket.emit('foodCoords', food);
 
     // send the current score
-    socket.emit('scoreUpdate', score);
+    // socket.emit('scoreUpdate', score);
 
     // socket.on('movePlayerCoordinates', function (data) {
     //     socket.broadcast.emit('draw', {
