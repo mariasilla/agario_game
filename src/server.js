@@ -17,6 +17,11 @@ app.get('/', function (req, res) {
 
 //Object to keep track of all the players that are currently in the game
 let players = {};
+let food = {
+    x: Math.floor(Math.random() * 700) + 50,
+    y: Math.floor(Math.random() * 700) + 50,
+    r: 9
+};
 
 
 //Socket.IO starts here
@@ -51,8 +56,8 @@ io.on('connection', function (socket) {
     });
 
     // send the food object to the new player
-    socket.emit('starLocation', food);
-    
+    socket.emit('foodCoords', food);
+
     // send the current score
     socket.emit('scoreUpdate', score);
 
