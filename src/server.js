@@ -50,6 +50,12 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });
 
+    // send the food object to the new player
+    socket.emit('starLocation', food);
+    
+    // send the current score
+    socket.emit('scoreUpdate', score);
+
     // socket.on('movePlayerCoordinates', function (data) {
     //     socket.broadcast.emit('draw', {
     //         x: data.x,
@@ -70,15 +76,8 @@ io.on('connection', function (socket) {
 
     // //DISCONNECT OTHER PLAYER on collision with other player
     // socket.on('disconnectOtherPlayer', function (data) {
-    //     Object.keys(players).forEach(function (id) {
-    //         if (players[id].playerId === data) {
-    //             delete players[players[id].playerId];
-    //         }
-    //     });
-    //     io.emit('disconnectOtherPlayer', data);
-    //     // console.log(playerId);
-    //     // delete players[playerId];
-    //     // io.emit('disconnect', socket.id);
+    //     io.sockets.connected[data].disconnect();
+    //     // io.emit('disconnectOtherPlayer', data);
     // });
 
 });
