@@ -6,12 +6,11 @@ import { log } from 'util';
 
 //Socket.IO starts here
 export let socket = io();
-
-export let allPlayersArray = [];
-// export let otherPlayersArray = [];
+//players object on client side
+export let playersClient = {};
 export let currentPlayer;
 export let otherPlayer;
-export let playersClient = {};
+
 
 // (function () {
 function gameCreate() {
@@ -85,7 +84,7 @@ function gameCreate() {
                         ctx.restore();
                         // }
                   });
-                 
+
                   // //OPTION 2****************************************************************************** */
                   // for (let i = allPlayersArray.length - 1; i >= 0; i--) {
                   //       if (playerId === allPlayersArray[i].playerId) {
@@ -119,7 +118,6 @@ function gameCreate() {
                   // }
 
             }); //socket.on disconnect ends here
-
 
       }); //socket.on currentPlayers ends here
 

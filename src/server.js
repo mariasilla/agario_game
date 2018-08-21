@@ -20,10 +20,9 @@ let players = {};
 
 
 //Socket.IO starts here
-// (function() {
 io.on('connection', function (socket) {
     //print NEW connected user's id to console
-    console.log('a NEW user is connected: ' + socket.id);
+    console.log('a NEW user is CONNECTED: ' + socket.id);
 
     // create a new player and add it to the players object
     players[socket.id] = {
@@ -36,7 +35,7 @@ io.on('connection', function (socket) {
     // send the players object(all players info) to the new player
     socket.emit('currentPlayers', players);
     // console.log(players);
-    
+
     //send new player's info to all other current players 
     socket.broadcast.emit('newPlayer', players[socket.id]);
 
@@ -59,40 +58,30 @@ io.on('connection', function (socket) {
     //     });
     // });
 
-    // when a player Disconnects, remove them from the players object
+    //DISCONNECT CURRENT PLAYER - when a player Disconnects, remove them from the players object
     socket.on('disconnect', function () {
-        console.log('user DISCONNECTED: ' + socket.id);    
+        console.log('user DISCONNECTED: ' + socket.id);
         // remove this player from the players object
         delete players[socket.id];
         console.log(players);
         // emit a message to all players to remove this player
         io.emit('disconnect', socket.id);
     });
+
+    // //DISCONNECT OTHER PLAYER on collision with other player
+    // socket.on('disconnectOtherPlayer', function (data) {
+    //     Object.keys(players).forEach(function (id) {
+    //         if (players[id].playerId === data) {
+    //             delete players[players[id].playerId];
+    //         }
+    //     });
+    //     io.emit('disconnectOtherPlayer', data);
+    //     // console.log(playerId);
+    //     // delete players[playerId];
+    //     // io.emit('disconnect', socket.id);
+    // });
+
 });
-
-//   }).call(this);
-
-
-// io.on('connection', function (socket) {
-
-//     // //print out the chat message event
-//     // socket.on('chat message', function (msg) {
-//     //     // sending to all clients except sender
-//     //     socket.broadcast.emit('chat message', msg);
-//     // });
-
-//     socket.on('coordinates', function (data) {
-//         socketPlayersArrCoords.push(data);
-//         console.log(socketPlayersArrCoords);
-//         socket.broadcast.emit(socketPlayersArrCoords);
-//         // console.log(data);
-//     });
-
-//     socket.on('draw', function (data) {
-//         socket.broadcast.emit('draw', data);
-//     });
-// });
-
 
 //Socket.IO ends here
 

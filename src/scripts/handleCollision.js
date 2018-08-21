@@ -1,4 +1,4 @@
-import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer, playersClient } from '../index.js';
+import { ctx, foodCirclesArr, extraMass, currentPlayer, socket, playersClient } from '../index.js';
 
 let dx;
 let dy;
@@ -43,10 +43,9 @@ export default function handleOtherPlayersCollision() {
     // }
     /***************************************************************** */
     // socket.on('currentPlayers', function (players) {
-    
+
     Object.keys(playersClient).forEach(function (id) {
-        console.log(Object.keys(playersClient));
-        // console.log("Other Player X: " + otherPlayer.x, "Other Player Y: " + otherPlayer.y);
+        // console.log(Object.keys(playersClient).indexOf(id));
 
         dx = currentPlayer.x - playersClient[id].x;
         dy = currentPlayer.y - playersClient[id].y;
@@ -68,11 +67,25 @@ export default function handleOtherPlayersCollision() {
             if (currentPlayer.r + 1 > playersClient[id].r) {
                 removeOtherPlayer()
                 growPlayerMass();
+                //update player's score
+                score += 5;
+                document.getElementById('score').innerHTML = "Score: " + score;
+                // remove item and disconnect the user from socket.io session 
+                let i = Object.keys(playersClient).indexOf(id);
+                if (i > -1) {
+                    Object.keys(playersClient).splice(i, 1);
+                }
+                // socket.emit("disconnectOtherPlayer", playersClient[id].playerId)
+                // console.log(playersClient[id].playerId);
+                // console.log(socket.id); //current player id       
+                // socket.clients[playersClient[id]].disconnect();
+                socket.id = playersClient[id].playerId;
+                socket.disconnect();
             }
             console.log("Collision detected!");
         }
     })
-}; 
+};
 
 
 // player and food collision detection function 
@@ -103,7 +116,6 @@ export function handleCollisionFood() {
                 //update player's score
                 score += 5;
                 console.log(score);
-
                 document.getElementById('score').innerHTML = "Score: " + score;
                 //remove foodItem from array 
                 if (i > -1) {
@@ -123,6 +135,6 @@ export function handleCollisionFood() {
 function growPlayerMass() {
     currentPlayer.r += extraMass;
     currentPlayer.draw(currentPlayer.r);
-    console.log("extraMass:" + extraMass, "current Mass:" + currentPlayer.r);
+    // console.log("extraMass:" + extraMass, "current Mass:" + currentPlayer.r);
     // socket.emit('playerMass', {r: currentPlayer.r});
 }
