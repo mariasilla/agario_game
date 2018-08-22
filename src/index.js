@@ -61,7 +61,6 @@ function gameCreate() {
                   otherPlayer.draw();
             });
 
-            //NEED to CHANGE 
             // when a player moves, update the player data
             socket.on('playerMoved', function (playerInfo) {
 

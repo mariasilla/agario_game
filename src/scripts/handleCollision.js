@@ -7,10 +7,23 @@ let score = 0;
 
 // player and other players collision detection function 
 export function handleOtherPlayersCollision() {
+    
+    socket.on('removeEnemy', function (playerInfo) {
 
-    Object.keys(playersClient).forEach(function (id) {
-        console.log("Current Player ID: "+currentPlayer.playerId, "Other Player ID: "+playersClient[id].playerId );
-        
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
+            ctx.clip();
+            ctx.fill();
+            ctx.restore();
+
+    });// socket removePlayer ends here
+
+    // Object.keys(playersClient).forEach(function (id) {
+    //     console.log("Current Player ID: " + currentPlayer.playerId, 
+    //     "Other Player ID: " + playersClient[id].playerId);
+
         // console.log(Object.keys(playersClient));
         // socket.emit('playersCollision', {
         //     currentX: currentPlayer.x, currentY: currentPlayer.y,
@@ -34,32 +47,32 @@ export function handleOtherPlayersCollision() {
         //     ctx.restore();
         // }
 
-        // if (distance < (currentPlayer.r + 1) + playersClient[id].r) {
+    //     if (distance < (currentPlayer.r + 1) + playersClient[id].r) {
 
-        //     if (currentPlayer.r + 1 > playersClient[id].r) {
-        //         removeOtherPlayer()
-        //         growPlayerMass();
-        //         //update player's score
-        //         score += 5;
-        //         document.getElementById('score').innerHTML = "Score: " + score;
-        //         // remove item and disconnect the user from socket.io session 
-        //         let i = Object.keys(playersClient).indexOf(id);
-        //         if (i > -1) {
-        //             Object.keys(playersClient).splice(i, 1);
-        //         }
-        //         // console.log("After splice:"+Object.keys(playersClient));
-        //         // socket.emit("disconnectOtherPlayer", playersClient[id].playerId)
-        //         // console.log(playersClient[id].playerId);
-        //         // console.log(socket.id); //current player id       
-        //         // socket.clients[playersClient[id]].disconnect();
-        //         // socket.id = playersClient[id].playerId;
-        //         socket.disconnect();
-        //     }
-        //     console.log("Collision detected!");
-        // }
+    //         if (currentPlayer.r + 1 > playersClient[id].r) {
+    //             removeOtherPlayer()
+    //             growPlayerMass();
+    //             //update player's score
+    //             score += 5;
+    //             document.getElementById('score').innerHTML = "Score: " + score;
+    //             // remove item and disconnect the user from socket.io session 
+    //             let i = Object.keys(playersClient).indexOf(id);
+    //             if (i > -1) {
+    //                 Object.keys(playersClient).splice(i, 1);
+    //             }
+    //             // console.log("After splice:"+Object.keys(playersClient));
+    //             // socket.emit("disconnectOtherPlayer", playersClient[id].playerId)
+    //             // console.log(playersClient[id].playerId);
+    //             // console.log(socket.id); //current player id       
+    //             // socket.clients[playersClient[id]].disconnect();
+    //             // socket.id = playersClient[id].playerId;
+    //             socket.disconnect();
+    //         }
+    //         console.log("Collision detected!");
+    //     }
 
-    }) // loop ends here
-    
+    // }) // loop ends here
+
 
     // for (let i = allPlayersArray.length - 1; i >= 0; i--) {
 

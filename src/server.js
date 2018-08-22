@@ -50,9 +50,54 @@ io.on('connection', function (socket) {
         players[socket.id].x = movementData.x;
         players[socket.id].y = movementData.y;
         players[socket.id].r = movementData.r;
+        console.log(players);
+
         Object.keys(players).forEach(function (id) {
-            console.log("Current Player ID: " + players[socket.id].playerId, "Other Player ID: " + players[id].playerId);
-        }) // loop ends here
+            if (players[id].playerId !== socket.id) {
+                // console.log("Current Player ID: " + players[socket.id].playerId,
+                //     "ENEMY ID: " + players[id].playerId);
+
+                dx = players[socket.id].x - players[id].x;
+                dy = players[socket.id].y - players[id].y;
+                distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < (players[socket.id].r + 1) + players[id].r) {
+
+                    //if you/current ATE the enemy
+                    if (players[socket.id].r + 1 > players[id].r) {
+                        // growPlayerMass();
+                        //update player's score
+                        // score += 5;
+                        // document.getElementById('score').innerHTML = "Score: " + score;
+                        // remove item and disconnect the user from socket.io session 
+                        // let i = Object.keys(playersClient).indexOf(id);
+                        // if (i > -1) {
+                        //     Object.keys(playersClient).splice(i, 1);
+                        // }
+                        // socket.on('disconnect', function () {
+                        //     console.log('user DISCONNECTED: ' + players[id].playerId);
+                        //     // remove this player from the players object
+                        //     delete players[id];
+                        //     console.log(players);
+                        //     // emit a message to all players to remove this player
+                        //     io.emit('disconnect', players[id].playerId);
+                        // });
+                        console.log("ENEMY id: " + players[id].playerId);
+                        // remove Enemy from the players object
+                        // delete players[id];
+                        console.log(players);
+                        //remove enemy/other player from canvas 
+                        socket.emit('removeEnemy', players[id]);
+                    } else {
+                        //if Enemy ATE you
+
+                    }
+                    console.log("Collision detected!");
+                }
+            } //if statement ends here
+        }); // collision loop ends here
+
+
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });
