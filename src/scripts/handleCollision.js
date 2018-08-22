@@ -7,45 +7,57 @@ let score = 0;
 
 // player and other players collision detection function 
 export function handleOtherPlayersCollision() {
-    
+
     socket.on('removeEnemy', function (playerInfo) {
 
-            ctx.save();
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-            ctx.clip();
-            ctx.fill();
-            ctx.restore();
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
+        ctx.clip();
+        ctx.fill();
+        ctx.restore();
 
     });// socket removePlayer ends here
+
+    socket.on('removePlayer', function (playerInfo) {
+
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
+        ctx.clip();
+        ctx.fill();
+        ctx.restore();
+
+    });
 
     // Object.keys(playersClient).forEach(function (id) {
     //     console.log("Current Player ID: " + currentPlayer.playerId, 
     //     "Other Player ID: " + playersClient[id].playerId);
 
-        // console.log(Object.keys(playersClient));
-        // socket.emit('playersCollision', {
-        //     currentX: currentPlayer.x, currentY: currentPlayer.y,
-        //     currentR: currentPlayer.r, currentID: currentPlayer.playerId,
-        //     otherX: playersClient[id].x, otherY: playersClient[id].y, otherR: playersClient[id].r,
-        //     otherID: playersClient[id].playerId
-        // });
+    // console.log(Object.keys(playersClient));
+    // socket.emit('playersCollision', {
+    //     currentX: currentPlayer.x, currentY: currentPlayer.y,
+    //     currentR: currentPlayer.r, currentID: currentPlayer.playerId,
+    //     otherX: playersClient[id].x, otherY: playersClient[id].y, otherR: playersClient[id].r,
+    //     otherID: playersClient[id].playerId
+    // });
 
-        // dx = currentPlayer.x - playersClient[id].x;
-        // dy = currentPlayer.y - playersClient[id].y;
+    // dx = currentPlayer.x - playersClient[id].x;
+    // dy = currentPlayer.y - playersClient[id].y;
 
-        // distance = Math.sqrt(dx * dx + dy * dy);
+    // distance = Math.sqrt(dx * dx + dy * dy);
 
-        // function removeOtherPlayer() {
-        //     ctx.save();
-        //     ctx.globalCompositeOperation = 'destination-out';
-        //     ctx.beginPath();
-        //     ctx.arc(playersClient[id].x, playersClient[id].y, playersClient[id].r + 1, 0, 2 * Math.PI, false);
-        //     ctx.clip();
-        //     ctx.fill();
-        //     ctx.restore();
-        // }
+    // function removeOtherPlayer() {
+    //     ctx.save();
+    //     ctx.globalCompositeOperation = 'destination-out';
+    //     ctx.beginPath();
+    //     ctx.arc(playersClient[id].x, playersClient[id].y, playersClient[id].r + 1, 0, 2 * Math.PI, false);
+    //     ctx.clip();
+    //     ctx.fill();
+    //     ctx.restore();
+    // }
 
     //     if (distance < (currentPlayer.r + 1) + playersClient[id].r) {
 
@@ -117,45 +129,48 @@ export function handleOtherPlayersCollision() {
 
 // player and food collision detection function 
 export function handleCollisionFood() {
+    // socket.on('food', function (foodCirclesArr) {
+        console.log(foodCirclesArr);
 
-    for (let i = foodCirclesArr.length - 1; i >= 0; i--) {
+        for (let i = foodCirclesArr.length - 1; i >= 0; i--) {
 
-        dx = currentPlayer.x - foodCirclesArr[i].x;
-        dy = currentPlayer.y - foodCirclesArr[i].y;
+            dx = currentPlayer.x - foodCirclesArr[i].x;
+            dy = currentPlayer.y - foodCirclesArr[i].y;
 
-        distance = Math.sqrt(dx * dx + dy * dy);
+            distance = Math.sqrt(dx * dx + dy * dy);
 
-        function removeFoodItem() {
-            ctx.save();
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(foodCirclesArr[i].x, foodCirclesArr[i].y, foodCirclesArr[i].r + 1, 0, 2 * Math.PI, false);
-            ctx.clip();
-            ctx.fill();
-            ctx.restore();
-        }
-
-        if (distance < (currentPlayer.r + 1) + foodCirclesArr[i].r) {
-
-            if (currentPlayer.r + 1 > foodCirclesArr[i].r) {
-                removeFoodItem()
-                growPlayerMass();
-                //update player's score
-                score += 5;
-                console.log(score);
-                document.getElementById('score').innerHTML = "Score: " + score;
-                //remove foodItem from array 
-                if (i > -1) {
-                    foodCirclesArr.splice(i, 1);
-                }
+            function removeFoodItem() {
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(foodCirclesArr[i].x, foodCirclesArr[i].y, foodCirclesArr[i].r + 1, 0, 2 * Math.PI, false);
+                ctx.clip();
+                ctx.fill();
+                ctx.restore();
             }
 
-            console.log("Collision detected!");
-            // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
-            console.log("foodItem Index:" + i);
-        }
+            if (distance < (currentPlayer.r + 1) + foodCirclesArr[i].r) {
 
-    }
+                if (currentPlayer.r + 1 > foodCirclesArr[i].r) {
+                    removeFoodItem()
+                    growPlayerMass();
+                    //update player's score
+                    score += 5;
+                    console.log(score);
+                    document.getElementById('score').innerHTML = "Score: " + score;
+                    //remove foodItem from array 
+                    if (i > -1) {
+                        foodCirclesArr.splice(i, 1);
+                    }
+                }
+
+                console.log("Collision detected!");
+                // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
+                console.log("foodItem Index:" + i);
+            }
+
+        }
+    // }); //food socket ends here
 }
 
 //function to grow current player's mass 

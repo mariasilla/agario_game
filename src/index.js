@@ -3,6 +3,7 @@ import io from 'socket.io-client';
 import makeFood from './scripts/food.js';
 import movePlayer from './scripts/player.js';
 import { log } from 'util';
+import {random} from './scripts/food.js'
 
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");
@@ -33,6 +34,7 @@ export let socket = io();
 export let playersClient = {};
 export let currentPlayer;
 export let otherPlayer;
+let foodItem;
 
 //Socket.IO starts here
 // (function () {
@@ -40,30 +42,41 @@ function gameCreate() {
       //socket.on listens to the currentPlayers event, and when this event is triggered
       //the function will be called with the players object passed from the server 
       //send the players object(all players info) to the new player
+
+      socket.on('food', function (foodCirclesArray) {
+            for (let i = 0; i < foodCirclesArray.length; i++) {
+                  foodItem = new Ball(foodCirclesArray[i].x, foodCirclesArray[i].y, foodCirclesArray[i].r,
+                        'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+                  foodItem.draw();
+            }
+      });
+
       socket.on('currentPlayers', function (players) {
             playersClient = players;
             Object.keys(players).forEach(function (id) {
                   // check to see if that player’s id matches the current player’s socket id
                   if (players[id].playerId === socket.id) {
                         //Add new Current Player to Canvas and pass the current player’s information
-                        currentPlayer = new Ball(players[id].x, players[id].y, players[id].r, "rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')");
+                        currentPlayer = new Ball(players[id].x, players[id].y, players[id].r,
+                              'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
                         currentPlayer.draw();
                   } else {
                         //Add Other Players to Current Player's Canvas
-                        otherPlayer = new Ball(players[id].x, players[id].y, players[id].r, "rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')");
+                        otherPlayer = new Ball(players[id].x, players[id].y, players[id].r,
+                              'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
                         otherPlayer.draw();
                   };
             });
             //send new player's info to all other current players 
             socket.on('newPlayer', function (playerInfo) {
-                  otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, "rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')");
+                  otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r,
+                        'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
                   otherPlayer.playerId = playerInfo.playerId;
                   otherPlayer.draw();
             });
 
             // when a player moves, update the player data
             socket.on('playerMoved', function (playerInfo) {
-
                   Object.keys(players).forEach(function (id) {
                         ctx.save();
                         ctx.globalCompositeOperation = 'destination-out';
@@ -75,7 +88,8 @@ function gameCreate() {
                         players[id].x = playerInfo.x;
                         players[id].y = playerInfo.y;
                         players[id].r = playerInfo.r;
-                        otherPlayer = new Ball(players[id].x, players[id].y, players[id].r, "rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')");
+                        otherPlayer = new Ball(players[id].x, players[id].y, players[id].r,
+                              'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
                         otherPlayer.draw();
                   });
 
@@ -195,7 +209,7 @@ canvas.addEventListener("mousemove", movePlayer, false);
 //function to initiate the game
 function gameInit() {
       gameCreate();
-      makeFood();
+      // makeFood();
 }
 
 //if mouse is over middle of canvas, start the game 

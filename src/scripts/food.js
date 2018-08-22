@@ -1,34 +1,33 @@
 import { foodCirclesArr, socket } from '../index.js';
 import Ball from '../index.js';
 
-let foodItemCoords;
+// let foodItemCoords;
 
-export default function makeFood() {
+// export default function makeFood() {
 
-    // socket.on('foodCoords', function (food) {
+//     // socket.on('foodCoords', function (food) {
 
-        while (foodCirclesArr.length < 25) {
+//     while (foodCirclesArr.length < 25) {
 
-            foodItemCoords = new Ball(
-                Math.floor(Math.random() * 600),
-                Math.floor(Math.random() * 600),
-                9,
-                'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
-                random(-7, 7),
-                random(-7, 7)
-            );
-            foodCirclesArr.push(foodItemCoords);
-        }
+//         foodItemCoords = new Ball(
+//             Math.floor(Math.random() * 600),
+//             Math.floor(Math.random() * 600),
+//             9,
+//             'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
+//             random(-7, 7),
+//             random(-7, 7)
+//         );
+//         foodCirclesArr.push(foodItemCoords);
+//     }
 
-        for (let i = 0; i < foodCirclesArr.length; i++) {
-            foodCirclesArr[i].draw();
-            // socket.emit('foodCoords', { x: foodCirclesArr[i].x, y: foodCirclesArr[i].y, r: foodCirclesArr[i].r});
-        }
-    // });
-};
+//     for (let i = 0; i < foodCirclesArr.length; i++) {
+//         foodCirclesArr[i].draw();
+//     }
+//     // });
+// };
 
 //randomize function 
-function random(min, max) {
+export function random(min, max) {
     var num = Math.floor(Math.random() * (max - min + 1)) + min;
     return num;
 }
