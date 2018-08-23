@@ -1,8 +1,9 @@
+import './style.scss';
 import './style.css';
 import io from 'socket.io-client';
 import movePlayer from './scripts/player.js';
 import { log } from 'util';
-import { random } from './scripts/random.js'
+import { random } from './scripts/random.js';
 
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");

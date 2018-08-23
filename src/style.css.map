@@ -2,11 +2,13 @@
 	"version": 3,
 	"file": "style.css",
 	"sources": [
-		"src/style.scss"
+		"src/style.scss",
+		"src/themeColors.scss"
 	],
 	"sourcesContent": [
-		"$font:    Helvetica, Arial;\n$score-color: #1cdcbd;\n$canvas-color: rgba(211, 211, 211, 1);\n\n* {\n    margin: 0;\n    padding: 0;\n    /* box-sizing: border-box; */\n}\n\n#score {\n    font: 20px $font;\n    color: $score-color;\n    position: absolute;\n    left: 50%;\n    margin-top: 25px;\n}\n\n#canvas {\n    background-color: $canvas-color;\n    position: absolute;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    margin: auto;\n}\n\n"
+		"@import 'themeColors';\n$font:    Helvetica, Arial;\n\n* {\n    margin: 0;\n    padding: 0;\n    /* box-sizing: border-box; */\n};\n\n#score {\n    font: 20px $font;\n    color: $score-color;\n    position: absolute;\n    left: 50%;\n    margin-top: 25px;\n};\n\n#canvas {\n    background-color: $canvas-color;\n    position: absolute;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    margin: auto;\n};\n\n",
+		"$score-color: #1cdcbd;\n$canvas-color: rgba(211, 211, 211, 1);"
 	],
 	"names": [],
-	"mappings": ";AAIA,AAAA,CAAC,CAAC;EACE,MAAM,EAAE,CAAC;EACT,OAAO,EAAE,CAAC;EACV,6BAA6B,EAChC;;;AAED,AAAA,MAAM,CAAC;EACH,IAAI,EAAE,IAAI,CAXJ,SAAS,EAAE,KAAK;EAYtB,KAAK,EAXK,OAAO;EAYjB,QAAQ,EAAE,QAAQ;EAClB,IAAI,EAAE,GAAG;EACT,UAAU,EAAE,IAAI,GACnB;;;AAED,AAAA,OAAO,CAAC;EACJ,gBAAgB,EAjBL,SAAsB;EAkBjC,QAAQ,EAAE,QAAQ;EAClB,GAAG,EAAE,CAAC;EACN,MAAM,EAAE,CAAC;EACT,IAAI,EAAE,CAAC;EACP,KAAK,EAAE,CAAC;EACR,MAAM,EAAE,IAAI,GACf"
+	"mappings": ";AAGA,AAAA,CAAC,CAAC;EACE,MAAM,EAAE,CAAC;EACT,OAAO,EAAE,CAAC;EACV,6BAA6B,EAChC;;;AAED,AAAA,MAAM,CAAC;EACH,IAAI,EAAE,IAAI,CATJ,SAAS,EAAE,KAAK;EAUtB,KAAK,ECXK,OAAO;EDYjB,QAAQ,EAAE,QAAQ;EAClB,IAAI,EAAE,GAAG;EACT,UAAU,EAAE,IAAI,GACnB;;;AAED,AAAA,OAAO,CAAC;EACJ,gBAAgB,ECjBL,SAAsB;EDkBjC,QAAQ,EAAE,QAAQ;EAClB,GAAG,EAAE,CAAC;EACN,MAAM,EAAE,CAAC;EACT,IAAI,EAAE,CAAC;EACP,KAAK,EAAE,CAAC;EACR,MAAM,EAAE,IAAI,GACf"
 }

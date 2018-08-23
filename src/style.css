@@ -1,10 +1,10 @@
-/* line 5, src/style.scss */
+/* line 4, src/style.scss */
 * {
   margin: 0;
   padding: 0;
   /* box-sizing: border-box; */ }
 
-/* line 11, src/style.scss */
+/* line 10, src/style.scss */
 #score {
   font: 20px Helvetica, Arial;
   color: #1cdcbd;
@@ -12,7 +12,7 @@
   left: 50%;
   margin-top: 25px; }
 
-/* line 19, src/style.scss */
+/* line 18, src/style.scss */
 #canvas {
   background-color: lightgray;
   position: absolute;

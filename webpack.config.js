@@ -1,5 +1,5 @@
 const path = require('path');
-const SassPlugin = require('sass-webpack-plugin');
+// const SassPlugin = require('sass-webpack-plugin');
 const HtmlPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -15,8 +15,8 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/,
-                use: ['style-loader', 'css-loader']
+                test: /\.(s*)css$/,
+                use: ['style-loader', 'css-loader', 'sass-loader']
             }
         ]
     }
