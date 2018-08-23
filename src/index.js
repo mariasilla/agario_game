@@ -1,9 +1,8 @@
 import './style.css';
 import io from 'socket.io-client';
-import makeFood from './scripts/food.js';
 import movePlayer from './scripts/player.js';
 import { log } from 'util';
-import { random } from './scripts/food.js'
+import { random } from './scripts/random.js'
 
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");
@@ -65,6 +64,7 @@ function gameCreate() {
                               'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
                         otherPlayer.draw();
                         otherPlayersArray.push(otherPlayer);
+                        // console.log(otherPlayersArray);
                         
                   };
             }
@@ -91,7 +91,7 @@ function gameCreate() {
                         playersArray[i].y = playerInfo.y;
                         playersArray[i].r = playerInfo.r;
                         otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r,
-                              'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+                              playersArray[i].color);
                         otherPlayer.draw();
                   }
             });

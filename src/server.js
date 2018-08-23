@@ -32,6 +32,7 @@ io.on('connection', function (socket) {
         x: Math.floor(Math.random() * 700) + 50,
         y: Math.floor(Math.random() * 700) + 50,
         r: 20,
+        color: this.color,
         playerId: socket.id
     };
 
@@ -56,7 +57,7 @@ io.on('connection', function (socket) {
             players[socket.id].x = movementData.x;
             players[socket.id].y = movementData.y;
             players[socket.id].r = movementData.r;
-            
+
             if (playersArray[i].playerId !== socket.id) {
 
                 dx = players[socket.id].x - playersArray[i].x;
@@ -85,7 +86,7 @@ io.on('connection', function (socket) {
                 }
             } //if statement ends here
         } // collision loop ends here
-    
+
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });
@@ -113,14 +114,17 @@ io.on('connection', function (socket) {
     });
 
     //food
-    while (foodCirclesArray.length < 25) {
-        foodItem = {
-            x: Math.floor(Math.random() * 700) + 50,
-            y: Math.floor(Math.random() * 700) + 50,
-            r: 9
+    
+    // socket.on('updatedFoodCirclesArr', function () {
+        while (foodCirclesArray.length < 25) {
+            foodItem = {
+                x: Math.floor(Math.random() * 700) + 50,
+                y: Math.floor(Math.random() * 700) + 50,
+                r: 9
+            };
+            foodCirclesArray.push(foodItem)
         };
-        foodCirclesArray.push(foodItem)
-    };
+    // });
     socket.emit('food', foodCirclesArray);
 
 

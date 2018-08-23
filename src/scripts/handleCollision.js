@@ -81,6 +81,7 @@ export function handleCollisionFood() {
                 if (i > -1) {
                     foodCirclesArr.splice(i, 1);
                 }
+                // socket.emit('updatedFoodCirclesArr', )
             }
 
             // console.log("Collision detected!");
