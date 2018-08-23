@@ -18,7 +18,7 @@ app.get('/', function (req, res) {
 //Object to keep track of all the players that are currently in the game
 let players = {};
 let foodCirclesArray = [];
-
+let playersArray = [];
 
 //Socket.IO starts here
 io.on('connection', function (socket) {
@@ -34,20 +34,10 @@ io.on('connection', function (socket) {
         playerId: socket.id
     };
 
-    //food
-    // socket.on('foodCoords', function () {
-        while (foodCirclesArray.length < 25) {
-            foodItem = {
-                x: Math.floor(Math.random() * 700) + 50,
-                y: Math.floor(Math.random() * 700) + 50,
-                r: 9
-            };
-            foodCirclesArray.push(foodItem)
-        };
-        console.log(foodCirclesArray);
-        
-        socket.emit('food', foodCirclesArray);
-    // });
+    playersArray.push(players[socket.id]);
+    socket.emit('playersArray', playersArray);
+    // console.log(playersArray);
+
 
     // send the players object(all players info) to the new player
     socket.emit('currentPlayers', players);
@@ -60,61 +50,52 @@ io.on('connection', function (socket) {
     //Listen for new playerMovement event
     // when a player MOVES, update the player data
     socket.on('playerMovement', function (movementData) {
-        // console.log(players[socket.id].x);
-        players[socket.id].x = movementData.x;
-        players[socket.id].y = movementData.y;
-        players[socket.id].r = movementData.r;
-        // console.log(players);
+        for (let i = playersArray.length - 1; i >= 0; i--) {
+            // console.log(players[socket.id].x);
+            players[socket.id].x = movementData.x;
+            players[socket.id].y = movementData.y;
+            players[socket.id].r = movementData.r;
+            // console.log(players);
 
-        Object.keys(players).forEach(function (id) {
-            if (players[id].playerId !== socket.id) {
+            // // Object.keys(players).forEach(function (id) {
+
+            if (playersArray[i].playerId !== socket.id) {
+                // console.log(playersArray[i].playerId,socket.id);
+
+                // if (players[id].playerId !== socket.id) {
                 // console.log("Current Player ID: " + players[socket.id].playerId,
                 //     "ENEMY ID: " + players[id].playerId);
 
-                dx = players[socket.id].x - players[id].x;
-                dy = players[socket.id].y - players[id].y;
+                // dx = players[socket.id].x - players[id].x;
+                // dy = players[socket.id].y - players[id].y;
+                dx = players[socket.id].x - playersArray[i].x;
+                dy = players[socket.id].y - playersArray[i].y;
+                // console.log(players[socket.id].x, playersArray[i].x);
+
                 distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < (players[socket.id].r + 1) + players[id].r) {
+                if (distance < (players[socket.id].r + 1) + playersArray[i].r) {
 
                     //if you/current ATE the enemy
-                    if (players[socket.id].r + 1 > players[id].r) {
-                        // growPlayerMass();
-                        //update player's score
-                        // score += 5;
-                        // document.getElementById('score').innerHTML = "Score: " + score;
-                        // remove item and disconnect the user from socket.io session 
-                        // let i = Object.keys(playersClient).indexOf(id);
-                        // if (i > -1) {
-                        //     Object.keys(playersClient).splice(i, 1);
-                        // }
-                        // socket.on('disconnect', function () {
-                        //     console.log('user DISCONNECTED: ' + players[id].playerId);
-                        //     // remove this player from the players object
-                        // delete players[id];
-                        //     console.log(players);
-                        //     // emit a message to all players to remove this player
-                        //     io.emit('disconnect', players[id].playerId);
-                        // });
-                        // console.log("ENEMY id: " + players[id].playerId);
-                        // remove Enemy from the players object
-                        // delete players[id];
-                        // console.log(players);
-                        //remove enemy/other player from canvas 
-                        socket.emit('removeEnemy', players[id]);
+                    if (players[socket.id].r + 1 > playersArray[i].r) {
+                        //remove enemy from current player canvas 
+                        socket.emit('removeEnemy', playersArray[i]);
+                        if (i > -1) {
+                            playersArray.splice(i, 1);
+                        }
                         // socket.emit('removePlayer', players[socket.id]);
                     } else {
                         //if Enemy ATE you
-                        // socket.emit('removePlayer', players[socket.id]);
+                        socket.emit('message', "Game Over!");
+                        socket.emit('removeYourselfFromOtherPlayersCanvas', players[socket.id]);
                         //send GAME OVER to client and stop emitting this player's movements
                         //remove yourself from canvas
                     }
                     console.log("Collision detected!");
                 }
             } //if statement ends here
-        }); // collision loop ends here
-
-
+        }
+        // }); // collision loop ends here
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });
@@ -136,7 +117,7 @@ io.on('connection', function (socket) {
         console.log('user DISCONNECTED: ' + socket.id);
         // remove this player from the players object
         delete players[socket.id];
-        console.log(players);
+        // console.log(players);
         // emit a message to all players to remove this player
         io.emit('disconnect', socket.id);
     });
@@ -145,6 +126,19 @@ io.on('connection', function (socket) {
     // socket.on('disconnectOtherPlayer', function (data) {
     //     io.sockets.connected[data].disconnect();
     //     // io.emit('disconnectOtherPlayer', data);
+    // });
+
+    //food
+    // socket.on('foodCoords', function () {
+    while (foodCirclesArray.length < 25) {
+        foodItem = {
+            x: Math.floor(Math.random() * 700) + 50,
+            y: Math.floor(Math.random() * 700) + 50,
+            r: 9
+        };
+        foodCirclesArray.push(foodItem)
+    };
+    socket.emit('food', foodCirclesArray);
     // });
 
 });
