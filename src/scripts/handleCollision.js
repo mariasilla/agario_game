@@ -8,8 +8,7 @@ let score = 0;
 // player and other players collision detection function 
 export function handleOtherPlayersCollision() {
 
-    socket.on('removeEnemy', function (playerInfo) {
-
+    socket.on('removeEnemy', function (enemyInfo) {
         //update player's score
         // score += 5;
         // console.log(score);
@@ -17,7 +16,7 @@ export function handleOtherPlayersCollision() {
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
-        ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
+        ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
         ctx.clip();
         ctx.fill();
         ctx.restore();
@@ -25,6 +24,17 @@ export function handleOtherPlayersCollision() {
         // console.log(otherPlayersArray);        
 
     });// socket removeEnemy ends here
+
+    socket.on('removeCurrentPlayer', function (playerInfo, message) {
+        // alert(message);
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
+        ctx.clip();
+        ctx.fill();
+        ctx.restore();
+    });// socket removeCurrentPlayer ends here
 
     // socket.on('removeYourselfFromOtherPlayersCanvas', function (playerInfo) {
 

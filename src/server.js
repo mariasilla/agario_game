@@ -68,23 +68,47 @@ io.on('connection', function (socket) {
 
                 if (distance < (players[socket.id].r + 1) + playersArray[i].r) {
 
-                    //if you/current player ATE the enemy
-                    if (players[socket.id].r + 1 > playersArray[i].r) {
-                        //remove enemy from current player canvas 
-                        socket.emit('removeEnemy', playersArray[i]);
-                        if (i > -1) {
-                            playersArray.splice(i, 1);
-                        }
-                    } else {
-                        //if Enemy ATE you
-                        socket.emit('message', "Game Over!");
-                        socket.emit('removeYourselfFromOtherPlayersCanvas', players[socket.id]);
-                        //send GAME OVER to client and stop emitting this player's movements
-                        //remove yourself from canvas
-                    }
+                    playerBiggerThanEnemy();
+                    enemyIsBiggerThanPlayer();
+                    // } else {
+                    //     //if Enemy ATE you
+                    //     socket.emit('message', "Game Over!");
+                    //     socket.emit('removeYourselfFromOtherPlayersCanvas', players[socket.id]);
+                    //     //send GAME OVER to client and stop emitting this player's movements
+                    //     //remove yourself from canvas
+                    // }
                     console.log("Collision detected!");
                 }
+
             } //if statement ends here
+            //**************************************************
+            //1.if current Player is bigger & ate the enemy
+            function playerBiggerThanEnemy() {
+                if (players[socket.id].r + 1 > playersArray[i].r) {
+                    //remove enemy from current player canvas 
+                    socket.emit('removeEnemy', playersArray[i]);
+                    socket.broadcast.emit('removeEnemy', playersArray[i]);
+                    if (i > -1) {
+                        playersArray.splice(i, 1);
+                    }
+                }
+            }
+
+            //2.if Enemy is bigger than current player
+            // function enemyIsBiggerThanPlayer() {
+            //     if (playersArray[i].r + 1 > players[socket.id].r) {
+            //         //remove enemy from current player canvas 
+            //         socket.emit('removeCurrentPlayer', players[socket.id]);
+            //         socket.emit('removeCurrentPlayer', players[socket.id]);
+            //         socket.broadcast.emit('removeCurrentPlayer', players[socket.id]);
+            //         let index = playersArray.indexOf(players[socket.id]);
+            //         if (index > -1) {
+            //             playersArray.splice(index, 1);
+            //         }
+            //     }
+            // }
+            //3.if Enemy and Player are the same size
+
         } // collision loop ends here
 
         // emit a message to all players about the player that moved
@@ -114,16 +138,16 @@ io.on('connection', function (socket) {
     });
 
     //food
-    
+
     // socket.on('updatedFoodCirclesArr', function () {
-        while (foodCirclesArray.length < 25) {
-            foodItem = {
-                x: Math.floor(Math.random() * 700) + 50,
-                y: Math.floor(Math.random() * 700) + 50,
-                r: 9
-            };
-            foodCirclesArray.push(foodItem)
+    while (foodCirclesArray.length < 25) {
+        foodItem = {
+            x: Math.floor(Math.random() * 700) + 50,
+            y: Math.floor(Math.random() * 700) + 50,
+            r: 9
         };
+        foodCirclesArray.push(foodItem)
+    };
     // });
     socket.emit('food', foodCirclesArray);
 
