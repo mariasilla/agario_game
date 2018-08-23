@@ -1,28 +1,25 @@
+/* line 5, src/style.scss */
 * {
-    margin: 0;
-    padding: 0;
-    /* box-sizing: border-box; */
-}
+  margin: 0;
+  padding: 0;
+  /* box-sizing: border-box; */ }
 
-body {
-    margin: 0px;
-    /* overflow: hidden; */
-}
-
+/* line 11, src/style.scss */
 #score {
-    font: 20px Helvetica, Arial;
-    color: #1cdcbd;
-    position: absolute;
-    left: 50%;
-    margin-top: 25px;
-}
+  font: 20px Helvetica, Arial;
+  color: #1cdcbd;
+  position: absolute;
+  left: 50%;
+  margin-top: 25px; }
 
+/* line 19, src/style.scss */
 #canvas {
-    background-color: rgba(211, 211, 211, 1);
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-}
+  background-color: lightgray;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto; }
+
+/*# sourceMappingURL=style.css.map */

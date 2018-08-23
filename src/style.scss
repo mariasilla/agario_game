@@ -1,0 +1,28 @@
+$font:    Helvetica, Arial;
+$score-color: #1cdcbd;
+$canvas-color: rgba(211, 211, 211, 1);
+
+* {
+    margin: 0;
+    padding: 0;
+    /* box-sizing: border-box; */
+}
+
+#score {
+    font: 20px $font;
+    color: $score-color;
+    position: absolute;
+    left: 50%;
+    margin-top: 25px;
+}
+
+#canvas {
+    background-color: $canvas-color;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
