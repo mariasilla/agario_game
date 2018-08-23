@@ -19,6 +19,7 @@ app.get('/', function (req, res) {
 let players = {};
 let foodCirclesArray = [];
 let playersArray = [];
+let newMass;
 
 //Socket.IO starts here
 io.on('connection', function (socket) {
@@ -51,23 +52,13 @@ io.on('connection', function (socket) {
     // when a player MOVES, update the player data
     socket.on('playerMovement', function (movementData) {
         for (let i = playersArray.length - 1; i >= 0; i--) {
-            // console.log(players[socket.id].x);
+
             players[socket.id].x = movementData.x;
             players[socket.id].y = movementData.y;
             players[socket.id].r = movementData.r;
-            // console.log(players);
-
-            // // Object.keys(players).forEach(function (id) {
-
+            
             if (playersArray[i].playerId !== socket.id) {
-                // console.log(playersArray[i].playerId,socket.id);
 
-                // if (players[id].playerId !== socket.id) {
-                // console.log("Current Player ID: " + players[socket.id].playerId,
-                //     "ENEMY ID: " + players[id].playerId);
-
-                // dx = players[socket.id].x - players[id].x;
-                // dy = players[socket.id].y - players[id].y;
                 dx = players[socket.id].x - playersArray[i].x;
                 dy = players[socket.id].y - playersArray[i].y;
                 // console.log(players[socket.id].x, playersArray[i].x);
@@ -76,14 +67,13 @@ io.on('connection', function (socket) {
 
                 if (distance < (players[socket.id].r + 1) + playersArray[i].r) {
 
-                    //if you/current ATE the enemy
+                    //if you/current player ATE the enemy
                     if (players[socket.id].r + 1 > playersArray[i].r) {
                         //remove enemy from current player canvas 
                         socket.emit('removeEnemy', playersArray[i]);
                         if (i > -1) {
                             playersArray.splice(i, 1);
                         }
-                        // socket.emit('removePlayer', players[socket.id]);
                     } else {
                         //if Enemy ATE you
                         socket.emit('message', "Game Over!");
@@ -94,8 +84,8 @@ io.on('connection', function (socket) {
                     console.log("Collision detected!");
                 }
             } //if statement ends here
-        }
-        // }); // collision loop ends here
+        } // collision loop ends here
+    
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });
@@ -122,14 +112,7 @@ io.on('connection', function (socket) {
         io.emit('disconnect', socket.id);
     });
 
-    // //DISCONNECT OTHER PLAYER on collision with other player
-    // socket.on('disconnectOtherPlayer', function (data) {
-    //     io.sockets.connected[data].disconnect();
-    //     // io.emit('disconnectOtherPlayer', data);
-    // });
-
     //food
-    // socket.on('foodCoords', function () {
     while (foodCirclesArray.length < 25) {
         foodItem = {
             x: Math.floor(Math.random() * 700) + 50,
@@ -139,7 +122,7 @@ io.on('connection', function (socket) {
         foodCirclesArray.push(foodItem)
     };
     socket.emit('food', foodCirclesArray);
-    // });
+
 
 });
 

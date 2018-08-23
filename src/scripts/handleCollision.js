@@ -10,7 +10,10 @@ export function handleOtherPlayersCollision() {
 
     socket.on('removeEnemy', function (playerInfo) {
 
-        // function removeEnemy() {
+        //update player's score
+        // score += 5;
+        // console.log(score);
+        // document.getElementById('score').innerHTML = "Score: " + score;
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
@@ -18,13 +21,7 @@ export function handleOtherPlayersCollision() {
         ctx.clip();
         ctx.fill();
         ctx.restore();
-        // }
-        // removeEnemy()
         // growPlayerMass();
-        //update player's score
-        score += 5;
-        console.log(score);
-        document.getElementById('score').innerHTML = "Score: " + score;
         // console.log(otherPlayersArray);        
 
     });// socket removeEnemy ends here
@@ -41,9 +38,9 @@ export function handleOtherPlayersCollision() {
 
     // });
 
-    socket.on('message', function (data) {
-        alert(data);
-    });
+    // socket.on('message', function (data) {
+    //     alert(data);
+    // });
 
 }; // handleOtherPlayersCollision ends here
 
