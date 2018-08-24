@@ -52,10 +52,12 @@ export function handleOtherPlayersCollision() {
         canvas.removeEventListener("mousemove", movePlayer, false);
     }
 
-    // socket.on('bothSameSize', function (enemyInfo, playerInfo) {
+    socket.on('bothSameSize', function (enemyInfo, playerInfo) {
+     console.log(enemyInfo.r,playerInfo.r);
+        
     // dx = -dx;
     // dy = -dy;
-    // });// socket bothSameSize ends here
+    });// socket bothSameSize ends here
 
 
     // v₂ = v₁ - 2 (v₁ · n) n

@@ -68,10 +68,10 @@ io.on('connection', function (socket) {
 
                 distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < (players[socket.id].r + 1) + playersArray[i].r) {
-                    // bothSameSize();
+                if (distance < (players[socket.id].r ) + playersArray[i].r) {
                     enemyIsBiggerThanPlayer();
                     playerBiggerThanEnemy();
+                    bothSameSize();
                     console.log("Collision detected!");
                 }
 
@@ -79,7 +79,7 @@ io.on('connection', function (socket) {
             //**************************************************
             //1.if Enemy is bigger than current player
             function enemyIsBiggerThanPlayer() {
-                if (playersArray[i].r + 1 > players[socket.id].r) {
+                if (playersArray[i].r  > players[socket.id].r) {
                     //remove enemy from current player canvas 
                     // let message = "Game Over!";
                     // socket.emit('message', message);
@@ -93,7 +93,7 @@ io.on('connection', function (socket) {
             };
             //2.if current Player is bigger & ate the enemy
             function playerBiggerThanEnemy() {
-                if (players[socket.id].r + 1 > playersArray[i].r) {
+                if (players[socket.id].r  > playersArray[i].r) {
                     let message = "Game Over!";
                     socket.broadcast.emit('message', message);
                     //remove enemy from current player canvas 
@@ -104,13 +104,16 @@ io.on('connection', function (socket) {
                     }
                 }
             };
+            
             //3.if Enemy and Player are the same size
-            // function bothSameSize() {
-            //     if (players[socket.id].r === playersArray[i].r) {
-            //         socket.emit('sameSize', playersArray[i], players[socket.id]);
-            //         socket.broadcast.emit('sameSize', playersArray[i],players[socket.id]);
-            //     }
-            // };
+            function bothSameSize() {
+                if (players[socket.id].r = playersArray[i].r) {
+                    console.log("Both same size");
+                    
+                    socket.emit('sameSize', playersArray[i], players[socket.id]);
+                    socket.broadcast.emit('sameSize', playersArray[i],players[socket.id]);
+                }
+            };
 
         } // collision loop ends here
 
