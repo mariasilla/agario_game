@@ -23,7 +23,7 @@ function setMousePosition(e) {
         x: e.clientX - rect.top,
         y: e.clientY - rect.left
     }
-}
+};
 
 //delete current player position
 function deleteCurrentPlayerPos() {

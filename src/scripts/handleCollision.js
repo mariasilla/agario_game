@@ -1,4 +1,5 @@
 import { ctx, foodCirclesArr, extraMass, currentPlayer, socket, otherPlayersArray } from '../index.js';
+import movePlayer from './player.js';
 
 let dx;
 let dy;
@@ -10,13 +11,13 @@ export function handleOtherPlayersCollision() {
 
     socket.on('removeEnemy', function (enemyInfo) {
         //update player's score
+        debugger;
         // score += 5;
         // console.log(score);
         // document.getElementById('score').innerHTML = "Score: " + score;
-        debugger;
-        socket.on('message', function (message) {
-            console.log(message);
-        });
+        // socket.on('message', function (message) {
+        //     console.log(message);
+        // });
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
@@ -41,33 +42,24 @@ export function handleOtherPlayersCollision() {
         ctx.clip();
         ctx.fill();
         ctx.restore();
-        // console.log("GAME OVER!");
+        stopMove();
+        console.log("stop movement");
+        
+        // alert("GAME OVER!");
     });// socket removeCurrentPlayer ends here
 
-    socket.on('bothSameSize', function (enemyInfo, playerInfo) {
-       
-    });// socket bothSameSize ends here
-    
+    function stopMove() {
+        canvas.removeEventListener("mousemove", movePlayer, false);
+    }
+
+    // socket.on('bothSameSize', function (enemyInfo, playerInfo) {
+    // dx = -dx;
+    // dy = -dy;
+    // });// socket bothSameSize ends here
+
 
     // v₂ = v₁ - 2 (v₁ · n) n
 
-
-
-    // socket.on('removeYourselfFromOtherPlayersCanvas', function (playerInfo) {
-
-    //     ctx.save();
-    //     ctx.globalCompositeOperation = 'destination-out';
-    //     ctx.beginPath();
-    //     ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-    //     ctx.clip();
-    //     ctx.fill();
-    //     ctx.restore();
-
-    // });
-
-    // socket.on('message', function (data) {
-    //     alert(data);
-    // });
 
 }; // handleOtherPlayersCollision ends here
 
@@ -108,7 +100,6 @@ export function handleCollisionFood() {
                 if (i > -1) {
                     foodCirclesArr.splice(i, 1);
                 }
-                // socket.emit('updatedFoodCirclesArr', )
             }
 
             // console.log("Collision detected!");

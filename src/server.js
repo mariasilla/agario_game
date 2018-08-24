@@ -5,6 +5,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const path = require('path');
 
+
 // app.use(express.static(path.join(__dirname, 'src')));
 
 app.get('/dist/build.js', function (req, res) {
@@ -20,6 +21,7 @@ let players = {};
 let foodCirclesArray = [];
 let playersArray = [];
 let newMass;
+let score;
 
 //Socket.IO starts here
 io.on('connection', function (socket) {
@@ -67,6 +69,7 @@ io.on('connection', function (socket) {
                 distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance < (players[socket.id].r + 1) + playersArray[i].r) {
+                    // bothSameSize();
                     enemyIsBiggerThanPlayer();
                     playerBiggerThanEnemy();
                     console.log("Collision detected!");
@@ -102,6 +105,12 @@ io.on('connection', function (socket) {
                 }
             };
             //3.if Enemy and Player are the same size
+            // function bothSameSize() {
+            //     if (players[socket.id].r === playersArray[i].r) {
+            //         socket.emit('sameSize', playersArray[i], players[socket.id]);
+            //         socket.broadcast.emit('sameSize', playersArray[i],players[socket.id]);
+            //     }
+            // };
 
         } // collision loop ends here
 
