@@ -13,6 +13,10 @@ export function handleOtherPlayersCollision() {
         // score += 5;
         // console.log(score);
         // document.getElementById('score').innerHTML = "Score: " + score;
+        debugger;
+        socket.on('message', function (message) {
+            console.log(message);
+        });
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
@@ -25,8 +29,11 @@ export function handleOtherPlayersCollision() {
 
     });// socket removeEnemy ends here
 
-    socket.on('removeCurrentPlayer', function (playerInfo, message) {
-        // alert(message);
+    socket.on('removeCurrentPlayer', function (playerInfo) {
+        // socket.on('message', function (message) {
+        //      console.log(message);
+
+        // });
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
@@ -34,7 +41,17 @@ export function handleOtherPlayersCollision() {
         ctx.clip();
         ctx.fill();
         ctx.restore();
+        // console.log("GAME OVER!");
     });// socket removeCurrentPlayer ends here
+
+    socket.on('bothSameSize', function (enemyInfo, playerInfo) {
+       
+    });// socket bothSameSize ends here
+    
+
+    // v₂ = v₁ - 2 (v₁ · n) n
+
+
 
     // socket.on('removeYourselfFromOtherPlayersCanvas', function (playerInfo) {
 
