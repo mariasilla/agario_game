@@ -51,8 +51,8 @@ io.on('connection', function (socket) {
     //send new player's info to all other current players 
     socket.broadcast.emit('newPlayer', players[socket.id]); //CURRENT PLAYER 
 
-    //Listen for new playerMovement event
-    // when a player MOVES, update the player data
+    //Listen for new player movement event
+    // when a player MOVES, update the player's data
     socket.on('playerMovement', function (movementData) {
         for (let i = playersArray.length - 1; i >= 0; i--) {
 
@@ -64,22 +64,27 @@ io.on('connection', function (socket) {
 
                 dx = players[socket.id].x - playersArray[i].x;
                 dy = players[socket.id].y - playersArray[i].y;
-                // console.log(players[socket.id].x, playersArray[i].x);
-
                 distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < (players[socket.id].r ) + playersArray[i].r) {
+                if (distance < (players[socket.id].r) + playersArray[i].r) {
+                    bothSameSize();
                     enemyIsBiggerThanPlayer();
                     playerBiggerThanEnemy();
-                    bothSameSize();
                     console.log("Collision detected!");
                 }
 
-            } //if statement ends here
+            }
             //**************************************************
-            //1.if Enemy is bigger than current player
+            //1.if Enemy and Player are the SAME SIZE
+            function bothSameSize() {
+                if (players[socket.id].r == playersArray[i].r) {
+                    socket.emit('sameSize', players[socket.id], playersArray[i]);
+                    socket.broadcast.emit('sameSize', players[socket.id], playersArray[i]);
+                }
+            };
+            //2.if Enemy is bigger than current Player
             function enemyIsBiggerThanPlayer() {
-                if (playersArray[i].r  > players[socket.id].r) {
+                if (playersArray[i].r > players[socket.id].r) {
                     //remove enemy from current player canvas 
                     // let message = "Game Over!";
                     // socket.emit('message', message);
@@ -91,9 +96,9 @@ io.on('connection', function (socket) {
                     }
                 }
             };
-            //2.if current Player is bigger & ate the enemy
+            //3.if current Player is Bigger/ remove the Enemy
             function playerBiggerThanEnemy() {
-                if (players[socket.id].r  > playersArray[i].r) {
+                if (players[socket.id].r > playersArray[i].r) {
                     let message = "Game Over!";
                     socket.broadcast.emit('message', message);
                     //remove enemy from current player canvas 
@@ -103,19 +108,8 @@ io.on('connection', function (socket) {
                         playersArray.splice(i, 1);
                     }
                 }
-            };
-            
-            //3.if Enemy and Player are the same size
-            function bothSameSize() {
-                if (players[socket.id].r = playersArray[i].r) {
-                    console.log("Both same size");
-                    
-                    socket.emit('sameSize', playersArray[i], players[socket.id]);
-                    socket.broadcast.emit('sameSize', playersArray[i],players[socket.id]);
-                }
-            };
-
-        } // collision loop ends here
+            }
+        }; // collision loop ends here
 
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players[socket.id]);
@@ -124,14 +118,6 @@ io.on('connection', function (socket) {
 
     // send the current score
     // socket.emit('scoreUpdate', score);
-
-    // socket.on('movePlayerCoordinates', function (data) {
-    //     socket.broadcast.emit('draw', {
-    //         x: data.x,
-    //         y: data.y,
-    //         r: data.r
-    //     });
-    // });
 
     //DISCONNECT CURRENT PLAYER - when a player Disconnects, remove them from the players object
     socket.on('disconnect', function () {
@@ -143,8 +129,7 @@ io.on('connection', function (socket) {
         io.emit('disconnect', socket.id);
     });
 
-    //food
-
+    //FOOD
     // socket.on('updatedFoodCirclesArr', function () {
     while (foodCirclesArray.length < 25) {
         foodItem = {
@@ -157,10 +142,7 @@ io.on('connection', function (socket) {
     // });
     socket.emit('food', foodCirclesArray);
 
-
-});
-
-//Socket.IO ends here
+}); //Socket.IO ends here
 
 http.listen(3000, function () {
     console.log('listening on *:3000');

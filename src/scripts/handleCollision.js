@@ -1,4 +1,4 @@
-import { ctx, foodCirclesArr, extraMass, currentPlayer, socket, otherPlayersArray } from '../index.js';
+import { ctx, foodCirclesArr, extraMass, currentPlayer, socket, otherPlayer } from '../index.js';
 import movePlayer from './player.js';
 
 let dx;
@@ -9,32 +9,20 @@ let score = 0;
 // player and other players collision detection function 
 export function handleOtherPlayersCollision() {
 
-    socket.on('removeEnemy', function (enemyInfo) {
-        //update player's score
-        debugger;
-        // score += 5;
-        // console.log(score);
-        // document.getElementById('score').innerHTML = "Score: " + score;
-        // socket.on('message', function (message) {
-        //     console.log(message);
-        // });
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
-        // growPlayerMass();
-        // console.log(otherPlayersArray);        
-
-    });// socket removeEnemy ends here
+    socket.on('sameSize', function (playerInfo, enemyInfo) {
+        // compute the amount you need to move
+        let step = enemyInfo.r + playerInfo.r - distance;
+        // if there's a collision, normalize the vector
+        dx /= distance; dy /= distance;
+        // and then move the two centers apart
+        enemyInfo.x -= dx * step / 2; enemyInfo.y -= dy * step / 2;
+        playerInfo.x += dx * step / 2; playerInfo.y += dy * step / 2;
+        //redraw enemy & player's circles
+        currentPlayer.draw(playerInfo.x, playerInfo.y);
+        otherPlayer.draw(enemyInfo.x, enemyInfo.y);
+    });// socket sameSize ends here
 
     socket.on('removeCurrentPlayer', function (playerInfo) {
-        // socket.on('message', function (message) {
-        //      console.log(message);
-
-        // });
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
@@ -42,27 +30,24 @@ export function handleOtherPlayersCollision() {
         ctx.clip();
         ctx.fill();
         ctx.restore();
-        stopMove();
-        console.log("stop movement");
-        
+        // stopMove();
+        // console.log("stop movement");
         // alert("GAME OVER!");
     });// socket removeCurrentPlayer ends here
+
+    socket.on('removeEnemy', function (enemyInfo) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
+        ctx.clip();
+        ctx.fill();
+        ctx.restore();
+    });// socket removeEnemy ends here
 
     function stopMove() {
         canvas.removeEventListener("mousemove", movePlayer, false);
     }
-
-    socket.on('bothSameSize', function (enemyInfo, playerInfo) {
-     console.log(enemyInfo.r,playerInfo.r);
-        
-    // dx = -dx;
-    // dy = -dy;
-    });// socket bothSameSize ends here
-
-
-    // v₂ = v₁ - 2 (v₁ · n) n
-
-
 }; // handleOtherPlayersCollision ends here
 
 
@@ -71,6 +56,7 @@ export function handleOtherPlayersCollision() {
 export function handleCollisionFood() {
     // socket.on('food', function (foodCirclesArr) {
     // console.log(foodCirclesArr);
+    //  }); //food socket ends here
 
     for (let i = foodCirclesArr.length - 1; i >= 0; i--) {
 
@@ -103,15 +89,10 @@ export function handleCollisionFood() {
                     foodCirclesArr.splice(i, 1);
                 }
             }
-
-            // console.log("Collision detected!");
-            // // console.log("Food item X" + foodCirclesArr[i].x, "Food item Y" + foodCirclesArr[i].y);
-            // console.log("foodItem Index:" + i);
         }
 
     }
-    // }); //food socket ends here
-}
+} //handleCollisionFood ends here
 
 //function to grow current player's mass 
 function growPlayerMass() {
