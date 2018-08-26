@@ -54,11 +54,12 @@ io.on('connection', function (socket) {
     //Listen for new player movement event
     // when a player MOVES, update the player's data
     socket.on('playerMovement', function (movementData) {
-        for (let i = playersArray.length - 1; i >= 0; i--) {
 
-            players[socket.id].x = movementData.x;
-            players[socket.id].y = movementData.y;
-            players[socket.id].r = movementData.r;
+        players[socket.id].x = movementData.x;
+        players[socket.id].y = movementData.y;
+        players[socket.id].r = movementData.r;
+
+        for (let i = playersArray.length - 1; i >= 0; i--) {
 
             if (playersArray[i].playerId !== socket.id) {
 
@@ -85,7 +86,18 @@ io.on('connection', function (socket) {
                     socket.emit('sameSize', players[socket.id], playersArray[i]);
                     socket.broadcast.emit('sameSize', players[socket.id], playersArray[i]);
             };
-            //2.if Enemy is bigger than current Player
+            //2.if current Player is Bigger/ remove the Enemy
+            function playerBiggerThanEnemy() {
+                    // let message = "Game Over!";
+                    // socket.broadcast.emit('message', message);
+                    //remove enemy from current player canvas 
+                    socket.emit('removeEnemy', playersArray[i]);
+                    socket.broadcast.emit('removeEnemy', playersArray[i]);
+                    if (i > -1) {
+                        playersArray.splice(i, 1);
+                    }
+            }
+                        //3.if Enemy is bigger than current Player
             function enemyIsBiggerThanPlayer() {
                 // if (playersArray[i].r > players[socket.id].r) {
                     //remove enemy from current player canvas 
@@ -98,18 +110,7 @@ io.on('connection', function (socket) {
                         playersArray.splice(index, 1);
                     }
                 // }
-            };
-            //3.if current Player is Bigger/ remove the Enemy
-            function playerBiggerThanEnemy() {
-                    let message = "Game Over!";
-                    socket.broadcast.emit('message', message);
-                    //remove enemy from current player canvas 
-                    socket.emit('removeEnemy', playersArray[i]);
-                    socket.broadcast.emit('removeEnemy', playersArray[i]);
-                    if (i > -1) {
-                        playersArray.splice(i, 1);
-                    }
-            }
+               };
             // socket.on('stop', function (data) {
             // console.log(data);
             
@@ -122,7 +123,9 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });
 
-
+    // socket.on('gameOverMessage', function(message){
+    //        console.log(message);    
+    // })
     // send the current score
     // socket.emit('scoreUpdate', score);
 

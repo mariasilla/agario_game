@@ -9,6 +9,7 @@ let score = 0;
 // player and other players collision detection function 
 export function handleOtherPlayersCollision() {
 
+    //1.
     socket.on('sameSize', function (playerInfo, enemyInfo) {
         // compute the amount you need to move
         let step = enemyInfo.r + playerInfo.r - distance;
@@ -22,19 +23,7 @@ export function handleOtherPlayersCollision() {
         otherPlayer.draw(enemyInfo.x, enemyInfo.y);
     });// socket sameSize ends here
 
-    // socket.on('removeCurrentPlayer', function (playerInfo) {
-    //     ctx.save();
-    //     ctx.globalCompositeOperation = 'destination-out';
-    //     ctx.beginPath();
-    //     ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-    //     ctx.clip();
-    //     ctx.fill();
-    //     ctx.restore();
-    //     // stopMove();
-    //     // console.log("stop movement");
-    //     // alert("GAME OVER!");
-    // });// socket removeCurrentPlayer ends here
-
+    //2.
     socket.on('removeEnemy', function (enemyInfo) {
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
@@ -43,16 +32,36 @@ export function handleOtherPlayersCollision() {
         ctx.clip();
         ctx.fill();
         ctx.restore();
-        console.log(enemyInfo.playerId);
-        
-        // stopMove();
-        // socket.broadcast.emit('stop', stopMove());
+        // console.log(enemyInfo.playerId);
     });// socket removeEnemy ends here
 
-    // function stopMove() {
-    //     alert("Game Over!")
-    //     canvas.removeEventListener("mousemove", movePlayer, false);
-    // }
+    //3.
+    socket.on('removeCurrentPlayer', function (playerInfo) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
+        ctx.clip();
+        ctx.fill();
+        ctx.restore();
+        if (playerInfo.playerId === socket.id) {
+            stopMove();
+        }
+        
+        // socket.emit('gameOverMessage', 'Game Over');
+        // console.log("You lost: "+playerInfo.playerId);
+        
+        // socket.on('message', function(message){
+        //        alert(message);
+        // })
+        // console.log("stop movement");
+        // alert("GAME OVER!");
+    });// socket removeCurrentPlayer ends here
+
+    function stopMove() {
+        canvas.removeEventListener("mousemove", movePlayer, false);
+        alert("Game Over!")
+    }
 }; // handleOtherPlayersCollision ends here
 
 
