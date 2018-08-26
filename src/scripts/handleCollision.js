@@ -46,11 +46,16 @@ export function handleOtherPlayersCollision() {
         ctx.restore();
         if (playerInfo.playerId === socket.id) {
             stopMove();
-        }
-        
+            //modal 
+            let modal = document.querySelector('.modal');
+            window.addEventListener('mousemove', () => {
+                modal.classList.add('modal--open');
+            });
+        };
+
         // socket.emit('gameOverMessage', 'Game Over');
         // console.log("You lost: "+playerInfo.playerId);
-        
+
         // socket.on('message', function(message){
         //        alert(message);
         // })
@@ -60,7 +65,7 @@ export function handleOtherPlayersCollision() {
 
     function stopMove() {
         canvas.removeEventListener("mousemove", movePlayer, false);
-        alert("Game Over!")
+        // alert("Game Over!")
     }
 }; // handleOtherPlayersCollision ends here
 

@@ -5,6 +5,7 @@ import movePlayer from './scripts/player.js';
 import { log } from 'util';
 import { random } from './scripts/random.js';
 
+
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");
 export let button = document.getElementById("game_start");
@@ -192,6 +193,7 @@ function gameCreate() {
 
 // add player event listeners  
 canvas.addEventListener("mousemove", movePlayer, false);
+
 
 //function to initiate the game
 function gameInit() {
