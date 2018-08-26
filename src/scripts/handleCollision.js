@@ -22,18 +22,18 @@ export function handleOtherPlayersCollision() {
         otherPlayer.draw(enemyInfo.x, enemyInfo.y);
     });// socket sameSize ends here
 
-    socket.on('removeCurrentPlayer', function (playerInfo) {
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
-        // stopMove();
-        // console.log("stop movement");
-        // alert("GAME OVER!");
-    });// socket removeCurrentPlayer ends here
+    // socket.on('removeCurrentPlayer', function (playerInfo) {
+    //     ctx.save();
+    //     ctx.globalCompositeOperation = 'destination-out';
+    //     ctx.beginPath();
+    //     ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
+    //     ctx.clip();
+    //     ctx.fill();
+    //     ctx.restore();
+    //     // stopMove();
+    //     // console.log("stop movement");
+    //     // alert("GAME OVER!");
+    // });// socket removeCurrentPlayer ends here
 
     socket.on('removeEnemy', function (enemyInfo) {
         ctx.save();
@@ -43,11 +43,14 @@ export function handleOtherPlayersCollision() {
         ctx.clip();
         ctx.fill();
         ctx.restore();
+        stopMove();
+        // socket.broadcast.emit('stop', stopMove());
     });// socket removeEnemy ends here
 
-    function stopMove() {
-        canvas.removeEventListener("mousemove", movePlayer, false);
-    }
+    // function stopMove() {
+    //     alert("Game Over!")
+    //     canvas.removeEventListener("mousemove", movePlayer, false);
+    // }
 }; // handleOtherPlayersCollision ends here
 
 
