@@ -69,10 +69,12 @@ io.on('connection', function (socket) {
                 if (distance < (players[socket.id].r) + playersArray[i].r) {
                     if (players[socket.id].r == playersArray[i].r) { 
                         bothSameSize();
-                    } else {
+                    } if (players[socket.id].r > playersArray[i].r) {
                         playerBiggerThanEnemy();
+                    } 
+                    else {
+                        enemyIsBiggerThanPlayer();
                     }
-                    // enemyIsBiggerThanPlayer();
                     console.log("Collision detected!");
                 }
 
@@ -80,28 +82,25 @@ io.on('connection', function (socket) {
             //**************************************************
             //1.if Enemy and Player are the SAME SIZE
             function bothSameSize() {
-                // if (players[socket.id].r == playersArray[i].r) {
                     socket.emit('sameSize', players[socket.id], playersArray[i]);
                     socket.broadcast.emit('sameSize', players[socket.id], playersArray[i]);
-                // }
             };
             //2.if Enemy is bigger than current Player
-            // function enemyIsBiggerThanPlayer() {
-            //     if (playersArray[i].r > players[socket.id].r) {
-            //         //remove enemy from current player canvas 
-            //         // let message = "Game Over!";
-            //         // socket.emit('message', message);
-            //         socket.emit('removeCurrentPlayer', players[socket.id]);
-            //         socket.broadcast.emit('removeCurrentPlayer', players[socket.id]);
-            //         let index = playersArray.indexOf(players[socket.id]);
-            //         if (index > -1) {
-            //             playersArray.splice(index, 1);
-            //         }
-            //     }
-            // };
+            function enemyIsBiggerThanPlayer() {
+                // if (playersArray[i].r > players[socket.id].r) {
+                    //remove enemy from current player canvas 
+                    // let message = "Game Over!";
+                    // socket.emit('message', message);
+                    socket.emit('removeCurrentPlayer', players[socket.id]);
+                    socket.broadcast.emit('removeCurrentPlayer', players[socket.id]);
+                    let index = playersArray.indexOf(players[socket.id]);
+                    if (index > -1) {
+                        playersArray.splice(index, 1);
+                    }
+                // }
+            };
             //3.if current Player is Bigger/ remove the Enemy
             function playerBiggerThanEnemy() {
-                // if (players[socket.id].r > playersArray[i].r) {
                     let message = "Game Over!";
                     socket.broadcast.emit('message', message);
                     //remove enemy from current player canvas 
@@ -110,7 +109,6 @@ io.on('connection', function (socket) {
                     if (i > -1) {
                         playersArray.splice(i, 1);
                     }
-                // }
             }
             // socket.on('stop', function (data) {
             // console.log(data);

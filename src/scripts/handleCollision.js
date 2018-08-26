@@ -43,7 +43,9 @@ export function handleOtherPlayersCollision() {
         ctx.clip();
         ctx.fill();
         ctx.restore();
-        stopMove();
+        console.log(enemyInfo.playerId);
+        
+        // stopMove();
         // socket.broadcast.emit('stop', stopMove());
     });// socket removeEnemy ends here
 
