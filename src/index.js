@@ -1,5 +1,4 @@
-// import './style.scss';
-import './style.css';
+import './style.scss';
 import io from 'socket.io-client';
 import movePlayer from './scripts/player.js';
 import { log } from 'util';
@@ -48,7 +47,6 @@ function gameCreate() {
 
       socket.on('food', function (foodCirclesArray) {
 
-
             for (let i = 0; i < foodCirclesArray.length; i++) {
                   foodItem = new Ball(foodCirclesArray[i].x, foodCirclesArray[i].y, foodCirclesArray[i].r,
                         'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
@@ -71,11 +69,11 @@ function gameCreate() {
             for (let i = 0; i < playersArray.length; i++) {
 
                   if (playersArray[i].playerId === socket.id) {
-                        currentPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+                        currentPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r);
                         currentPlayer.draw();
                   } else {
                         //Add Other Players to Current Player's Canvas
-                        otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+                        otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r);
                         otherPlayer.draw();
                         otherPlayersArray.push(otherPlayer);
                         // console.log(otherPlayersArray);
@@ -84,7 +82,7 @@ function gameCreate() {
 
             //send new player's info to all other current players 
             socket.on('newPlayer', function (playerInfo) {
-                  otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+                  otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r);
                   otherPlayer.playerId = playerInfo.playerId;
                   otherPlayer.draw();
             });
@@ -102,7 +100,7 @@ function gameCreate() {
                         playersArray[i].x = playerInfo.x;
                         playersArray[i].y = playerInfo.y;
                         playersArray[i].r = playerInfo.r;
-                        otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
+                        otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r);
                         otherPlayer.draw();
                   }
             });
@@ -207,8 +205,7 @@ gameInit();
 
 
 // io.socket.on('connection', socket => {
-//       socket.on('food', onFoodCreation)
-
+//       socket.on('food', onFoodCreation
 // })
 
 

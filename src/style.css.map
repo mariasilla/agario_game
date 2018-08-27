@@ -3,7 +3,8 @@
 	"file": "style.css",
 	"sources": [
 		"src/style.scss",
-		"src/themeColors.scss"
+		"src/themeColors.scss",
+		"src/modal.scss"
 	],
 	"sourcesContent": [
 		"@import 'themeColors';\n$font:    Helvetica, Arial;\n\n* {\n    margin: 0;\n    padding: 0;\n    /* box-sizing: border-box; */\n};\n\n#score {\n    font: 20px $font;\n    color: $score-color;\n    position: absolute;\n    left: 50%;\n    margin-top: 25px;\n};\n\n#canvas {\n    background-color: $canvas-color;\n    position: absolute;\n    top: 0;\n    bottom: 0;\n    left: 0;\n    right: 0;\n    margin: auto;\n};\n\n",

@@ -32,10 +32,10 @@ io.on('connection', function (socket) {
     console.log('a NEW user is CONNECTED: ' + socket.id);
 
     //FOOD
-    socket.on('removedFoodItem', function (item) {
-        console.log(item);
-        // socket.broadcast.emit('removedFoodCoords', item)
-    });
+    // socket.on('removedFoodItem', function (item) {
+    //     console.log(item);
+    //     // socket.broadcast.emit('removedFoodCoords', item)
+    // });
 
     while (foodCirclesArray.length < 25) {
         foodItem = {
@@ -52,13 +52,13 @@ io.on('connection', function (socket) {
         x: Math.floor(Math.random() * 700) + 50,
         y: Math.floor(Math.random() * 700) + 50,
         r: 20,
-        color: this.color,
+        color: ranColor,
         playerId: socket.id
     };
 
     playersArray.push(players[socket.id]);
     socket.emit('playersArray', playersArray);
-    // console.log(playersArray);
+    console.log(playersArray);
 
 
     // send the players object(all players info) to the new player
@@ -112,7 +112,7 @@ io.on('connection', function (socket) {
                 if (index > -1) {
                     playersArray.splice(index, 1);
                 };
-                socket.broadcast.emit('playersArray', playersArray);
+                // socket.broadcast.emit('playersArray', playersArray);
 
             };
             //3.if current Player is Bigger/ remove the Enemy
@@ -190,3 +190,7 @@ http.listen(3000, function () {
     console.log('listening on *:3000');
 });
 
+// function random(min, max) {
+//     var num = Math.floor(Math.random() * (max - min + 1)) + min;
+//     return num;
+// };
