@@ -24,18 +24,6 @@ export function handleOtherPlayersCollision() {
     });// socket sameSize ends here
 
     //2.
-    socket.on('removeEnemy', function (enemyInfo) {
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
-        // console.log(enemyInfo.playerId);
-    });// socket removeEnemy ends here
-
-    //3.
     socket.on('removeCurrentPlayer', function (playerInfo) {
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
@@ -53,6 +41,18 @@ export function handleOtherPlayersCollision() {
             });
         };
     });// socket removeCurrentPlayer ends here
+
+    //3.
+    socket.on('removeEnemy', function (enemyInfo) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
+        ctx.clip();
+        ctx.fill();
+        ctx.restore();
+        // console.log(enemyInfo.playerId);
+    });// socket removeEnemy ends here
 
     function stopMove() {
         canvas.removeEventListener("mousemove", movePlayer, false);
@@ -98,11 +98,21 @@ export function handleCollisionFood() {
                 if (i > -1) {
                     foodCirclesArr.splice(i, 1);
                 }
+                socket.emit('removedFoodItem', { x:  foodCirclesArr[i].x, y:  foodCirclesArr[i].y, r: foodCirclesArr[i].r});
             }
         }
-
     }
-} //handleCollisionFood ends here
+}; //handleCollisionFood ends here
+
+// socket.on('removedFoodCoords', function(item){
+//     ctx.save();
+//     ctx.globalCompositeOperation = 'destination-out';
+//     ctx.beginPath();
+//     ctx.arc(item.x, item.y, item.r + 1, 0, 2 * Math.PI, false);
+//     ctx.clip();
+//     ctx.fill();
+//     ctx.restore();
+// });
 
 //function to grow current player's mass 
 function growPlayerMass() {

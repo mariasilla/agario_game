@@ -1,9 +1,10 @@
-import './style.scss';
+// import './style.scss';
 import './style.css';
 import io from 'socket.io-client';
 import movePlayer from './scripts/player.js';
 import { log } from 'util';
 import { random } from './scripts/random.js';
+
 
 
 export const canvas = document.getElementById("canvas");
@@ -46,6 +47,8 @@ function gameCreate() {
       //send the players object(all players info) to the new player
 
       socket.on('food', function (foodCirclesArray) {
+
+
             for (let i = 0; i < foodCirclesArray.length; i++) {
                   foodItem = new Ball(foodCirclesArray[i].x, foodCirclesArray[i].y, foodCirclesArray[i].r,
                         'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
@@ -58,41 +61,37 @@ function gameCreate() {
                   //       overlapping = true;
                   // }
                   // if (!overlapping) {
-                        foodCirclesArr.push(foodItem);
+                  foodCirclesArr.push(foodItem);
                   // }
-
             }
+
       });
 
       socket.on('playersArray', function (playersArray) {
             for (let i = 0; i < playersArray.length; i++) {
 
                   if (playersArray[i].playerId === socket.id) {
-                        currentPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r,
-                              'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+                        currentPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
                         currentPlayer.draw();
                   } else {
                         //Add Other Players to Current Player's Canvas
-                        otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r,
-                              'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+                        otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
                         otherPlayer.draw();
                         otherPlayersArray.push(otherPlayer);
                         // console.log(otherPlayersArray);
-
                   };
             }
 
             //send new player's info to all other current players 
             socket.on('newPlayer', function (playerInfo) {
-                  otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r,
-                        'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+                  otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
                   otherPlayer.playerId = playerInfo.playerId;
                   otherPlayer.draw();
             });
 
             // when a player moves, update the player data
             socket.on('playerMoved', function (playerInfo) {
-                  for (let i = 0; i < playersArray.length; i++) {
+                  for (let i = playersArray.length - 1; i >= 0; i--) {
                         ctx.save();
                         ctx.globalCompositeOperation = 'destination-out';
                         ctx.beginPath();
@@ -103,29 +102,31 @@ function gameCreate() {
                         playersArray[i].x = playerInfo.x;
                         playersArray[i].y = playerInfo.y;
                         playersArray[i].r = playerInfo.r;
-                        otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r,
-                              playersArray[i].color);
+                        otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
                         otherPlayer.draw();
                   }
             });
 
             // //NEED to CHANGE 
-            // socket.on('disconnect', function (playerId) {
-            //       //OPTION 1****************************************************************************** */
-            //       Object.keys(players).forEach(function (id) {
-            //             // if (playerId === players[id].playerId) {
-            //             ctx.save();
-            //             ctx.globalCompositeOperation = 'destination-out';
-            //             ctx.beginPath();
-            //             ctx.arc(players[id].x, players[id].y, players[id].r + 1, 0, 2 * Math.PI, false);
-            //             ctx.clip();
-            //             ctx.fill();
-            //             ctx.restore();
-            //             // }
-            //       });
-            //       // socket.disconnect();
-
-            // }); //socket.on disconnect ends here
+            socket.on('disconnect', function (playerId) {
+                  //OPTION 1****************************************************************************** */
+                  // Object.keys(players).forEach(function (id) {
+                  for (let i = playersArray.length - 1; i >= 0; i--) {
+                        if (playersArray[i].playerId === playerId) {
+                              ctx.save();
+                              ctx.globalCompositeOperation = 'destination-out';
+                              ctx.beginPath();
+                              ctx.arc(playersArray[i].x, playersArray[i].y, playersArray[i].r + 1, 0, 2 * Math.PI, false);
+                              ctx.clip();
+                              ctx.fill();
+                              ctx.restore();
+                              if (i > -1) {
+                                    playersArray.splice(i, 1);
+                              }
+                        }
+                        // });
+                  }
+            }); //socket.on disconnect ends here
 
       }); //socket.on playersArray ends here
 
@@ -205,9 +206,14 @@ function gameInit() {
 gameInit();
 
 
+// io.socket.on('connection', socket => {
+//       socket.on('food', onFoodCreation)
+
+// })
 
 
-
-
+// io.socket.on('connection', socket => {
+      // socket.on('food', foodCreation);
+// })
 
 
