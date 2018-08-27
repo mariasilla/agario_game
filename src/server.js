@@ -58,7 +58,7 @@ io.on('connection', function (socket) {
 
     playersArray.push(players[socket.id]);
     socket.emit('playersArray', playersArray);
-    console.log(playersArray);
+    // console.log(playersArray);
 
 
     // send the players object(all players info) to the new player
@@ -175,13 +175,21 @@ io.on('connection', function (socket) {
     //DISCONNECT CURRENT PLAYER - when a player Disconnects, remove them from the players object
     socket.on('disconnect', function () {
         console.log('user DISCONNECTED: ' + socket.id);
+        socket.broadcast.emit('userDisconnected', playersArray, socket.id);
+        // socket.broadcast.emit('playerDisconnect',players, socket.id);
         // remove this player from the players object
         delete players[socket.id];
-        // console.log(players);
-        // emit a message to all players to remove this player
-        io.emit('disconnect', socket.id);
+    //     for (let i = playersArray.length - 1; i >= 0; i--) {
+    //         if (playersArray[i].playerId === socket.id) {
+    //               if (i > -1) {
+    //                     playersArray.splice(i, 1);
+    //               }
+    //         }
+    //   };
+        console.log(players);
+        // io.emit('disconnect', socket.id);
         // io.emit('myCustomEvent', {customEvent: 'Custom Message'})
-    
+        // emit a message to all players to remove this player
     });
 
 }); //Socket.IO ends here

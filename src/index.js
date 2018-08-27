@@ -106,11 +106,11 @@ function gameCreate() {
             });
 
             // //NEED to CHANGE 
-            socket.on('disconnect', function (playerId) {
-                  //OPTION 1****************************************************************************** */
-                  // Object.keys(players).forEach(function (id) {
+            socket.on('userDisconnected', function (playersArray, playerID) {
+                  console.log("User disconnected: " + playerID);
                   for (let i = playersArray.length - 1; i >= 0; i--) {
-                        if (playersArray[i].playerId === playerId) {
+                        console.log(playersArray[i].playerId);
+                        if (playersArray[i].playerId === playerID) {
                               ctx.save();
                               ctx.globalCompositeOperation = 'destination-out';
                               ctx.beginPath();
@@ -122,8 +122,22 @@ function gameCreate() {
                                     playersArray.splice(i, 1);
                               }
                         }
-                        // });
-                  }
+                  };
+                  // Object.keys(players).forEach(function (id) {
+                  // if (players[id].playerId === playerID) {
+                  //       ctx.save();
+                  //       ctx.globalCompositeOperation = 'destination-out';
+                  //       ctx.beginPath();
+                  //       ctx.arc(players[id].x, players[id].y, players[id].r + 1, 0, 2 * Math.PI, false);
+                  //       ctx.clip();
+                  //       ctx.fill();
+                  //       ctx.restore();
+                  //       // if (i > -1) {
+                  //       //       playersArray.splice(i, 1);
+                  //       // }
+                  // }
+                  // });
+
             }); //socket.on disconnect ends here
 
       }); //socket.on playersArray ends here
