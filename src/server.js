@@ -68,13 +68,13 @@ io.on('connection', function (socket) {
                 distance = Math.sqrt(dx * dx + dy * dy);
 
                 if (distance < (players[socket.id].r) + playersArray[i].r) {
-                    if (players[socket.id].r === playersArray[i].r) { 
+                    if (players[socket.id].r === playersArray[i].r) {
                         bothSameSize();
                     } else if (players[socket.id].r < playersArray[i].r) {
                         enemyIsBiggerThanPlayer();
-                    } 
+                    }
                     else {
-                          playerBiggerThanEnemy();
+                        playerBiggerThanEnemy();
                     }
                     console.log("Collision detected!");
                 }
@@ -83,30 +83,30 @@ io.on('connection', function (socket) {
             //**************************************************
             //1.if Enemy and Player are the SAME SIZE
             function bothSameSize() {
-                    socket.emit('sameSize', players[socket.id], playersArray[i]);
-                    socket.broadcast.emit('sameSize', players[socket.id], playersArray[i]);
+                socket.emit('sameSize', players[socket.id], playersArray[i]);
+                socket.broadcast.emit('sameSize', players[socket.id], playersArray[i]);
             };
-            //2.if current Player is Bigger/ remove the Enemy
-            function playerBiggerThanEnemy() {
-                    socket.emit('removeEnemy', playersArray[i]);
-                    socket.broadcast.emit('removeEnemy', playersArray[i]);
-                    if (i > -1) {
-                        playersArray.splice(i, 1);
-                    }
-            };
-                        //3.if Enemy is bigger than current Player
+            //2.if Enemy is bigger than current Player
             function enemyIsBiggerThanPlayer() {
-                    socket.emit('removeCurrentPlayer', players[socket.id]);
-                    socket.broadcast.emit('removeCurrentPlayer', players[socket.id]);
-                    let index = playersArray.indexOf(players[socket.id]);
-                    if (index > -1) {
-                        playersArray.splice(index, 1);
-                    }
-               };
+                socket.emit('removeCurrentPlayer', players[socket.id]);
+                socket.broadcast.emit('removeCurrentPlayer', players[socket.id]);
+                let index = playersArray.indexOf(players[socket.id]);
+                if (index > -1) {
+                    playersArray.splice(index, 1);
+                }
+            };
+            //3.if current Player is Bigger/ remove the Enemy
+            function playerBiggerThanEnemy() {
+                socket.emit('removeEnemy', playersArray[i]);
+                socket.broadcast.emit('removeEnemy', playersArray[i]);
+                if (i > -1) {
+                    playersArray.splice(i, 1);
+                }
+            };
 
         }; // collision loop ends here
-    
-      
+
+
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players[socket.id]);
     });

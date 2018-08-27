@@ -52,15 +52,6 @@ export function handleOtherPlayersCollision() {
                 modal.classList.add('modal--open');
             });
         };
-
-        // socket.emit('gameOverMessage', 'Game Over');
-        // console.log("You lost: "+playerInfo.playerId);
-
-        // socket.on('message', function(message){
-        //        alert(message);
-        // })
-        // console.log("stop movement");
-        // alert("GAME OVER!");
     });// socket removeCurrentPlayer ends here
 
     function stopMove() {
