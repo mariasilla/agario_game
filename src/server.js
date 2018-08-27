@@ -22,6 +22,7 @@ app.get('/', function (req, res) {
 let players = {};
 let foodCirclesArray = [];
 let playersArray = [];
+let foodNum = 25;
 let newMass;
 let score;
 
@@ -30,14 +31,13 @@ io.on('connection', function (socket) {
 
     //print NEW connected user's id to console
     console.log('a NEW user is CONNECTED: ' + socket.id);
-
     //FOOD
     // socket.on('removedFoodItem', function (item) {
     //     console.log(item);
     //     // socket.broadcast.emit('removedFoodCoords', item)
     // });
 
-    while (foodCirclesArray.length < 25) {
+    while (foodCirclesArray.length < foodNum) {
         foodItem = {
             x: Math.floor(Math.random() * 700) + 50,
             y: Math.floor(Math.random() * 700) + 50,
@@ -88,11 +88,12 @@ io.on('connection', function (socket) {
                 if (distance < (players[socket.id].r + 1) + playersArray[i].r) {
                     if (players[socket.id].r === playersArray[i].r) {
                         bothSameSize();
-                    } else if (players[socket.id].r < playersArray[i].r) {
-                        enemyIsBiggerThanPlayer();
+                    } else if (players[socket.id].r > playersArray[i].r) {
+                        // enemyIsBiggerThanPlayer();
+                        playerBiggerThanEnemy();
                     }
                     else {
-                        playerBiggerThanEnemy();
+                        enemyIsBiggerThanPlayer();
                     }
                     console.log("Collision detected!");
                 }
@@ -104,24 +105,23 @@ io.on('connection', function (socket) {
                 socket.emit('sameSize', players[socket.id], playersArray[i]);
                 socket.broadcast.emit('sameSize', players[socket.id], playersArray[i]);
             };
-            //2.if Enemy is bigger than current Player
-            function enemyIsBiggerThanPlayer() {
-                socket.emit('removeCurrentPlayer', players[socket.id]);
-                socket.broadcast.emit('removeCurrentPlayer', players[socket.id]);
-                let index = playersArray.indexOf(players[socket.id]);
-                if (index > -1) {
-                    playersArray.splice(index, 1);
-                };
-                // socket.broadcast.emit('playersArray', playersArray);
-
-            };
-            //3.if current Player is Bigger/ remove the Enemy
+            //2.if current Player is Bigger/ remove the Enemy
             function playerBiggerThanEnemy() {
                 socket.emit('removeEnemy', playersArray[i]);
                 socket.broadcast.emit('removeEnemy', playersArray[i]);
                 if (i > -1) {
                     playersArray.splice(i, 1);
                 }
+            };
+            //3.if Enemy is bigger than current Player
+            function enemyIsBiggerThanPlayer() {
+                socket.emit('removeCurrentPlayer', players[socket.id]);
+                socket.broadcast.emit('removeCurPlayerFromOtherCanvases', players[socket.id]);
+                let index = playersArray.indexOf(players[socket.id]);
+                if (index > -1) {
+                    playersArray.splice(index, 1);
+                };
+                // socket.broadcast.emit('playersArray', playersArray);
             };
 
         }; // players collision loop ends here
@@ -179,19 +179,18 @@ io.on('connection', function (socket) {
         // socket.broadcast.emit('playerDisconnect',players, socket.id);
         // remove this player from the players object
         delete players[socket.id];
-    //     for (let i = playersArray.length - 1; i >= 0; i--) {
-    //         if (playersArray[i].playerId === socket.id) {
-    //               if (i > -1) {
-    //                     playersArray.splice(i, 1);
-    //               }
-    //         }
-    //   };
+        //     for (let i = playersArray.length - 1; i >= 0; i--) {
+        //         if (playersArray[i].playerId === socket.id) {
+        //               if (i > -1) {
+        //                     playersArray.splice(i, 1);
+        //               }
+        //         }
+        //   };
         console.log(players);
         // io.emit('disconnect', socket.id);
         // io.emit('myCustomEvent', {customEvent: 'Custom Message'})
         // emit a message to all players to remove this player
     });
-
 }); //Socket.IO ends here
 
 http.listen(3000, function () {

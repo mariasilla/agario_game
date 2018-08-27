@@ -24,6 +24,18 @@ export function handleOtherPlayersCollision() {
     });// socket sameSize ends here
 
     //2.
+    socket.on('removeEnemy', function (enemyInfo) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
+        ctx.clip();
+        ctx.fill();
+        ctx.restore();
+        // console.log(enemyInfo.playerId);
+    });// socket removeEnemy ends here
+
+    //3.
     socket.on('removeCurrentPlayer', function (playerInfo) {
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
@@ -42,17 +54,26 @@ export function handleOtherPlayersCollision() {
         };
     });// socket removeCurrentPlayer ends here
 
-    //3.
-    socket.on('removeEnemy', function (enemyInfo) {
+    socket.on('removeCurPlayerFromOtherCanvases', function (playerInfo) {
+        console.log(playerInfo);
+
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
-        ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
+        ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
         ctx.clip();
         ctx.fill();
         ctx.restore();
-        // console.log(enemyInfo.playerId);
-    });// socket removeEnemy ends here
+        // if (playerInfo.playerId === socket.id) {
+        //     stopMove();
+        //     //modal 
+        //     let modal = document.querySelector('.modal');
+        //     window.addEventListener('mousemove', () => {
+        //         modal.classList.add('modal--open');
+        //     });
+        // };
+    });// socket removeCurPlayerFromOtherCanvases ends here
+
 
     function stopMove() {
         canvas.removeEventListener("mousemove", movePlayer, false);
@@ -98,7 +119,7 @@ export function handleCollisionFood() {
                 if (i > -1) {
                     foodCirclesArr.splice(i, 1);
                 }
-                socket.emit('removedFoodItem', { x:  foodCirclesArr[i].x, y:  foodCirclesArr[i].y, r: foodCirclesArr[i].r});
+                socket.emit('removedFoodItem', { x: foodCirclesArr[i].x, y: foodCirclesArr[i].y, r: foodCirclesArr[i].r });
             }
         }
     }

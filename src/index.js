@@ -41,9 +41,6 @@ let foodItem;
 //Socket.IO starts here
 // (function () {
 function gameCreate() {
-      //socket.on listens to the currentPlayers event, and when this event is triggered
-      //the function will be called with the players object passed from the server 
-      //send the players object(all players info) to the new player
 
       socket.on('food', function (foodCirclesArray) {
 
@@ -65,6 +62,9 @@ function gameCreate() {
 
       });
 
+      //socket.on listens to the currentPlayers event, and when this event is triggered
+      //the function will be called with the players object passed from the server 
+      //send the players object(all players info) to the new player
       socket.on('playersArray', function (playersArray) {
             for (let i = 0; i < playersArray.length; i++) {
 
