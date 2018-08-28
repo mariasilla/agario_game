@@ -21,7 +21,7 @@ app.get('/', function (req, res) {
 //Object to keep track of all the players that are currently in the game
 let players = {};
 let foodCirclesArray = [];
-let playersArray = [];
+// let playersArray = [];
 let foodNum = 25;
 let newMass;
 let score;
@@ -78,7 +78,7 @@ io.on('connection', function (socket) {
         players[socket.id].r = movementData.r;
 
         // for (let i = playersArray.length - 1; i >= 0; i--) {
-            Object.keys(players).forEach(function (id) {
+        Object.keys(players).forEach(function (id) {
 
             if (players[id].playerId !== socket.id) {
 
@@ -133,30 +133,18 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('playerMoved', players[socket.id]);
     }); //playerMovement socket ends here
 
-    // socket.on('gameOverMessage', function(message){
-    //        console.log(message);    
-    // })
-    // send the current score
-    // socket.emit('scoreUpdate', score);
-
     //DISCONNECT CURRENT PLAYER - when a player Disconnects, remove them from the players object
     socket.on('disconnect', function () {
+        // emit a message to all players to remove this player
         console.log('user DISCONNECTED: ' + socket.id);
-        // socket.broadcast.emit('playerDisconnect',players, socket.id);
+        socket.broadcast.emit('userDisconnected', players[socket.id]);
         // remove this player from the players object
         delete players[socket.id];
-        //     for (let i = playersArray.length - 1; i >= 0; i--) {
-        //         if (playersArray[i].playerId === socket.id) {
-        //            ß   if (i > -1) {
-        //                     playersArray.splice(i, 1);
-        //               }
-        //         }
-        //   };
-        socket.broadcast.emit('userDisconnected', socket.id);
+        // socket.broadcast.emit('userDisconnected', socket.id);
         console.log(players);
+
         // io.emit('disconnect', socket.id);
         // io.emit('myCustomEvent', {customEvent: 'Custom Message'})
-        // emit a message to all players to remove this player
     });
 }); //Socket.IO ends here
 
@@ -164,7 +152,3 @@ http.listen(3000, function () {
     console.log('listening on *:3000');
 });
 
-// function random(min, max) {
-//     var num = Math.floor(Math.random() * (max - min + 1)) + min;
-//     return num;
-// };
