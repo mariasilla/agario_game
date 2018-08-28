@@ -36,3 +36,4 @@ function deleteCurrentPlayerPos() {
     ctx.fill();
     ctx.restore();
 }
+

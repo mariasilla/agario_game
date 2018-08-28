@@ -63,13 +63,12 @@ io.on('connection', socket => {
     //Listen for new player movement event
     // when a player MOVES, update the player's data
     socket.on('playerMovement', movementData => {
-
+ 
         players[socket.id].x = movementData.x;
         players[socket.id].y = movementData.y;
         players[socket.id].r = movementData.r;
 
         Object.keys(players).forEach(function (id) {
-
             currentPlayer = players[socket.id];
             enemy = players[id];
 
@@ -107,28 +106,26 @@ io.on('connection', socket => {
                 socket.emit('removeEnemy', enemy);
                 socket.broadcast.emit('removeEnemy', enemy);
                 delete players[id];
-
             };
-            //3.if Enemy is bigger than current Player
+            //3.if Enemy is bigger than current Players
             function enemyIsBiggerThanPlayer() {
                 socket.emit('removeCurrentPlayer', currentPlayer);
                 socket.broadcast.emit('removeCurrentPlayer', currentPlayer);
                 // socket.broadcast.emit('removeCurPlayerFromOtherCanvases', players[socket.id]);
                 delete players[socket.id];
-                // socket.broadcast.emit('playersArray', playersArray);
             };
         });
         // }; // players collision loop ends here
 
         // emit a message to all players about the player that moved
-        socket.broadcast.emit('playerMoved', players[socket.id]);
+        socket.broadcast.emit('playerMoved', players, players[socket.id]);
     }); //playerMovement socket ends here
 
     //DISCONNECT CURRENT PLAYER - when a player Disconnects, remove them from the players object
     socket.on('disconnect', function () {
         // emit a message to all players to remove this player
         console.log('user DISCONNECTED: ' + socket.id);
-        socket.broadcast.emit('userDisconnected', players[socket.id]);
+        socket.broadcast.emit('userDisconnected', players, players[socket.id]);
         // remove this player from the players object
         delete players[socket.id];
         // socket.broadcast.emit('userDisconnected', socket.id);
