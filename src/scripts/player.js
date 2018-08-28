@@ -15,7 +15,7 @@ export default function movePlayer(e) {
     handleCollisionFood();
     handleOtherPlayersCollision();
     socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r});
-}
+};
 
 function setMousePosition(e) {
     const rect = canvas.getBoundingClientRect();
@@ -27,7 +27,6 @@ function setMousePosition(e) {
 
 //delete current player position
 function deleteCurrentPlayerPos() {
-
     ctx.save();
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
@@ -35,5 +34,8 @@ function deleteCurrentPlayerPos() {
     ctx.clip();
     ctx.fill();
     ctx.restore();
-}
+};
+
+
+
 

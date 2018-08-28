@@ -63,10 +63,13 @@ io.on('connection', socket => {
     //Listen for new player movement event
     // when a player MOVES, update the player's data
     socket.on('playerMovement', movementData => {
- 
+
         players[socket.id].x = movementData.x;
         players[socket.id].y = movementData.y;
         players[socket.id].r = movementData.r;
+
+        // emit a message to all players about the player that moved
+        socket.broadcast.emit('playerMoved', players, players[socket.id]);
 
         Object.keys(players).forEach(function (id) {
             currentPlayer = players[socket.id];
@@ -117,8 +120,6 @@ io.on('connection', socket => {
         });
         // }; // players collision loop ends here
 
-        // emit a message to all players about the player that moved
-        socket.broadcast.emit('playerMoved', players, players[socket.id]);
     }); //playerMovement socket ends here
 
     //DISCONNECT CURRENT PLAYER - when a player Disconnects, remove them from the players object

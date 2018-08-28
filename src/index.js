@@ -78,25 +78,8 @@ function gameCreate() {
                         // otherPlayersArray.push(otherPlayer);
                         // console.log(otherPlayersArray);
                   };
-                  // }
-                  // //DISCONNECT
-                  // socket.on('userDisconnected', function (playerID) {
-                  //       console.log("disconnected user: " + playerID);
-                  //       // console.log("player's id: " + players[id].playerId);
-
-                  //       if (players[socket.id] === playerID) {
-                  //             ctx.save();
-                  //             ctx.globalCompositeOperation = 'destination-out';
-                  //             ctx.beginPath();
-                  //             ctx.arc(players[id].x, players[id].y, players[id].r + 1, 0, 2 * Math.PI, false);
-                  //             ctx.clip();
-                  //             ctx.fill();
-                  //             ctx.restore();
-                  //       }
-                  //       //NEED to find the way to delete this player from players object
-
-                  // }); //socket.on disconnect ends here
             });
+
       }); //socket.on currentPlayers ends here
 
 
@@ -109,30 +92,33 @@ function gameCreate() {
 
 
       // when a player moves, update the player data
+      //find a player in the players object 
+      //with the id that matches the id of the player whose coordinates are broadcasted from the server
       socket.on('playerMoved', (players, otherPlayerInfo) => {
-         
+
             Object.keys(players).forEach(function (id) {
-                  console.log("other player ID: " +otherPlayerInfo.playerId);
-             
 
-                  // if (playerInfo.playerId !== players[id].playerId) {
-                  function deleteCurrentPosition() {
-                        ctx.save();
-                        ctx.globalCompositeOperation = 'destination-out';
-                        ctx.beginPath();
-                        ctx.arc(otherPlayer.x, otherPlayer.y, otherPlayer.r + 1, 0, 2 * Math.PI, false);
-                        ctx.clip();
-                        ctx.fill();
-                        ctx.restore();
+                  // console.log("other player ID: " + otherPlayerInfo.playerId);
+                  // console.log(currentPlayer.playerId);
+
+                  if (otherPlayerInfo.playerId === players[id].playerId) {
+                        function deleteCurrentPosition() {
+                              ctx.save();
+                              ctx.globalCompositeOperation = 'destination-out';
+                              ctx.beginPath();
+                              ctx.arc(otherPlayer.x, otherPlayer.y, otherPlayer.r + 1, 0, 2 * Math.PI, false);
+                              ctx.clip();
+                              ctx.fill();
+                              ctx.restore();
+                        };
+
+                        deleteCurrentPosition();
+                        players[id].x = otherPlayerInfo.x;
+                        players[id].y = otherPlayerInfo.y;
+                        players[id].r = otherPlayerInfo.r;
+                        otherPlayer = new Ball(players[id].x, players[id].y, players[id].r);
+                        otherPlayer.draw();
                   };
-
-                  deleteCurrentPosition();
-                  players[id].x = otherPlayerInfo.x;
-                  players[id].y = otherPlayerInfo.y;
-                  players[id].r = otherPlayerInfo.r;
-                  otherPlayer = new Ball(players[id].x, players[id].y, players[id].r);
-                  otherPlayer.draw();
-                  // }
 
                   // // if (players[id].playerId === socket.id) {
                   //       deleteCurrentPosition();
@@ -165,82 +151,29 @@ function gameCreate() {
             });
       });
 
-      // // //NEED to CHANGE 
-      socket.on('userDisconnected', (players, playerInfo) => {
-            console.log(playerInfo.playerId);
-            // console.log("current player: " + socket.id);
-            // console.log(players[id]);
-            // if (players[id] === playerID) {
-            ctx.save();
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-            ctx.clip();
-            ctx.fill();
-            ctx.restore();
-            // socket.close();
-            // global.disconnected = true;
-            // delete players[id];
-            // }
+      // SOCKET DISCONNECT
+      socket.on('userDisconnected', (players, disconnectedPlayer) => {
+            // console.log(players);
+
+            // Object.keys(players).forEach(function (id) {
+                  // console.log("disconnected player id: "+ disconnectedPlayer.playerId);
+                  // console.log("other players id: "+players[id].playerId);
+
+                  // if (disconnectedPlayer.playerId === players[id].playerId) {
+                        ctx.save();
+                        ctx.globalCompositeOperation = 'destination-out';
+                        ctx.beginPath();
+                        ctx.arc(disconnectedPlayer.x, disconnectedPlayer.y, disconnectedPlayer.r + 1, 0, 2 * Math.PI, false);
+                        ctx.clip();
+                        ctx.fill();
+                        ctx.restore();
+                  // }
+            // });
+
             //NEED to find the way to delete this player from players object
       }); //socket.on disconnect ends here
 
-
-
-      //********************************************************************************************/
-
-
-      //             //NEED to CHANGE 
-      //             socket.on('disconnect', function (playerId) {
-      //                   //OPTION 1****************************************************************************** */
-      //                   Object.keys(players).forEach(function (id) {
-      //                         // if (playerId === players[id].playerId) {
-      //                         ctx.save();
-      //                         ctx.globalCompositeOperation = 'destination-out';
-      //                         ctx.beginPath();
-      //                         ctx.arc(players[id].x, players[id].y, players[id].r + 1, 0, 2 * Math.PI, false);
-      //                         ctx.clip();
-      //                         ctx.fill();
-      //                         ctx.restore();
-      //                         // }
-      //                   });
-      //                   // socket.disconnect();
-
-      //                   // //OPTION 2****************************************************************************** */
-      //                   // for (let i = playersArray.length - 1; i >= 0; i--) {
-      //                   //       if (playerId === playersArray[i].playerId) {
-      //                   //             ctx.save();
-      //                   //             ctx.globalCompositeOperation = 'destination-out';
-      //                   //             ctx.beginPath();
-      //                   //             ctx.arc(playersArray[i].x, playersArray[i].y, playersArray[i].r + 1, 0, 2 * Math.PI, false);
-      //                   //             ctx.clip();
-      //                   //             ctx.fill();
-      //                   //             ctx.restore();
-      //                   //             // if (i > -1) {
-      //                   //             //       playersArray.splice(i, 1);
-      //                   //             // }
-      //                   //       }
-      //                   //       // console.log(playersArray);
-      //                   // }
-
-      //                   //OPTION 3****************************************************************************** */
-
-
-      //                   // for (let i = 0; i < otherPlayersArray.length; i++) {
-      //                   //       if (playerId === otherPlayersArray[i].playerId) {
-      //                   //             ctx.save();
-      //                   //             ctx.globalCompositeOperation = 'destination-out';
-      //                   //             ctx.beginPath();
-      //                   //             ctx.arc(otherPlayersArray[i].x, otherPlayersArray[i].y, otherPlayersArray[i].r + 1, 0, 2 * Math.PI, false);
-      //                   //             ctx.clip();
-      //                   //             ctx.fill();
-      //                   //             ctx.restore();
-      //                   //       }
-      //                   // }
-
-      //             }); //socket.on disconnect ends here
-
-};//Socket.IO ends here
+};//Socket.IO connection ends here
 
 // }).call(this);
 
