@@ -54,25 +54,25 @@ export function handleOtherPlayersCollision() {
         };
     });// socket removeCurrentPlayer ends here
 
-    socket.on('removeCurPlayerFromOtherCanvases', function (playerInfo) {
-        console.log(playerInfo);
+    // socket.on('removeCurPlayerFromOtherCanvases', function (playerInfo) {
+    //     console.log(playerInfo);
 
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
-        // if (playerInfo.playerId === socket.id) {
-        //     stopMove();
-        //     //modal 
-        //     let modal = document.querySelector('.modal');
-        //     window.addEventListener('mousemove', () => {
-        //         modal.classList.add('modal--open');
-        //     });
-        // };
-    });// socket removeCurPlayerFromOtherCanvases ends here
+    //     ctx.save();
+    //     ctx.globalCompositeOperation = 'destination-out';
+    //     ctx.beginPath();
+    //     ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
+    //     ctx.clip();
+    //     ctx.fill();
+    //     ctx.restore();
+    //     // if (playerInfo.playerId === socket.id) {
+    //     //     stopMove();
+    //     //     //modal 
+    //     //     let modal = document.querySelector('.modal');
+    //     //     window.addEventListener('mousemove', () => {
+    //     //         modal.classList.add('modal--open');
+    //     //     });
+    //     // };
+    // });// socket removeCurPlayerFromOtherCanvases ends here
 
 
     function stopMove() {
