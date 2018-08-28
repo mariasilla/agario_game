@@ -57,7 +57,7 @@ io.on('connection', function (socket) {
     };
 
     playersArray.push(players[socket.id]);
-    socket.emit('playersArray', playersArray);
+    // socket.emit('playersArray', playersArray);
     // console.log(playersArray);
 
 
@@ -175,17 +175,17 @@ io.on('connection', function (socket) {
     //DISCONNECT CURRENT PLAYER - when a player Disconnects, remove them from the players object
     socket.on('disconnect', function () {
         console.log('user DISCONNECTED: ' + socket.id);
-        socket.broadcast.emit('userDisconnected', playersArray, socket.id);
         // socket.broadcast.emit('playerDisconnect',players, socket.id);
         // remove this player from the players object
         delete players[socket.id];
         //     for (let i = playersArray.length - 1; i >= 0; i--) {
         //         if (playersArray[i].playerId === socket.id) {
-        //               if (i > -1) {
+        //            ß   if (i > -1) {
         //                     playersArray.splice(i, 1);
         //               }
         //         }
         //   };
+        socket.broadcast.emit('userDisconnected', socket.id);
         console.log(players);
         // io.emit('disconnect', socket.id);
         // io.emit('myCustomEvent', {customEvent: 'Custom Message'})
