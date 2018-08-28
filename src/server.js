@@ -56,7 +56,7 @@ io.on('connection', function (socket) {
         playerId: socket.id
     };
 
-    playersArray.push(players[socket.id]);
+    // playersArray.push(players[socket.id]);
     // socket.emit('playersArray', playersArray);
     // console.log(playersArray);
 
@@ -77,18 +77,19 @@ io.on('connection', function (socket) {
         players[socket.id].y = movementData.y;
         players[socket.id].r = movementData.r;
 
-        for (let i = playersArray.length - 1; i >= 0; i--) {
+        // for (let i = playersArray.length - 1; i >= 0; i--) {
+            Object.keys(players).forEach(function (id) {
 
-            if (playersArray[i].playerId !== socket.id) {
+            if (players[id].playerId !== socket.id) {
 
-                dx = players[socket.id].x - playersArray[i].x;
-                dy = players[socket.id].y - playersArray[i].y;
+                dx = players[socket.id].x - players[id].x;
+                dy = players[socket.id].y - players[id].y;
                 distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < (players[socket.id].r + 1) + playersArray[i].r) {
-                    if (players[socket.id].r === playersArray[i].r) {
+                if (distance < (players[socket.id].r + 1) + players[id].r) {
+                    if (players[socket.id].r === players[id].r) {
                         bothSameSize();
-                    } else if (players[socket.id].r > playersArray[i].r) {
+                    } else if (players[socket.id].r > players[id].r) {
                         // enemyIsBiggerThanPlayer();
                         playerBiggerThanEnemy();
                     }
@@ -102,65 +103,31 @@ io.on('connection', function (socket) {
             //**************************************************
             //1.if Enemy and Player are the SAME SIZE
             function bothSameSize() {
-                socket.emit('sameSize', players[socket.id], playersArray[i]);
-                socket.broadcast.emit('sameSize', players[socket.id], playersArray[i]);
+                socket.emit('sameSize', players[socket.id], players[id]);
+                socket.broadcast.emit('sameSize', players[socket.id], players[id]);
             };
             //2.if current Player is Bigger/ remove the Enemy
             function playerBiggerThanEnemy() {
-                socket.emit('removeEnemy', playersArray[i]);
-                socket.broadcast.emit('removeEnemy', playersArray[i]);
-                if (i > -1) {
-                    playersArray.splice(i, 1);
-                }
+                socket.emit('removeEnemy', players[id]);
+                socket.broadcast.emit('removeEnemy', players[id]);
+                delete players[id];
+                // if (i > -1) {
+                //     playersArray.splice(i, 1);
+                // }
             };
             //3.if Enemy is bigger than current Player
             function enemyIsBiggerThanPlayer() {
                 socket.emit('removeCurrentPlayer', players[socket.id]);
                 socket.broadcast.emit('removeCurPlayerFromOtherCanvases', players[socket.id]);
-                let index = playersArray.indexOf(players[socket.id]);
-                if (index > -1) {
-                    playersArray.splice(index, 1);
-                };
+                delete players[socket.id]
+                // let index = playersArray.indexOf(players[socket.id]);
+                // if (index > -1) {
+                //     playersArray.splice(index, 1);
+                // };
                 // socket.broadcast.emit('playersArray', playersArray);
             };
-
-        }; // players collision loop ends here
-
-        //PLAYER with FOOD collision starts here 
-        // for (let i = foodCirclesArray.length - 1; i >= 0; i--) {
-
-        //     dx = currentPlayer.x - foodCirclesArray[i].x;
-        //     dy = currentPlayer.y - foodCirclesArray[i].y;
-
-        //     distance = Math.sqrt(dx * dx + dy * dy);
-
-        //     function removeFoodItem() {
-        //         ctx.save();
-        //         ctx.globalCompositeOperation = 'destination-out';
-        //         ctx.beginPath();
-        //         ctx.arc(foodCirclesArray[i].x, foodCirclesArray[i].y, foodCirclesArray[i].r + 1, 0, 2 * Math.PI, false);
-        //         ctx.clip();
-        //         ctx.fill();
-        //         ctx.restore();
-        //     }
-
-        //     if (distance < (currentPlayer.r + 1) + foodCirclesArray[i].r) {
-
-        //         if (currentPlayer.r + 1 > foodCirclesArray[i].r) {
-        //             removeFoodItem()
-        //             // growPlayerMass();
-        //             //update player's score
-        //             // score += 5;
-        //             // console.log(score);
-        //             // document.getElementById('score').innerHTML = "Score: " + score;
-        //             //remove foodItem from array 
-        //             if (i > -1) {
-        //                 foodCirclesArr.splice(i, 1);
-        //             }
-        //             // socket.emit('removedFoodItem', { x: foodCirclesArr[i].x, y: foodCirclesArr[i].y, r: foodCirclesArr[i].r });
-        //         }
-        //     }
-        // } // food collision ends here 
+        });
+        // }; // players collision loop ends here
 
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players[socket.id]);

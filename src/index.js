@@ -81,6 +81,20 @@ function gameCreate() {
                         // console.log(otherPlayersArray);
                   };
                   // }
+                  // //DISCONNECT
+                  socket.on('userDisconnected', function (playerID) {
+                        // if (players[id].playerId === playerID) {
+                              ctx.save();
+                              ctx.globalCompositeOperation = 'destination-out';
+                              ctx.beginPath();
+                              ctx.arc(players[id].x, players[id].y, players[id].r + 1, 0, 2 * Math.PI, false);
+                              ctx.clip();
+                              ctx.fill();
+                              ctx.restore();
+                        // }
+                        //NEED to find the way to delete this player from players object
+
+                  }); //socket.on disconnect ends here
             });
             //send new player's info to all other current players 
             socket.on('newPlayer', function (playerInfo) {
@@ -109,48 +123,48 @@ function gameCreate() {
                   });
             });
 
-            // //NEED to CHANGE 
-            socket.on('userDisconnected', function (playerID) {
+            // // //NEED to CHANGE 
+            // socket.on('userDisconnected', function (playerID) {
 
-                  // console.log("User disconnected: " + playerID);
-                  // for (let i = playersArray.length - 1; i >= 0; i--) {
-                  //       console.log(playersArray[i].playerId);
-                  //       if (playersArray[i].playerId === playerID) {
-                  //             ctx.save();
-                  //             ctx.globalCompositeOperation = 'destination-out';
-                  //             ctx.beginPath();
-                  //             ctx.arc(playersArray[i].x, playersArray[i].y, playersArray[i].r + 1, 0, 2 * Math.PI, false);
-                  //             ctx.clip();
-                  //             ctx.fill();
-                  //             ctx.restore();
-                  //             if (i > -1) {
-                  //                   playersArray.splice(i, 1);
-                  //             }
-                  //       }
-                  // };
-                  Object.keys(players).forEach(function (id) {
-                        // console.log(playerInfo);
-                        console.log("current player: " + socket.id);
-                        console.log(players[id]);
-                        // if (players[id] === playerID) {
-                              ctx.save();
-                              ctx.globalCompositeOperation = 'destination-out';
-                              ctx.beginPath();
-                              ctx.arc(players[id].x, players[id].y, players[id].r + 1, 0, 2 * Math.PI, false);
-                              ctx.clip();
-                              ctx.fill();
-                              ctx.restore();
-                              // console.log(players[playerInfo.playerId]);
+            //       // console.log("User disconnected: " + playerID);
+            //       // for (let i = playersArray.length - 1; i >= 0; i--) {
+            //       //       console.log(playersArray[i].playerId);
+            //       //       if (playersArray[i].playerId === playerID) {
+            //       //             ctx.save();
+            //       //             ctx.globalCompositeOperation = 'destination-out';
+            //       //             ctx.beginPath();
+            //       //             ctx.arc(playersArray[i].x, playersArray[i].y, playersArray[i].r + 1, 0, 2 * Math.PI, false);
+            //       //             ctx.clip();
+            //       //             ctx.fill();
+            //       //             ctx.restore();
+            //       //             if (i > -1) {
+            //       //                   playersArray.splice(i, 1);
+            //       //             }
+            //       //       }
+            //       // };
+            //       Object.keys(players).forEach(function (id) {
+            //             // console.log(playerInfo);
+            //             console.log("current player: " + socket.id);
+            //             console.log(players[id]);
+            //             // if (players[id] === playerID) {
+            //                   ctx.save();
+            //                   ctx.globalCompositeOperation = 'destination-out';
+            //                   ctx.beginPath();
+            //                   ctx.arc(players[id].x, players[id].y, players[id].r + 1, 0, 2 * Math.PI, false);
+            //                   ctx.clip();
+            //                   ctx.fill();
+            //                   ctx.restore();
+            //                   // console.log(players[playerInfo.playerId]);
 
-                              // socket.close();
-                              // global.disconnected = true;
-                              // if (players[id] === playerInfo.playerId) {
-                              // delete players[id];
-                        // }
-                        //NEED to find the way to delete this player from players object
-                  });
+            //                   // socket.close();
+            //                   // global.disconnected = true;
+            //                   // if (players[id] === playerInfo.playerId) {
+            //                   // delete players[id];
+            //             // }
+            //             //NEED to find the way to delete this player from players object
+            //       });
 
-            }); //socket.on disconnect ends here
+            // }); //socket.on disconnect ends here
 
       }); //socket.on currentPlayers ends here
 
