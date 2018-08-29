@@ -67,6 +67,7 @@ io.on('connection', socket => {
         players[socket.id].x = movementData.x;
         players[socket.id].y = movementData.y;
         players[socket.id].r = movementData.r;
+        players[socket.id].color = movementData.color;
 
         // emit a message to all players about the player that moved
         socket.broadcast.emit('playerMoved', players, players[socket.id]);

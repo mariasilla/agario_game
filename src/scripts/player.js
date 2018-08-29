@@ -14,7 +14,7 @@ export default function movePlayer(e) {
     currentPlayer.draw();
     handleCollisionFood();
     handleOtherPlayersCollision();
-    socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r});
+    socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r, color: currentPlayer.color});
 };
 
 function setMousePosition(e) {

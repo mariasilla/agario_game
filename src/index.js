@@ -69,11 +69,11 @@ function gameCreate() {
                   // for (let i = 0; i < playersArray.length; i++) {
 
                   if (players[id].playerId === socket.id) {
-                        currentPlayer = new Ball(players[id].x, players[id].y, players[id].r);
+                        currentPlayer = new Ball(players[id].x, players[id].y, players[id].r,players[id].color);
                         currentPlayer.draw();
                   } else {
                         //Add Other Players to Current Player's Canvas
-                        otherPlayer = new Ball(players[id].x, players[id].y, players[id].r);
+                        otherPlayer = new Ball(players[id].x, players[id].y, players[id].r,players[id].color);
                         otherPlayer.draw();
                         // otherPlayersArray.push(otherPlayer);
                         // console.log(otherPlayersArray);
@@ -85,7 +85,7 @@ function gameCreate() {
 
       //send new player's info to all other current players 
       socket.on('newPlayer', playerInfo => {
-            otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r);
+            otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, playerInfo.color);
             otherPlayer.playerId = playerInfo.playerId;
             otherPlayer.draw();
       });
@@ -116,7 +116,8 @@ function gameCreate() {
                         players[id].x = otherPlayerInfo.x;
                         players[id].y = otherPlayerInfo.y;
                         players[id].r = otherPlayerInfo.r;
-                        otherPlayer = new Ball(players[id].x, players[id].y, players[id].r);
+                        players[id].color = otherPlayerInfo.color;
+                        otherPlayer = new Ball(players[id].x, players[id].y, players[id].r, players[id].color);
                         otherPlayer.draw();
                   };
 
