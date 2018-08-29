@@ -19,7 +19,6 @@ app.get('/', function (req, res) {
 //Object to keep track of all the players that are currently in the game
 let players = {};
 let foodCirclesArray = [];
-// let playersArray = [];
 let foodNum = 25;
 let currentPlayer;
 let enemy;
@@ -62,81 +61,148 @@ io.on('connection', socket => {
 
     //Listen for new player movement event
     // when a player MOVES, update the player's data
+    // socket.on('playerMovement', onMovement);
+
     socket.on('playerMovement', movementData => {
 
-        players[socket.id].x = movementData.x;
-        players[socket.id].y = movementData.y;
-        players[socket.id].r = movementData.r;
-        players[socket.id].color = movementData.color;
+    players[socket.id].x = movementData.x;
+    players[socket.id].y = movementData.y;
+    players[socket.id].r = movementData.r;
+    players[socket.id].color = movementData.color;
 
-        // emit a message to all players about the player that moved
-        socket.broadcast.emit('playerMoved', players, players[socket.id]);
+    // emit a message to all players about the player that moved
+    socket.broadcast.emit('playerMoved', players[socket.id]);
 
-        Object.keys(players).forEach(function (id) {
-            currentPlayer = players[socket.id];
-            enemy = players[id];
+    Object.keys(players).forEach(function (id) {
+        currentPlayer = players[socket.id];
+        enemy = players[id];
 
-            if (currentPlayer.playerId !== enemy.playerId) {
-                // console.log("current player id: " + currentPlayer.playerId);
-                // console.log("enemy id: " + enemy.playerId);
-                measureDistance();
-                if (distance < (currentPlayer.r) + enemy.r) {
-                    if (currentPlayer.r === enemy.r) {
-                        bothSameSize();
-                    } else if (currentPlayer.r > enemy.r) {
-                        // enemyIsBiggerThanPlayer();
-                        playerBiggerThanEnemy();
-                    }
-                    else {
-                        enemyIsBiggerThanPlayer();
-                    }
-                    console.log("Collision detected!");
+        if (currentPlayer.playerId !== enemy.playerId) {
+            // console.log("current player id: " + currentPlayer.playerId);
+            // console.log("enemy id: " + enemy.playerId);
+            measureDistance();
+            if (distance < (currentPlayer.r) + enemy.r) {
+                if (currentPlayer.r === enemy.r) {
+                    bothSameSize();
+                } else if (currentPlayer.r > enemy.r) {
+                    // enemyIsBiggerThanPlayer();
+                    playerBiggerThanEnemy();
                 }
-            };
+                else {
+                    enemyIsBiggerThanPlayer();
+                }
+                console.log("Collision detected!");
+            }
+        };
 
-            function measureDistance() {
-                dx = currentPlayer.x - enemy.x;
-                dy = currentPlayer.y - enemy.y;
-                distance = Math.sqrt(dx * dx + dy * dy);
-            };
-            //**************************************************
-            //1.if Enemy and Player are the SAME SIZE
-            function bothSameSize() {
-                socket.emit('sameSize', currentPlayer, enemy);
-                socket.broadcast.emit('sameSize', currentPlayer, enemy);
-            };
-            //2.if current Player is Bigger/ remove the Enemy
-            function playerBiggerThanEnemy() {
-                socket.emit('removeEnemy', enemy);
-                socket.broadcast.emit('removeEnemy', enemy);
-                delete players[id];
-            };
-            //3.if Enemy is bigger than current Players
-            function enemyIsBiggerThanPlayer() {
-                socket.emit('removeCurrentPlayer', currentPlayer);
-                socket.broadcast.emit('removeCurrentPlayer', currentPlayer);
-                // socket.broadcast.emit('removeCurPlayerFromOtherCanvases', players[socket.id]);
-                delete players[socket.id];
-            };
-        });
-        // }; // players collision loop ends here
+        function measureDistance() {
+            dx = currentPlayer.x - enemy.x;
+            dy = currentPlayer.y - enemy.y;
+            distance = Math.sqrt(dx * dx + dy * dy);
+        };
+        //**************************************************
+        //1.if Enemy and Player are the SAME SIZE
+        function bothSameSize() {
+            socket.emit('sameSize', currentPlayer, enemy);
+            socket.broadcast.emit('sameSize', currentPlayer, enemy);
+        };
+        //2.if current Player is Bigger/ remove the Enemy
+        function playerBiggerThanEnemy() {
+            socket.emit('removeEnemy', enemy);
+            socket.broadcast.emit('removeEnemy', enemy);
+            delete players[id];
+        };
+        //3.if Enemy is bigger than current Players
+        function enemyIsBiggerThanPlayer() {
+            socket.emit('removeCurrentPlayer', currentPlayer);
+            socket.broadcast.emit('removeCurrentPlayer', currentPlayer);
+            // socket.broadcast.emit('removeCurPlayerFromOtherCanvases', players[socket.id]);
+            delete players[socket.id];
+        };
+    });
+    // }; // players collision loop ends here
 
     }); //playerMovement socket ends here
 
     //DISCONNECT CURRENT PLAYER - when a player Disconnects, remove them from the players object
-    socket.on('disconnect', function () {
-        // emit a message to all players to remove this player
-        console.log('user DISCONNECTED: ' + socket.id);
-        socket.broadcast.emit('userDisconnected', players, players[socket.id]);
-        // remove this player from the players object
-        delete players[socket.id];
-        // socket.broadcast.emit('userDisconnected', socket.id);
-        console.log(players);
-
-        // io.emit('disconnect', socket.id);
-        // io.emit('myCustomEvent', {customEvent: 'Custom Message'})
-    });
+    socket.on('disconnect', onDisconnect);
 }); //Socket.IO ends here
+
+
+// function onMovement(movementData) {
+
+//     players[this.id].x = movementData.x;
+//     players[this.id].y = movementData.y;
+//     players[this.id].r = movementData.r;
+//     players[this.id].color = movementData.color;
+
+//     // emit a message to all players about the player that moved
+//     this.broadcast.emit('playerMoved', players[this.id]);
+//     currentPlayer = players[this.id];
+
+//     Object.keys(players).forEach(function (id) {
+//         enemy = players[id];
+
+//         if (currentPlayer.playerId !== enemy.playerId) {
+//             // console.log("current player id: " + currentPlayer.playerId);
+//             // console.log("enemy id: " + enemy.playerId);
+//             measureDistance();
+//             if (distance < (currentPlayer.r) + enemy.r) {
+//                 if (currentPlayer.r === enemy.r) {
+//                     bothSameSize();
+//                 } else if (currentPlayer.r > enemy.r) {
+//                     // enemyIsBiggerThanPlayer();
+//                     playerBiggerThanEnemy();
+//                 }
+//                 else {
+//                     enemyIsBiggerThanPlayer();
+//                 }
+//                 console.log("Collision detected!");
+//             }
+//         };
+
+//         function measureDistance() {
+//             dx = currentPlayer.x - enemy.x;
+//             dy = currentPlayer.y - enemy.y;
+//             distance = Math.sqrt(dx * dx + dy * dy);
+//         };
+//         //**************************************************
+//         //1.if Enemy and Player are the SAME SIZE
+//         function bothSameSize() {
+//             this.emit('sameSize', currentPlayer, enemy);
+//             this.broadcast.emit('sameSize', currentPlayer, enemy);
+//         };
+//         //2.if current Player is Bigger/ remove the Enemy
+//         function playerBiggerThanEnemy() {
+//             this.emit('removeEnemy', enemy);
+//             this.broadcast.emit('removeEnemy', enemy);
+//             // delete players[id];
+//         };
+//         //3.if Enemy is bigger than current Players
+//         function enemyIsBiggerThanPlayer() {
+//             this.emit('removeCurrentPlayer', currentPlayer);
+//             this.broadcast.emit('removeCurrentPlayer', currentPlayer);
+//             // socket.broadcast.emit('removeCurPlayerFromOtherCanvases', players[socket.id]);
+//             // delete players[socket.id];
+//         };
+//     });
+//     // }; // players collision loop ends here
+// }; // onMovementFunction ends here 
+
+
+
+function onDisconnect() {
+    // emit a message to all players to remove this player
+    console.log('user DISCONNECTED1: ' + this.id);
+    this.broadcast.emit('userDisconnected', players[this.id]);
+    // remove this player from the players object
+    delete players[this.id];
+    // socket.broadcast.emit('userDisconnected', socket.id);
+    console.log(players);
+
+    // io.emit('disconnect', socket.id);
+    // io.emit('myCustomEvent', {customEvent: 'Custom Message'})
+}
 
 http.listen(3000, function () {
     console.log('listening on *:3000');

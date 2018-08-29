@@ -1,4 +1,4 @@
-import { ctx, foodCirclesArr, extraMass, currentPlayer, socket, otherPlayer } from '../index.js';
+import { ctx, foodCirclesArr, extraMass, playersArray, currentPlayer, otherPlayer, socket } from '../index.js';
 import movePlayer from './player.js';
 
 let dx;
@@ -25,25 +25,43 @@ export function handleOtherPlayersCollision() {
 
     //2.
     socket.on('removeEnemy', function (enemyInfo) {
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
+        for (let i = playersArray.length - 1; i >= 0; i--) {
+            if (enemyInfo.playerId === playersArray[i].playerId) {
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(playersArray[i].x, playersArray[i].y, playersArray[i].r + 1, 0, 2 * Math.PI, false);
+                ctx.clip();
+                ctx.fill();
+                ctx.restore();
+                if (i > -1) {
+                    playersArray.splice(i, 1);
+                }
+            }
+        }
         // console.log(enemyInfo.playerId);
     });// socket removeEnemy ends here
 
+
+
     //3.
     socket.on('removeCurrentPlayer', function (playerInfo) {
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
+
+        for (let i = playersArray.length - 1; i >= 0; i--) {
+            if (playerInfo.playerId === playersArray[i].playerId) {
+                ctx.save();
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(playersArray[i].x, playersArray[i].y, playersArray[i].r + 1, 0, 2 * Math.PI, false);
+                ctx.clip();
+                ctx.fill();
+                ctx.restore();
+                if (i > -1) {
+                    playersArray.splice(i, 1);
+                }
+            }
+        }
+
         if (playerInfo.playerId === socket.id) {
             stopMove();
             //modal 
@@ -113,32 +131,19 @@ export function handleCollisionFood() {
                 growPlayerMass();
                 //update player's score
                 score += 5;
-                console.log(score);
                 document.getElementById('score').innerHTML = "Score: " + score;
                 //remove foodItem from array 
                 if (i > -1) {
                     foodCirclesArr.splice(i, 1);
                 }
-                socket.emit('removedFoodItem', { x: foodCirclesArr[i].x, y: foodCirclesArr[i].y, r: foodCirclesArr[i].r });
+                // socket.emit('removedFoodItem', { x: foodCirclesArr[i].x, y: foodCirclesArr[i].y, r: foodCirclesArr[i].r });
             }
         }
     }
 }; //handleCollisionFood ends here
 
-// socket.on('removedFoodCoords', function(item){
-//     ctx.save();
-//     ctx.globalCompositeOperation = 'destination-out';
-//     ctx.beginPath();
-//     ctx.arc(item.x, item.y, item.r + 1, 0, 2 * Math.PI, false);
-//     ctx.clip();
-//     ctx.fill();
-//     ctx.restore();
-// });
-
 //function to grow current player's mass 
 function growPlayerMass() {
     currentPlayer.r += extraMass;
     currentPlayer.draw(currentPlayer.r);
-    // console.log("extraMass:" + extraMass, "current Mass:" + currentPlayer.r);
-    // socket.emit('playerMass', {r: currentPlayer.r});
 }
