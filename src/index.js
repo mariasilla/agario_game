@@ -63,27 +63,26 @@ function gameCreate() {
       //the function will be called with the players object passed from the server 
       //send the players object(all players info) to the new player
       socket.on('currentPlayers', players => {
+            playersArray = Object.values(players);
+            // Object.keys(players).forEach(function (id) {
+            //       playersArray.push(players[id]);
+            // });
+            for (let i = 0; i < playersArray.length; i++) {
 
-            Object.keys(players).forEach(function (id) {
-                  playersArray.push(players[id]);
+                  if (playersArray[i].playerId === socket.id) {
+                        currentPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
+                        currentPlayer.draw();
+                  } else {
+                        //Add Other Players to Current Player's Canvas
+                        otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
+                        otherPlayer.draw();
+                        // otherPlayersArray.push(otherPlayer);
+                        // console.log(otherPlayersArray);
+                  };
+            }
 
-                  for (let i = 0; i < playersArray.length; i++) {
-
-                        if (playersArray[i].playerId === socket.id) {
-                              currentPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
-                              currentPlayer.draw();
-                        } else {
-                              //Add Other Players to Current Player's Canvas
-                              otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
-                              otherPlayer.draw();
-                              // otherPlayersArray.push(otherPlayer);
-                              // console.log(otherPlayersArray);
-                        };
-                  }
-            });
 
       }); //socket.on currentPlayers ends here
-
 
       //send new player's info to all other current players 
       socket.on('newPlayer', playerInfo => {
@@ -97,7 +96,6 @@ function gameCreate() {
       //find a player in the players object 
       //with the id that matches the id of the player whose coordinates are broadcasted from the server
       socket.on('playerMoved', (otherPlayerInfo) => {
-
             // Object.keys(players).forEach(function (id) {
             for (let i = playersArray.length - 1; i >= 0; i--) {
 
@@ -129,19 +127,18 @@ function gameCreate() {
       socket.on('userDisconnected', (disconnectedPlayer) => {
 
             for (let i = playersArray.length - 1; i >= 0; i--) {
-                  // if (disconnectedPlayer.playerId === playersArray[i].playerId) {
-                        ctx.save();
-                        ctx.globalCompositeOperation = 'destination-out';
-                        ctx.beginPath();
-                        ctx.arc( disconnectedPlayer.x, disconnectedPlayer.y, disconnectedPlayer.r + 1, 0, 2 * Math.PI, false);
-                        ctx.clip();
-                        ctx.fill();
-                        ctx.restore();
-                        if (i > -1) {
-                              playersArray.splice(i, 1);
-                        }
-                  // }
+                  ctx.save();
+                  ctx.globalCompositeOperation = 'destination-out';
+                  ctx.beginPath();
+                  ctx.arc(disconnectedPlayer.x, disconnectedPlayer.y, disconnectedPlayer.r + 1, 0, 2 * Math.PI, false);
+                  ctx.clip();
+                  ctx.fill();
+                  ctx.restore();
+                  if (i > -1) {
+                        playersArray.splice(i, 1);
+                  }
             }
+            console.log("after splice: ", playersArray);
       }); //socket.on disconnect ends here
 
 };//Socket.IO connection ends here
