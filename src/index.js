@@ -30,6 +30,7 @@ Ball.prototype.draw = function () {
 }
 export let socket = io();
 export let playersArray = [];
+export let otherPlayersArray;
 export let currentPlayer;
 export let otherPlayer;
 let foodItem;
@@ -66,7 +67,6 @@ function gameInit() {
 //if mouse is over middle of canvas, start the game 
 gameInit();
 
-
 function onCreateFood(foodCirclesArray) {
       for (let i = 0; i < foodCirclesArray.length; i++) {
             foodItem = new Ball(foodCirclesArray[i].x, foodCirclesArray[i].y, foodCirclesArray[i].r,
@@ -74,11 +74,10 @@ function onCreateFood(foodCirclesArray) {
             foodItem.draw();
             foodCirclesArr.push(foodItem);
       }
-
 }
 
 function addPlayers(players) {
-      console.log("players object: ", players);
+      // console.log("players object: ", players);
 
       playersArray = Object.values(players);
 
@@ -86,7 +85,6 @@ function addPlayers(players) {
       //       playersArray.push(players[id]);
       // });
       for (let i = 0; i < playersArray.length; i++) {
-
             if (playersArray[i].playerId === socket.id) {
                   currentPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
                   currentPlayer.draw();
@@ -94,34 +92,24 @@ function addPlayers(players) {
                   //Add Other Players to Current Player's Canvas
                   otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
                   otherPlayer.draw();
-                  // otherPlayersArray.push(otherPlayer);
-                  // console.log(otherPlayersArray);
             };
       }
 };
 
 function addNewPlayer(playerInfo) {
+    
       otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, playerInfo.color);
       otherPlayer.playerId = playerInfo.playerId;
       otherPlayer.draw();
 };
 
 // when a player moves, update the player data
-//find a player in the players object 
+//find a player in the players array 
 //with the id that matches the id of the player whose coordinates are broadcasted from the server
 function onPlayerMove(otherPlayerInfo) {
+
       for (let i = playersArray.length - 1; i >= 0; i--) {
             // if (otherPlayerInfo.playerId === playersArray[i].playerId) {
-            function deleteCurrentPosition() {
-                  ctx.save();
-                  ctx.globalCompositeOperation = 'destination-out';
-                  ctx.beginPath();
-                  ctx.arc(otherPlayer.x, otherPlayer.y, otherPlayer.r + 1, 0, 2 * Math.PI, false);
-                  ctx.clip();
-                  ctx.fill();
-                  ctx.restore();
-            };
-
             deleteCurrentPosition();
             playersArray[i].x = otherPlayerInfo.x;
             playersArray[i].y = otherPlayerInfo.y;
@@ -131,12 +119,20 @@ function onPlayerMove(otherPlayerInfo) {
             otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
             otherPlayer.draw();
             // };
+
+            function deleteCurrentPosition() {
+                  ctx.save();
+                  ctx.globalCompositeOperation = 'destination-out';
+                  ctx.beginPath();
+                  ctx.arc(otherPlayer.x, otherPlayer.y, otherPlayer.r + 1, 0, 2 * Math.PI, false);
+                  ctx.clip();
+                  ctx.fill();
+                  ctx.restore();
+            };
       }; //for loop ends here
-      // }); 
 };
 
 function onDisconnect(disconnectedPlayer) {
-      // console.log("before splice: ", playersArray);
       ctx.save();
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
@@ -144,12 +140,12 @@ function onDisconnect(disconnectedPlayer) {
       ctx.clip();
       ctx.fill();
       ctx.restore();
-      for (let i = playersArray.length - 1; i >= 0; i--) {
-            if (disconnectedPlayer.playerId === playersArray[i].playerId) {
-                  if (i > -1) {
-                        playersArray.splice(i, 1);
-                  }
-            }
-      }
-      console.log("after splice: ", playersArray);
+      // for (let i = playersArray.length - 1; i >= 0; i--) {
+      //       if (disconnectedPlayer.playerId === playersArray[i].playerId) {
+      //             if (i > -1) {
+      //                   playersArray.splice(i, 1);
+      //             }
+      //       }
+      // }
+      console.log("user disconnected: ", disconnectedPlayer.playerId);
 };

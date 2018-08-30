@@ -12,98 +12,88 @@ let modal;
 export function handleOtherPlayersCollision() {
 
     //1.
-    socket.on('sameSize', function (playerInfo, enemyInfo) {
-        // compute the amount you need to move
-        let step = enemyInfo.r + playerInfo.r - distance;
-        // if there's a collision, normalize the vector
-        dx /= distance; dy /= distance;
-        // and then move the two centers apart
-        enemyInfo.x -= dx * step / 2; enemyInfo.y -= dy * step / 2;
-        playerInfo.x += dx * step / 2; playerInfo.y += dy * step / 2;
-        //redraw enemy & player's circles
-        currentPlayer.draw(playerInfo.x, playerInfo.y);
-        otherPlayer.draw(enemyInfo.x, enemyInfo.y);
-    });// socket sameSize ends here
-
+    socket.on('sameSize', onSameSize);
     //2.
-    socket.on('removeEnemy', function (enemyInfo) {
+    socket.on('removeEnemy', onRemoveEnemy);
+    //3.
+    socket.on('removeCurrentPlayer', onRemoveCurrentPlayer);
 
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
+}; // handleOtherPlayersCollision ends here
 
+//1.
+function onSameSize(playerInfo, enemyInfo) {
+    // compute the amount you need to move
+    let step = enemyInfo.r + playerInfo.r - distance;
+    // if there's a collision, normalize the vector
+    dx /= distance; dy /= distance;
+    // and then move the two centers apart
+    enemyInfo.x -= dx * step / 2; enemyInfo.y -= dy * step / 2;
+    playerInfo.x += dx * step / 2; playerInfo.y += dy * step / 2;
+    //redraw enemy & player's circles
+    currentPlayer.draw(playerInfo.x, playerInfo.y);
+    otherPlayer.draw(enemyInfo.x, enemyInfo.y);
+};
+//2.
+function onRemoveEnemy(enemyInfo) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
+    ctx.clip();
+    ctx.fill();
+    ctx.restore();
+
+
+    for (let i = playersArray.length - 1; i >= 0; i--) {
+
+        if (enemyInfo.playerId === playersArray[i].playerId) {
+
+            // delete playersArray[i];
+            if (i > -1) {
+                playersArray.splice(i, 1);
+            }
+        }
+        // console.log("after splice: ", playersArray);
+    }
+};
+//3.
+function onRemoveCurrentPlayer(playerInfo) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
+    ctx.clip();
+    ctx.fill();
+    ctx.restore();
+
+    if (playerInfo.playerId === socket.id) {
+        stopMove();
+        modalInit();
         for (let i = playersArray.length - 1; i >= 0; i--) {
-            if (enemyInfo.playerId === playersArray[i].playerId) {
+            if (playersArray[i].playerId === socket) {
+                console.log(playersArray[i]);
+
+                // delete playersArray[i];
                 if (i > -1) {
                     playersArray.splice(i, 1);
                 }
             }
         }
-        // console.log(enemyInfo.playerId);
-    });// socket removeEnemy ends here
-
-    //3.
-    socket.on('removeCurrentPlayer', function (playerInfo) {
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-        ctx.beginPath();
-        ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-        ctx.clip();
-        ctx.fill();
-        ctx.restore();
-
-        if (playerInfo.playerId === socket.id) {
-            stopMove();
-            modalInit();
-            for (let i = playersArray.length - 1; i >= 0; i--) {
-                if (playersArray[i].playerId === socket) {
-                    if (i > -1) {
-                        playersArray.splice(i, 1);
-                    }
-                }
-            }
-            console.log("after splice: ", playersArray);
-        };
-
-    });// socket removeCurrentPlayer ends here
-
-    // socket.on('removeCurPlayerFromOtherCanvases', function (playerInfo) {
-    //     console.log(playerInfo);
-
-    //     ctx.save();
-    //     ctx.globalCompositeOperation = 'destination-out';
-    //     ctx.beginPath();
-    //     ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-    //     ctx.clip();
-    //     ctx.fill();
-    //     ctx.restore();
-    //     // if (playerInfo.playerId === socket.id) {
-    //     //     stopMove();
-    //     //     //modal 
-    //     //     let modal = document.querySelector('.modal');
-    //     //     window.addEventListener('mousemove', () => {
-    //     //         modal.classList.add('modal--open');
-    //     //     });
-    //     // };
-    // });// socket removeCurPlayerFromOtherCanvases ends here
-
-}; // handleOtherPlayersCollision ends here
+        console.log("after splice: ", playersArray);
+    }
+};
 
 function stopMove() {
     canvas.removeEventListener("mousemove", movePlayer, false);
     // alert("Game Over!")
-}
+};
 
 function modalInit() {
     modal = document.querySelector('.modal');
     window.addEventListener('mousemove', () => {
         modal.classList.add('modal--open');
     });
-}
+};
 
 // player and food collision detection function 
 export function handleCollisionFood() {
@@ -150,4 +140,4 @@ export function handleCollisionFood() {
 function growPlayerMass() {
     currentPlayer.r += extraMass;
     currentPlayer.draw(currentPlayer.r);
-}
+};

@@ -4,7 +4,6 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const path = require('path');
 
-
 // app.use(express.static(path.join(__dirname, 'src')));
 
 app.get('/dist/build.js', function (req, res) {
@@ -97,7 +96,6 @@ function onMovement(movementData) {
                 console.log("Collision detected!");
             }
         };
-
         function measureDistance() {
             dx = currentPlayer.x - enemy.x;
             dy = currentPlayer.y - enemy.y;
@@ -125,9 +123,7 @@ function onMovement(movementData) {
             delete players[that.id];
             // socket.broadcast.emit('currentPlayers', players);
         };
-    });
-    // }; // players collision loop ends here
-
+    }); // players collision loop ends here 
 };
 
 function onDisconnect() {
@@ -142,7 +138,7 @@ function onDisconnect() {
 
     // io.emit('disconnect', socket.id);
     // io.emit('myCustomEvent', {customEvent: 'Custom Message'})
-}
+};
 
 http.listen(3000, function () {
     console.log('listening on *:3000');
@@ -151,4 +147,4 @@ http.listen(3000, function () {
 function random(min, max) {
     var num = Math.floor(Math.random() * (max - min + 1)) + min;
     return num;
-}
+};

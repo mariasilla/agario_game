@@ -6,8 +6,6 @@ import {handleCollisionFood} from './handleCollision.js';
 export default function movePlayer(e) {
     const mousePos = setMousePosition(e);
     deleteCurrentPlayerPos();
-    // playerCoords.x = mousePos.x;
-    // playerCoords.y = mousePos.y;
     currentPlayer.x = mousePos.x;
     currentPlayer.y = mousePos.y;
     // playerCoords.draw();
@@ -16,6 +14,7 @@ export default function movePlayer(e) {
     handleOtherPlayersCollision();
     socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r, color: currentPlayer.color});
 };
+
 
 function setMousePosition(e) {
     const rect = canvas.getBoundingClientRect();
