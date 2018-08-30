@@ -75,10 +75,10 @@ function onMovement(movementData) {
 
     // emit a message to all players about the player that moved
     this.broadcast.emit('playerMoved', players[this.id]);
-    currentPlayer = players[this.id];
 
     Object.keys(players).forEach(function (id) {
         enemy = players[id];
+        currentPlayer = players[that.id];
 
         if (currentPlayer.playerId !== enemy.playerId) {
             // console.log("current player id: " + currentPlayer.playerId);
@@ -122,7 +122,7 @@ function onMovement(movementData) {
             that.emit('removeCurrentPlayer', currentPlayer);
             that.broadcast.emit('removeCurrentPlayer', currentPlayer);
             // socket.broadcast.emit('removeCurPlayerFromOtherCanvases', players[socket.id]);
-            delete players[socket.id];
+            delete players[that.id];
             // socket.broadcast.emit('currentPlayers', players);
         };
     });

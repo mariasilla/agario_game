@@ -46,8 +46,6 @@ export function handleOtherPlayersCollision() {
         // console.log(enemyInfo.playerId);
     });// socket removeEnemy ends here
 
-
-
     //3.
     socket.on('removeCurrentPlayer', function (playerInfo) {
         ctx.save();
