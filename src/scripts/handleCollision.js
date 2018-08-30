@@ -62,7 +62,7 @@ export function handleOtherPlayersCollision() {
             stopMove();
             modalInit();
             for (let i = playersArray.length - 1; i >= 0; i--) {
-                if (playersArray[i].playerId === socket.id) {
+                if (playersArray[i].playerId === socket) {
                     if (i > -1) {
                         playersArray.splice(i, 1);
                     }
