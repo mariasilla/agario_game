@@ -6,6 +6,7 @@ let dx;
 let dy;
 let distance;
 let score = 0;
+let modal;
 
 // player and other players collision detection function 
 export function handleOtherPlayersCollision() {
@@ -49,7 +50,6 @@ export function handleOtherPlayersCollision() {
 
     //3.
     socket.on('removeCurrentPlayer', function (playerInfo) {
-
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
         ctx.beginPath();
@@ -57,22 +57,19 @@ export function handleOtherPlayersCollision() {
         ctx.clip();
         ctx.fill();
         ctx.restore();
+
         if (playerInfo.playerId === socket.id) {
             stopMove();
-            //modal 
-            let modal = document.querySelector('.modal');
-            window.addEventListener('mousemove', () => {
-                modal.classList.add('modal--open');
-            });
+            modalInit();
+            for (let i = playersArray.length - 1; i >= 0; i--) {
+                if (playersArray[i].playerId === socket.id) {
+                    if (i > -1) {
+                        playersArray.splice(i, 1);
+                    }
+                }
+            }
+            console.log("after splice: ", playersArray);
         };
-
-        // for (let i = playersArray.length - 1; i >= 0; i--) {
-        //     if (playerInfo.playerId === playersArray[i].playerId) {
-        //         if (i > -1) {
-        //             playersArray.splice(i, 1);
-        //         }
-        //     }
-        // }
 
     });// socket removeCurrentPlayer ends here
 
@@ -96,14 +93,19 @@ export function handleOtherPlayersCollision() {
     //     // };
     // });// socket removeCurPlayerFromOtherCanvases ends here
 
-
-    function stopMove() {
-        canvas.removeEventListener("mousemove", movePlayer, false);
-        // alert("Game Over!")
-    }
 }; // handleOtherPlayersCollision ends here
 
+function stopMove() {
+    canvas.removeEventListener("mousemove", movePlayer, false);
+    // alert("Game Over!")
+}
 
+function modalInit() {
+    modal = document.querySelector('.modal');
+    window.addEventListener('mousemove', () => {
+        modal.classList.add('modal--open');
+    });
+}
 
 // player and food collision detection function 
 export function handleCollisionFood() {

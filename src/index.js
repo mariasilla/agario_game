@@ -5,7 +5,6 @@ import { log } from 'util';
 import { random } from './scripts/random.js';
 
 
-
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");
 export let button = document.getElementById("game_start");
@@ -63,7 +62,10 @@ function gameCreate() {
       //the function will be called with the players object passed from the server 
       //send the players object(all players info) to the new player
       socket.on('currentPlayers', players => {
+            console.log("players object: ", players);
+
             playersArray = Object.values(players);
+
             // Object.keys(players).forEach(function (id) {
             //       playersArray.push(players[id]);
             // });
@@ -91,14 +93,11 @@ function gameCreate() {
             otherPlayer.draw();
       });
 
-
       // when a player moves, update the player data
       //find a player in the players object 
       //with the id that matches the id of the player whose coordinates are broadcasted from the server
       socket.on('playerMoved', (otherPlayerInfo) => {
-            // Object.keys(players).forEach(function (id) {
             for (let i = playersArray.length - 1; i >= 0; i--) {
-
                   // if (otherPlayerInfo.playerId === playersArray[i].playerId) {
                   function deleteCurrentPosition() {
                         ctx.save();
@@ -125,20 +124,22 @@ function gameCreate() {
 
       // SOCKET DISCONNECT
       socket.on('userDisconnected', (disconnectedPlayer) => {
-
+            // console.log("before splice: ", playersArray);
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(disconnectedPlayer.x, disconnectedPlayer.y, disconnectedPlayer.r + 1, 0, 2 * Math.PI, false);
+            ctx.clip();
+            ctx.fill();
+            ctx.restore();
             for (let i = playersArray.length - 1; i >= 0; i--) {
-                  ctx.save();
-                  ctx.globalCompositeOperation = 'destination-out';
-                  ctx.beginPath();
-                  ctx.arc(disconnectedPlayer.x, disconnectedPlayer.y, disconnectedPlayer.r + 1, 0, 2 * Math.PI, false);
-                  ctx.clip();
-                  ctx.fill();
-                  ctx.restore();
-                  if (i > -1) {
-                        playersArray.splice(i, 1);
+                  if (disconnectedPlayer.playerId === playersArray[i].playerId) {
+                        if (i > -1) {
+                              playersArray.splice(i, 1);
+                        }
                   }
             }
-            console.log("after splice: ", playersArray);
+            // console.log("after splice: ", playersArray);
       }); //socket.on disconnect ends here
 
 };//Socket.IO connection ends here
