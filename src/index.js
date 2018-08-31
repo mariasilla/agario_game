@@ -30,7 +30,6 @@ Ball.prototype.draw = function () {
 }
 export let socket = io();
 export let playersArray = [];
-export let otherPlayersArray;
 export let currentPlayer;
 export let otherPlayer;
 let foodItem;
@@ -97,9 +96,8 @@ function addPlayers(players) {
 };
 
 function addNewPlayer(playerInfo) {
-
       otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, playerInfo.color);
-      otherPlayer.playerId = playerInfo.playerId;
+      // otherPlayer.playerId = playerInfo.playerId;
       otherPlayer.draw();
 };
 
@@ -110,31 +108,37 @@ function onPlayerMove(players, playerThatMoved) {
       playersArray = Object.values(players);
       for (let i = playersArray.length - 1; i >= 0; i--) {
             if (playerThatMoved.playerId === playersArray[i].playerId) {
-                  console.log("player that moved: ", playerThatMoved);
-                  console.log("players array i: ", playersArray[i]);
-
+                  
+                  otherPlayer = playersArray[i];
+                  otherPlayer.x = playerThatMoved.x;
+                  otherPlayer.y = playerThatMoved.y;
+                  otherPlayer.r = playerThatMoved.r;
+                  otherPlayer.color = playerThatMoved.color;
                   deleteCurrentPosition();
-                  playersArray[i].x = playerThatMoved.x;
-                  playersArray[i].y = playerThatMoved.y;
-                  playersArray[i].r = playerThatMoved.r;
-                  playersArray[i].color = playerThatMoved.color;
-
-                  playersArray[i] = new Ball(playerThatMoved.x, playerThatMoved.y, playerThatMoved.r, playerThatMoved.color);
-                  playersArray[i].draw();
-
-            };
-            function deleteCurrentPosition() {
-
-                  ctx.save();
-                  ctx.globalCompositeOperation = 'destination-out';
-                  ctx.beginPath();
-                  ctx.arc(playersArray[i].x, playersArray[i].y, playersArray[i].r + 1, 0, 2 * Math.PI, false);
-                  // ctx.clip();
-                  ctx.fill();
-                  ctx.restore();
+                  otherPlayer = new Ball(playerThatMoved.x, playerThatMoved.y, playerThatMoved.r, playerThatMoved.color);
+                  otherPlayer.draw();
             };
       }; //for loop ends here
+
+      function deleteCurrentPosition() {
+
+            // ctx.save();
+            // ctx.rect(aPlayer.x - aPlayer.r, aPlayer.y - aPlayer.r, aPlayer.r + aPlayer.r, aPlayer.r + aPlayer.r);
+            // ctx.clip();
+            // ctx.clearRect(aPlayer.x - aPlayer.r, aPlayer.y - aPlayer.r, aPlayer.r * 2, aPlayer.r * 2);
+            // ctx.restore();
+
+            ctx.save();
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.beginPath();
+            ctx.arc(otherPlayer.x, otherPlayer.y, otherPlayer.r + 1, 0, 2 * Math.PI, false);
+            ctx.clip();
+            ctx.fill();
+            ctx.restore();
+      };
 };
+
+
 
 function onDisconnect(disconnectedPlayer) {
       ctx.save();

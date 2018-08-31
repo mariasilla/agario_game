@@ -1,4 +1,4 @@
-import { ctx, foodCirclesArr, extraMass, playersArray, currentPlayer, otherPlayer, socket } from '../index.js';
+import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer, socket } from '../index.js';
 import movePlayer from './player.js';
 import { log } from 'util';
 
@@ -7,6 +7,7 @@ let dy;
 let distance;
 let score = 0;
 let modal;
+let playersArray;
 
 // player and other players collision detection function 
 export function handleOtherPlayersCollision() {
@@ -21,7 +22,7 @@ export function handleOtherPlayersCollision() {
 }; // handleOtherPlayersCollision ends here
 
 //1.
-function onSameSize(playerInfo, enemyInfo) {
+export function onSameSize(playerInfo, enemyInfo) {
     // compute the amount you need to move
     let step = enemyInfo.r + playerInfo.r - distance;
     // if there's a collision, normalize the vector
@@ -34,7 +35,8 @@ function onSameSize(playerInfo, enemyInfo) {
     otherPlayer.draw(enemyInfo.x, enemyInfo.y);
 };
 //2.
-function onRemoveEnemy(enemyInfo) {
+export function onRemoveEnemy(players, enemyInfo) {
+    playersArray = Object.values(players);
     ctx.save();
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
@@ -53,11 +55,12 @@ function onRemoveEnemy(enemyInfo) {
                 playersArray.splice(i, 1);
             }
         }
-        // console.log("after splice: ", playersArray);
+        console.log("after splice: ", playersArray);
     }
 };
 //3.
-function onRemoveCurrentPlayer(playerInfo) {
+export function onRemoveCurrentPlayer(players, playerInfo) {
+    playersArray = Object.values(players);
     ctx.save();
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
@@ -83,7 +86,7 @@ function onRemoveCurrentPlayer(playerInfo) {
     }
 };
 
-function stopMove() {
+ function stopMove() {
     canvas.removeEventListener("mousemove", movePlayer, false);
     // alert("Game Over!")
 };
