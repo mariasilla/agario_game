@@ -97,7 +97,7 @@ function addPlayers(players) {
 };
 
 function addNewPlayer(playerInfo) {
-    
+
       otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, playerInfo.color);
       otherPlayer.playerId = playerInfo.playerId;
       otherPlayer.draw();
@@ -106,26 +106,30 @@ function addNewPlayer(playerInfo) {
 // when a player moves, update the player data
 //find a player in the players array 
 //with the id that matches the id of the player whose coordinates are broadcasted from the server
-function onPlayerMove(otherPlayerInfo) {
-
+function onPlayerMove(players, playerThatMoved) {
+      playersArray = Object.values(players);
       for (let i = playersArray.length - 1; i >= 0; i--) {
-            // if (otherPlayerInfo.playerId === playersArray[i].playerId) {
-            deleteCurrentPosition();
-            playersArray[i].x = otherPlayerInfo.x;
-            playersArray[i].y = otherPlayerInfo.y;
-            playersArray[i].r = otherPlayerInfo.r;
-            playersArray[i].color = otherPlayerInfo.color;
+            if (playerThatMoved.playerId === playersArray[i].playerId) {
+                  console.log("player that moved: ", playerThatMoved);
+                  console.log("players array i: ", playersArray[i]);
 
-            otherPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
-            otherPlayer.draw();
-            // };
+                  deleteCurrentPosition();
+                  playersArray[i].x = playerThatMoved.x;
+                  playersArray[i].y = playerThatMoved.y;
+                  playersArray[i].r = playerThatMoved.r;
+                  playersArray[i].color = playerThatMoved.color;
 
+                  playersArray[i] = new Ball(playerThatMoved.x, playerThatMoved.y, playerThatMoved.r, playerThatMoved.color);
+                  playersArray[i].draw();
+
+            };
             function deleteCurrentPosition() {
+
                   ctx.save();
                   ctx.globalCompositeOperation = 'destination-out';
                   ctx.beginPath();
-                  ctx.arc(otherPlayer.x, otherPlayer.y, otherPlayer.r + 1, 0, 2 * Math.PI, false);
-                  ctx.clip();
+                  ctx.arc(playersArray[i].x, playersArray[i].y, playersArray[i].r + 1, 0, 2 * Math.PI, false);
+                  // ctx.clip();
                   ctx.fill();
                   ctx.restore();
             };

@@ -11,7 +11,7 @@ export default function movePlayer(e) {
     // playerCoords.draw();
     currentPlayer.draw();
     handleCollisionFood();
-    handleOtherPlayersCollision();
+    // handleOtherPlayersCollision();
     socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r, color: currentPlayer.color});
 };
 
@@ -30,11 +30,18 @@ function deleteCurrentPlayerPos() {
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
     ctx.arc(currentPlayer.x, currentPlayer.y, currentPlayer.r + 1, 0, 2 * Math.PI, false);
-    ctx.clip();
+    // ctx.clip();
     ctx.fill();
     ctx.restore();
 };
 
 
-
+// function clearArc(context, x, y, radius) {
+//     context.save();
+//     context.globalCompositeOperation = 'destination-out';
+//     context.beginPath();
+//     context.arc(x, y, radius, 0, 2 * Math.PI, false);
+//     context.fill();
+//     context.restore();
+//   }
 
