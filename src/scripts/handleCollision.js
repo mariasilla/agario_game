@@ -1,4 +1,4 @@
-import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer, socket } from '../index.js';
+import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer, socket, playerThatMoved } from '../index.js';
 import movePlayer from './player.js';
 import { log } from 'util';
 
@@ -35,8 +35,8 @@ export function onSameSize(playerInfo, enemyInfo) {
     otherPlayer.draw(enemyInfo.x, enemyInfo.y);
 };
 //2.
-export function onRemoveEnemy(players, enemyInfo) {
-    playersArray = Object.values(players);
+export function onRemoveEnemy(enemyInfo) {
+    // playersArray = Object.values(players);
     ctx.save();
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();
@@ -59,8 +59,8 @@ export function onRemoveEnemy(players, enemyInfo) {
     }
 };
 //3.
-export function onRemoveCurrentPlayer(players, playerInfo) {
-    playersArray = Object.values(players);
+export function onRemoveCurrentPlayer(playerInfo) {
+    // playersArray = Object.values(players);
     ctx.save();
     ctx.globalCompositeOperation = 'destination-out';
     ctx.beginPath();

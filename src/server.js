@@ -73,7 +73,7 @@ function onMovement(movementData) {
     players[this.id].color = movementData.color;
 
     // emit a message to all players about the player that moved
-    this.broadcast.emit('playerMoved', players, players[this.id]);
+    this.broadcast.emit('playerMoved', players[this.id]);
 
     Object.keys(players).forEach(function (id) {
         enemy = players[id];
@@ -110,15 +110,15 @@ function onMovement(movementData) {
         };
         //2.if current Player is Bigger/ remove the Enemy
         function playerBiggerThanEnemy() {
-            that.emit('removeEnemy', players, enemy);
-            that.broadcast.emit('removeEnemy', players, enemy);
+            that.emit('removeEnemy', enemy);
+            that.broadcast.emit('removeEnemy', enemy);
             delete players[id];
             // socket.broadcast.emit('currentPlayers', players);
         };
         //3.if Enemy is bigger than current Players
         function enemyIsBiggerThanPlayer() {
-            that.emit('removeCurrentPlayer', players, currentPlayer);
-            that.broadcast.emit('removeCurrentPlayer', players, currentPlayer);
+            that.emit('removeCurrentPlayer', currentPlayer);
+            that.broadcast.emit('removeCurrentPlayer', currentPlayer);
             // socket.broadcast.emit('removeCurPlayerFromOtherCanvases', players[socket.id]);
             delete players[that.id];
             // socket.broadcast.emit('currentPlayers', players);
