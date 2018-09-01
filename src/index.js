@@ -122,9 +122,9 @@ function onPlayerMove(playerInfo) {
             function getPlayerByID() {
                   if (playerInfo.playerId === playersArray[i].playerId
                         && playerInfo.playerId !== socket.id) {
+
                         deletePosition(playersArray[i].x, playersArray[i].y, playersArray[i].r);
                         otherPlayer = playersArray[i];
-
                         otherPlayer.x = playerInfo.x;
                         otherPlayer.y = playerInfo.y;
                         otherPlayer.r = playerInfo.r;

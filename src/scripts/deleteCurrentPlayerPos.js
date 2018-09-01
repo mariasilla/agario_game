@@ -1,4 +1,4 @@
-import { currentPlayer, ctx } from '../index.js';
+import { ctx } from '../index.js';
 
 export default function deletePosition(x, y, r) {
   ctx.save();

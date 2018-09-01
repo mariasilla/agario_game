@@ -1,4 +1,4 @@
-import { canvas, ctx, socket, currentPlayer } from '../index.js';
+import { canvas, socket, currentPlayer } from '../index.js';
 // import handleCollisionFood from './handleCollision.js';
 import { handleOtherPlayersCollision } from './handleCollision.js';
 import { handleCollisionFood } from './handleCollision.js';
@@ -7,7 +7,6 @@ import deletePosition from './deleteCurrentPlayerPos.js'
 export default function movePlayer(e) {
     const mousePos = setMousePosition(e);
     deletePosition(currentPlayer.x, currentPlayer.y, currentPlayer.r);
-    // deleteCurrentPlayerPos();
     currentPlayer.x = mousePos.x;
     currentPlayer.y = mousePos.y;
     currentPlayer.draw();

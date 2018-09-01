@@ -1,4 +1,4 @@
-import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer, socket, playerThatMoved } from '../index.js';
+import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer, socket, playersArray } from '../index.js';
 import movePlayer from './player.js';
 import deletePosition from './deleteCurrentPlayerPos.js'
 import { log } from 'util';
@@ -8,7 +8,6 @@ let dy;
 let distance;
 let score = 0;
 let modal;
-let playersArray;
 
 // player and other players collision detection function 
 export function handleOtherPlayersCollision() {
@@ -37,54 +36,34 @@ export function onSameSize(playerInfo, enemyInfo) {
 };
 //2.
 export function onRemoveEnemy(enemyInfo) {
-    // playersArray = Object.values(players);
-    // ctx.save();
-    // ctx.globalCompositeOperation = 'destination-out';
-    // ctx.beginPath();
-    // ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
-    // ctx.clip();
-    // ctx.fill();
-    // ctx.restore();
+
     deletePosition(enemyInfo.x,enemyInfo.y,enemyInfo.r);
 
-    for (let i = playersArray.length - 1; i >= 0; i--) {
+    // for (let i = playersArray.length - 1; i >= 0; i--) {
 
-        if (enemyInfo.playerId === playersArray[i].playerId) {
-
-            // delete playersArray[i];
-            if (i > -1) {
-                playersArray.splice(i, 1);
-            }
-        }
-        console.log("after splice: ", playersArray);
-    }
+    //     if (enemyInfo.playerId === playersArray[i].playerId) {
+    //         if (i > -1) {
+    //             playersArray.splice(i, 1);
+    //         }
+    //     }
+    // }
 };
 //3.
 export function onRemoveCurrentPlayer(playerInfo) {
-    // playersArray = Object.values(players);
-    // ctx.save();
-    // ctx.globalCompositeOperation = 'destination-out';
-    // ctx.beginPath();
-    // ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-    // ctx.clip();
-    // ctx.fill();
-    // ctx.restore();
+
     deletePosition(playerInfo.x,playerInfo.y,playerInfo.r);
 
     if (playerInfo.playerId === socket.id) {
         stopMove();
         modalInit();
-        for (let i = playersArray.length - 1; i >= 0; i--) {
-            if (playersArray[i].playerId === socket) {
-                console.log(playersArray[i]);
-
-                // delete playersArray[i];
-                if (i > -1) {
-                    playersArray.splice(i, 1);
-                }
-            }
-        }
-        console.log("after splice: ", playersArray);
+        // for (let i = playersArray.length - 1; i >= 0; i--) {
+        //     if (playersArray[i].playerId === socket) {
+        //         console.log(playersArray[i]);
+        //         if (i > -1) {
+        //             playersArray.splice(i, 1);
+        //         }
+        //     }
+        // }
     }
 };
 

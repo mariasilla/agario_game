@@ -112,16 +112,13 @@ function onMovement(movementData) {
         function playerBiggerThanEnemy() {
             that.emit('removeEnemy', enemy);
             that.broadcast.emit('removeEnemy', enemy);
-            delete players[id];
-            // socket.broadcast.emit('currentPlayers', players);
+            delete players[id];            
         };
         //3.if Enemy is bigger than current Players
         function enemyIsBiggerThanPlayer() {
             that.emit('removeCurrentPlayer', currentPlayer);
             that.broadcast.emit('removeCurrentPlayer', currentPlayer);
-            // socket.broadcast.emit('removeCurPlayerFromOtherCanvases', players[socket.id]);
-            delete players[that.id];
-            // socket.broadcast.emit('currentPlayers', players);
+            delete players[that.id];  
         };
     }); // players collision loop ends here 
 };
@@ -134,10 +131,6 @@ function onDisconnect() {
     delete players[this.id];
     // socket.broadcast.emit('userDisconnected', socket.id);
     console.log(players);
-
-
-    // io.emit('disconnect', socket.id);
-    // io.emit('myCustomEvent', {customEvent: 'Custom Message'})
 };
 
 http.listen(3000, function () {
