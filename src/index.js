@@ -137,13 +137,6 @@ function onPlayerMove(playerInfo) {
 
 
 function onDisconnect(disconnectedPlayer) {
-      // ctx.save();
-      // ctx.globalCompositeOperation = 'destination-out';
-      // ctx.beginPath();
-      // ctx.arc(disconnectedPlayer.x, disconnectedPlayer.y, disconnectedPlayer.r + 1, 0, 2 * Math.PI, false);
-      // ctx.clip();
-      // ctx.fill();
-      // ctx.restore();
       deletePosition(isconnectedPlayer.x,isconnectedPlayer.y,isconnectedPlayer.r);
       for (let i = playersArray.length - 1; i >= 0; i--) {
             if (disconnectedPlayer.playerId === playersArray[i].playerId) {
@@ -154,14 +147,3 @@ function onDisconnect(disconnectedPlayer) {
       }
       console.log("user disconnected: ", disconnectedPlayer.playerId);
 };
-
-// function deletePosition(x, y, r) {
-
-//       ctx.save();
-//       ctx.globalCompositeOperation = 'destination-out';
-//       ctx.beginPath();
-//       ctx.arc(x, y, r + 1, 0, 2 * Math.PI, false);
-//       ctx.clip();
-//       ctx.fill();
-//       ctx.restore();
-// };
