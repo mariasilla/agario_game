@@ -1,5 +1,6 @@
 import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer, socket, playerThatMoved } from '../index.js';
 import movePlayer from './player.js';
+import deletePosition from './deleteCurrentPlayerPos.js'
 import { log } from 'util';
 
 let dx;
@@ -37,14 +38,14 @@ export function onSameSize(playerInfo, enemyInfo) {
 //2.
 export function onRemoveEnemy(enemyInfo) {
     // playersArray = Object.values(players);
-    ctx.save();
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
-    ctx.clip();
-    ctx.fill();
-    ctx.restore();
-
+    // ctx.save();
+    // ctx.globalCompositeOperation = 'destination-out';
+    // ctx.beginPath();
+    // ctx.arc(enemyInfo.x, enemyInfo.y, enemyInfo.r + 1, 0, 2 * Math.PI, false);
+    // ctx.clip();
+    // ctx.fill();
+    // ctx.restore();
+    deletePosition(enemyInfo.x,enemyInfo.y,enemyInfo.r);
 
     for (let i = playersArray.length - 1; i >= 0; i--) {
 
@@ -61,13 +62,14 @@ export function onRemoveEnemy(enemyInfo) {
 //3.
 export function onRemoveCurrentPlayer(playerInfo) {
     // playersArray = Object.values(players);
-    ctx.save();
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
-    ctx.clip();
-    ctx.fill();
-    ctx.restore();
+    // ctx.save();
+    // ctx.globalCompositeOperation = 'destination-out';
+    // ctx.beginPath();
+    // ctx.arc(playerInfo.x, playerInfo.y, playerInfo.r + 1, 0, 2 * Math.PI, false);
+    // ctx.clip();
+    // ctx.fill();
+    // ctx.restore();
+    deletePosition(playerInfo.x,playerInfo.y,playerInfo.r);
 
     if (playerInfo.playerId === socket.id) {
         stopMove();
@@ -111,20 +113,11 @@ export function handleCollisionFood() {
 
         distance = Math.sqrt(dx * dx + dy * dy);
 
-        function removeFoodItem() {
-            ctx.save();
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.beginPath();
-            ctx.arc(foodCirclesArr[i].x, foodCirclesArr[i].y, foodCirclesArr[i].r + 1, 0, 2 * Math.PI, false);
-            ctx.clip();
-            ctx.fill();
-            ctx.restore();
-        }
-
         if (distance < (currentPlayer.r + 1) + foodCirclesArr[i].r) {
 
             if (currentPlayer.r + 1 > foodCirclesArr[i].r) {
-                removeFoodItem()
+                // removeFoodItem();
+                deletePosition(foodCirclesArr[i].x,foodCirclesArr[i].y,foodCirclesArr[i].r);
                 growPlayerMass();
                 //update player's score
                 score += 5;
