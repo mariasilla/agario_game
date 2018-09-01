@@ -137,7 +137,7 @@ function onPlayerMove(playerInfo) {
 
 
 function onDisconnect(disconnectedPlayer) {
-      deletePosition(isconnectedPlayer.x,isconnectedPlayer.y,isconnectedPlayer.r);
+      deletePosition(disconnectedPlayer.x, disconnectedPlayer.y, disconnectedPlayer.r);
       for (let i = playersArray.length - 1; i >= 0; i--) {
             if (disconnectedPlayer.playerId === playersArray[i].playerId) {
                   if (i > -1) {
