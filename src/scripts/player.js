@@ -1,5 +1,4 @@
 import { canvas, socket, currentPlayer } from '../index.js';
-// import handleCollisionFood from './handleCollision.js';
 import { handleOtherPlayersCollision } from './handleCollision.js';
 import { handleCollisionFood } from './handleCollision.js';
 import deletePosition from './deleteCurrentPlayerPos.js'

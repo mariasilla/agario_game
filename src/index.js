@@ -34,7 +34,7 @@ export let playersArray = [];
 export let currentPlayer;
 export let otherPlayer;
 let currentPlayerBroadcast;
-export let playerThatMoved;
+// export let playerThatMoved;
 let foodItem;
 
 
@@ -48,6 +48,12 @@ function gameCreate() {
       //the function will be called with the players object passed from the server 
       //send the players object(all players info) to the new player
       socket.on('currentPlayers', addPlayers);
+      
+      //*********************************
+      //add enemy player to current player canvas
+      // socket.on('new_enemyPlayer', addEnemyPlayer);
+      // socket.on('new_Player', addNewPlayer);
+      // //********************************************
 
       //send new player's info to all other current players 
       socket.on('newPlayer', addNewPlayer);
@@ -73,20 +79,30 @@ gameInit();
 function onCreateFood(foodCirclesArray) {
       for (let i = 0; i < foodCirclesArray.length; i++) {
             foodItem = new Ball(foodCirclesArray[i].x, foodCirclesArray[i].y, foodCirclesArray[i].r,
-                  'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+                  'rgb(' + random() + ',' + random(0, 255) + ',' + random(0, 255) + ')');
             foodItem.draw();
             foodCirclesArr.push(foodItem);
       }
 }
 
+// function addEnemyPlayer(playerInfo) {
+//       console.log(playerInfo);
+//       otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, playerInfo.color);
+//       otherPlayer.draw();
+// }
+
+// function addNewPlayer(playerInfo) {
+//       console.log(playerInfo);
+//       otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, playerInfo.color);
+//       otherPlayer.draw();
+// }
+
+
+
 function addPlayers(players) {
       // console.log("players object: ", players);
-
       playersArray = Object.values(players);
 
-      // Object.keys(players).forEach(function (id) {
-      //       playersArray.push(players[id]);
-      // });
       for (let i = 0; i < playersArray.length; i++) {
             if (playersArray[i].playerId === socket.id) {
                   currentPlayer = new Ball(playersArray[i].x, playersArray[i].y, playersArray[i].r, playersArray[i].color);
@@ -111,8 +127,7 @@ function addNewPlayer(playerInfo) {
 //find a player in the players array 
 //with the id that matches the id of the player whose coordinates are broadcasted from the server
 function onPlayerMove(playerInfo) {
-
-
+    
       for (let i = playersArray.length - 1; i >= 0; i--) {
 
             getPlayerByID();
@@ -140,9 +155,9 @@ function onDisconnect(disconnectedPlayer) {
       deletePosition(disconnectedPlayer.x, disconnectedPlayer.y, disconnectedPlayer.r);
       for (let i = playersArray.length - 1; i >= 0; i--) {
             if (disconnectedPlayer.playerId === playersArray[i].playerId) {
-                  if (i > -1) {
-                        playersArray.splice(i, 1);
-                  }
+
+                  playersArray.splice(i, 1);
+
             }
       }
       console.log("user disconnected: ", disconnectedPlayer.playerId);

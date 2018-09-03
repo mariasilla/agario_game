@@ -21,14 +21,20 @@ let foodNum = 25;
 let currentPlayer;
 let enemy;
 let distance;
+// let allClients = [];
 let newMass;
 let score;
 
 //Socket.IO starts here
 io.on('connection', socket => {
+    // allClients.push(socket);
+    // console.log(allClients);
 
     //print NEW connected user's id to console
     console.log('a NEW user is CONNECTED: ' + socket.id);
+
+
+    // socket.on("newPlayer", onNewPlayer);
 
     // create a new player and add it to the players object
     players[socket.id] = {
@@ -38,6 +44,7 @@ io.on('connection', socket => {
         color: 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
         playerId: socket.id
     };
+
 
     // send the players object(all players info) to the new player
     socket.emit('currentPlayers', players);
@@ -64,6 +71,25 @@ io.on('connection', socket => {
 
 }); //Socket.IO ends here
 
+// function onNewPlayer(data) {
+//     const newPlayer = {
+//         x: Math.floor(Math.random() * 700) + 50,
+//         y: Math.floor(Math.random() * 700) + 50,
+//         r: 20,
+//         color: 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
+//         playerId: this.id
+//     };
+//     for (const key in players) {
+//         if (players.hasOwnProperty(key)) {
+//             this.emit("new_enemyPlayer", players[key]);
+//         }
+//     }
+//     this.broadcast.emit('new_enemyPlayer', newPlayer);
+
+//     players[socket.id] = newPlayer;
+// }
+
+
 function onMovement(movementData) {
     let that = this;
 
@@ -74,7 +100,6 @@ function onMovement(movementData) {
 
     // emit a message to all players about the player that moved
     this.broadcast.emit('playerMoved', players[this.id]);
-
     Object.keys(players).forEach(function (id) {
         enemy = players[id];
         currentPlayer = players[that.id];
@@ -102,23 +127,25 @@ function onMovement(movementData) {
             distance = Math.sqrt(dx * dx + dy * dy);
         };
         //**************************************************
-        //1.if Enemy and Player are the SAME SIZE
+        //1.if Enemy and Player are the SAME SIZE- NEED TO CHANGE
         function bothSameSize() {
-            that.emit('sameSize', currentPlayer, enemy);
-            that.broadcast.emit('sameSize', currentPlayer, enemy);
+            that.emit('sameSize', dx, dy, distance, currentPlayer, enemy);
+            that.broadcast.emit('sameSize', dx, dy, distance, currentPlayer, enemy);
 
         };
         //2.if current Player is Bigger/ remove the Enemy
         function playerBiggerThanEnemy() {
             that.emit('removeEnemy', enemy);
             that.broadcast.emit('removeEnemy', enemy);
-            delete players[id];            
+            console.log("before col: ", players);
+            delete players[id];
+            console.log("after col: ", players);
         };
         //3.if Enemy is bigger than current Players
         function enemyIsBiggerThanPlayer() {
             that.emit('removeCurrentPlayer', currentPlayer);
             that.broadcast.emit('removeCurrentPlayer', currentPlayer);
-            delete players[that.id];  
+            delete players[that.id];
         };
     }); // players collision loop ends here 
 };
@@ -129,8 +156,10 @@ function onDisconnect() {
     this.broadcast.emit('userDisconnected', players[this.id]);
     // remove this player from the players object
     delete players[this.id];
+    console.log("Players After Disconnect: ", players);
+    // var i = allClients.indexOf(this);
+    // allClients.splice(i, 1);
     // socket.broadcast.emit('userDisconnected', socket.id);
-    console.log(players);
 };
 
 http.listen(3000, function () {
@@ -141,3 +170,5 @@ function random(min, max) {
     var num = Math.floor(Math.random() * (max - min + 1)) + min;
     return num;
 };
+
+

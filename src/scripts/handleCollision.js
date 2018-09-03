@@ -11,7 +11,7 @@ let modal;
 
 // player and other players collision detection function 
 export function handleOtherPlayersCollision() {
-
+    
     //1.
     socket.on('sameSize', onSameSize);
     //2.
@@ -22,7 +22,9 @@ export function handleOtherPlayersCollision() {
 }; // handleOtherPlayersCollision ends here
 
 //1.
-export function onSameSize(playerInfo, enemyInfo) {
+function onSameSize(dx, dy, distance, playerInfo, enemyInfo) {
+    console.log(playersArray);
+    
     // compute the amount you need to move
     let step = enemyInfo.r + playerInfo.r - distance;
     // if there's a collision, normalize the vector
@@ -35,21 +37,28 @@ export function onSameSize(playerInfo, enemyInfo) {
     otherPlayer.draw(enemyInfo.x, enemyInfo.y);
 };
 //2.
-export function onRemoveEnemy(enemyInfo) {
+function onRemoveEnemy(enemyInfo) {
+    // playersArray = Object.values(players);
+
+    // console.log("before splice", playersArray);
+    
 
     deletePosition(enemyInfo.x,enemyInfo.y,enemyInfo.r);
-
+   
     // for (let i = playersArray.length - 1; i >= 0; i--) {
 
-    //     if (enemyInfo.playerId === playersArray[i].playerId) {
-    //         if (i > -1) {
-    //             playersArray.splice(i, 1);
-    //         }
+    //     if (enemyInfo.playerId === playersArray[i].playerId) {debugger;
+    //         // if (i > -1) {
+    //         // playersArray.splice(i, 1);
+    //         // }
     //     }
     // }
+    // console.log("array after splice: ", playersArray);
+    
 };
 //3.
-export function onRemoveCurrentPlayer(playerInfo) {
+function onRemoveCurrentPlayer(playerInfo) {
+    // playersArray = Object.values(players);
 
     deletePosition(playerInfo.x,playerInfo.y,playerInfo.r);
 
@@ -57,11 +66,10 @@ export function onRemoveCurrentPlayer(playerInfo) {
         stopMove();
         modalInit();
         // for (let i = playersArray.length - 1; i >= 0; i--) {
-        //     if (playersArray[i].playerId === socket) {
-        //         console.log(playersArray[i]);
-        //         if (i > -1) {
-        //             playersArray.splice(i, 1);
-        //         }
+        //     if (playersArray[i].playerId === socket.id) {
+        //         // if (i > -1) {
+        //             // playersArray.splice(i, 1);
+        //         // }
         //     }
         // }
     }
@@ -116,3 +124,4 @@ function growPlayerMass() {
     currentPlayer.r += extraMass;
     currentPlayer.draw(currentPlayer.r);
 };
+
