@@ -21,20 +21,16 @@ let foodNum = 25;
 let currentPlayer;
 let enemy;
 let distance;
-// let allClients = [];
+let dx;
+let dy;
 let newMass;
 let score;
 
 //Socket.IO starts here
 io.on('connection', socket => {
-    // allClients.push(socket);
-    // console.log(allClients);
 
     //print NEW connected user's id to console
     console.log('a NEW user is CONNECTED: ' + socket.id);
-
-
-    // socket.on("newPlayer", onNewPlayer);
 
     // create a new player and add it to the players object
     players[socket.id] = {
@@ -71,25 +67,6 @@ io.on('connection', socket => {
 
 }); //Socket.IO ends here
 
-// function onNewPlayer(data) {
-//     const newPlayer = {
-//         x: Math.floor(Math.random() * 700) + 50,
-//         y: Math.floor(Math.random() * 700) + 50,
-//         r: 20,
-//         color: 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
-//         playerId: this.id
-//     };
-//     for (const key in players) {
-//         if (players.hasOwnProperty(key)) {
-//             this.emit("new_enemyPlayer", players[key]);
-//         }
-//     }
-//     this.broadcast.emit('new_enemyPlayer', newPlayer);
-
-//     players[socket.id] = newPlayer;
-// }
-
-
 function onMovement(movementData) {
     let that = this;
 
@@ -105,20 +82,19 @@ function onMovement(movementData) {
         currentPlayer = players[that.id];
 
         if (currentPlayer.playerId !== enemy.playerId) {
-            // console.log("current player id: " + currentPlayer.playerId);
-            // console.log("enemy id: " + enemy.playerId);
             measureDistance();
             if (distance < (currentPlayer.r) + enemy.r) {
                 if (currentPlayer.r === enemy.r) {
                     bothSameSize();
+                    console.log("Both are the Same! Collision detected!");
                 } else if (currentPlayer.r > enemy.r) {
-                    // enemyIsBiggerThanPlayer();
                     playerBiggerThanEnemy();
+                    console.log("Player is Bigger!Collision detected!");
                 }
                 else {
                     enemyIsBiggerThanPlayer();
+                    console.log("Enemy is Bigger!Collision detected!");
                 }
-                console.log("Collision detected!");
             }
         };
         function measureDistance() {
@@ -131,21 +107,22 @@ function onMovement(movementData) {
         function bothSameSize() {
             that.emit('sameSize', dx, dy, distance, currentPlayer, enemy);
             that.broadcast.emit('sameSize', dx, dy, distance, currentPlayer, enemy);
-
+        
         };
         //2.if current Player is Bigger/ remove the Enemy
         function playerBiggerThanEnemy() {
             that.emit('removeEnemy', enemy);
             that.broadcast.emit('removeEnemy', enemy);
-            console.log("before col: ", players);
+            // console.log("before col Player is Bigger: ", players);
             delete players[id];
-            console.log("after col: ", players);
+            // console.log("after col Player is Bigger: ", players);
         };
         //3.if Enemy is bigger than current Players
         function enemyIsBiggerThanPlayer() {
             that.emit('removeCurrentPlayer', currentPlayer);
             that.broadcast.emit('removeCurrentPlayer', currentPlayer);
-            delete players[that.id];
+            console.log("players after col Enemy is bigger: ",players );
+            
         };
     }); // players collision loop ends here 
 };
@@ -172,3 +149,20 @@ function random(min, max) {
 };
 
 
+// function onNewPlayer(data) {
+//     const newPlayer = {
+//         x: Math.floor(Math.random() * 700) + 50,
+//         y: Math.floor(Math.random() * 700) + 50,
+//         r: 20,
+//         color: 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
+//         playerId: this.id
+//     };
+//     for (const key in players) {
+//         if (players.hasOwnProperty(key)) {
+//             this.emit("new_enemyPlayer", players[key]);
+//         }
+//     }
+//     this.broadcast.emit('new_enemyPlayer', newPlayer);
+
+//     players[socket.id] = newPlayer;
+// }

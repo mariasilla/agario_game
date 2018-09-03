@@ -3,15 +3,12 @@ import movePlayer from './player.js';
 import deletePosition from './deleteCurrentPlayerPos.js'
 import { log } from 'util';
 
-let dx;
-let dy;
-let distance;
 let score = 0;
 let modal;
 
 // player and other players collision detection function 
 export function handleOtherPlayersCollision() {
-    
+
     //1.
     socket.on('sameSize', onSameSize);
     //2.
@@ -23,8 +20,7 @@ export function handleOtherPlayersCollision() {
 
 //1.
 function onSameSize(dx, dy, distance, playerInfo, enemyInfo) {
-    console.log(playersArray);
-    
+    //from https://stackoverflow.com/questions/17600668/keeping-circles-from-overlapping
     // compute the amount you need to move
     let step = enemyInfo.r + playerInfo.r - distance;
     // if there's a collision, normalize the vector
@@ -32,52 +28,39 @@ function onSameSize(dx, dy, distance, playerInfo, enemyInfo) {
     // and then move the two centers apart
     enemyInfo.x -= dx * step / 2; enemyInfo.y -= dy * step / 2;
     playerInfo.x += dx * step / 2; playerInfo.y += dy * step / 2;
+
     //redraw enemy & player's circles
     currentPlayer.draw(playerInfo.x, playerInfo.y);
     otherPlayer.draw(enemyInfo.x, enemyInfo.y);
 };
 //2.
 function onRemoveEnemy(enemyInfo) {
-    // playersArray = Object.values(players);
+    deletePosition(enemyInfo.x, enemyInfo.y, enemyInfo.r);
+    for (let i = playersArray.length - 1; i >= 0; i--) {
 
-    // console.log("before splice", playersArray);
-    
+        if (enemyInfo.playerId === playersArray[i].playerId) {
 
-    deletePosition(enemyInfo.x,enemyInfo.y,enemyInfo.r);
-   
-    // for (let i = playersArray.length - 1; i >= 0; i--) {
-
-    //     if (enemyInfo.playerId === playersArray[i].playerId) {debugger;
-    //         // if (i > -1) {
-    //         // playersArray.splice(i, 1);
-    //         // }
-    //     }
-    // }
-    // console.log("array after splice: ", playersArray);
+                playersArray.splice(i, 1);
+            
+        }
+        console.log("after splice: ", playersArray);
+    }
+    console.log("players after col Player is Bigger", playersArray );
     
 };
+
 //3.
 function onRemoveCurrentPlayer(playerInfo) {
-    // playersArray = Object.values(players);
 
-    deletePosition(playerInfo.x,playerInfo.y,playerInfo.r);
-
+    deletePosition(playerInfo.x, playerInfo.y, playerInfo.r);
     if (playerInfo.playerId === socket.id) {
         stopMove();
         modalInit();
-        // for (let i = playersArray.length - 1; i >= 0; i--) {
-        //     if (playersArray[i].playerId === socket.id) {
-        //         // if (i > -1) {
-        //             // playersArray.splice(i, 1);
-        //         // }
-        //     }
-        // }
     }
 };
 
- function stopMove() {
+function stopMove() {
     canvas.removeEventListener("mousemove", movePlayer, false);
-    // alert("Game Over!")
 };
 
 function modalInit() {
@@ -89,32 +72,23 @@ function modalInit() {
 
 // player and food collision detection function 
 export function handleCollisionFood() {
-    // socket.on('food', function (foodCirclesArr) {
-    // console.log(foodCirclesArr);
-    //  }); //food socket ends here
 
     for (let i = foodCirclesArr.length - 1; i >= 0; i--) {
 
-        dx = currentPlayer.x - foodCirclesArr[i].x;
-        dy = currentPlayer.y - foodCirclesArr[i].y;
+        let dx = currentPlayer.x - foodCirclesArr[i].x;
+        let dy = currentPlayer.y - foodCirclesArr[i].y;
 
-        distance = Math.sqrt(dx * dx + dy * dy);
+        let distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < (currentPlayer.r + 1) + foodCirclesArr[i].r) {
-
-            if (currentPlayer.r + 1 > foodCirclesArr[i].r) {
-                // removeFoodItem();
-                deletePosition(foodCirclesArr[i].x,foodCirclesArr[i].y,foodCirclesArr[i].r);
-                growPlayerMass();
-                //update player's score
-                score += 5;
-                document.getElementById('score').innerHTML = "Score: " + score;
-                //remove foodItem from array 
-                if (i > -1) {
-                    foodCirclesArr.splice(i, 1);
-                }
-                // socket.emit('removedFoodItem', { x: foodCirclesArr[i].x, y: foodCirclesArr[i].y, r: foodCirclesArr[i].r });
-            }
+            // removeFoodItem();
+            deletePosition(foodCirclesArr[i].x, foodCirclesArr[i].y, foodCirclesArr[i].r);
+            growPlayerMass();
+            //update player's score
+            score += 5;
+            document.getElementById('score').innerHTML = "Score: " + score;
+            //remove foodItem from array 
+            foodCirclesArr.splice(i, 1);
         }
     }
 }; //handleCollisionFood ends here

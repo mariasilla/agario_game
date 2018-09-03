@@ -14,7 +14,6 @@ export default function movePlayer(e) {
     socket.emit('playerMovement', { x: currentPlayer.x, y: currentPlayer.y, r: currentPlayer.r, color: currentPlayer.color });
 };
 
-
 function setMousePosition(e) {
     const rect = canvas.getBoundingClientRect();
     return {
