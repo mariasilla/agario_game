@@ -33,9 +33,10 @@ export let socket = io();
 export let playersArray = [];
 export let currentPlayer;
 let otherPlayer;
+let currentPlayerBroadcast;
+
 
 let foodItem;
-let currentPlayerBroadcast;
 
 
 //Socket.IO starts here

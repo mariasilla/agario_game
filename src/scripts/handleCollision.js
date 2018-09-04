@@ -1,4 +1,5 @@
-import { foodCirclesArr, extraMass, currentPlayer, otherPlayer, socket, playersArray } from '../index.js';
+import { foodCirclesArr, extraMass, currentPlayer, socket, playersArray } from '../index.js';
+import Ball from '../index.js';
 import movePlayer from './player.js';
 import deletePosition from './deleteCurrentPlayerPos.js'
 import { log } from 'util';
@@ -21,13 +22,26 @@ export function handleOtherPlayersCollision() {
 
 //1.
 function onSameSize(dx, dy, playerInfo, enemyInfo) {
+
     //from https://stackoverflow.com/questions/17600668/keeping-circles-from-overlapping
     // compute the amount you need to move
+    // deletePosition(enemyInfo.x, enemyInfo.y, enemyInfo.r);
+    // let enemy = new Ball(enemyInfo.x, enemyInfo.y, enemyInfo.r, enemyInfo.color);
+
     const distance = Math.sqrt(dx * dx + dy * dy);
     const step = enemyInfo.r + playerInfo.r - distance;
+
+    //normalize the vector
+    dx /= distance; dy /= distance;
+
     // and then move the two centers apart
-    enemyInfo.x -= dx * step / 2; enemyInfo.y -= dy * step / 2;
-    playerInfo.x += dx * step / 2; playerInfo.y += dy * step / 2;
+    playerInfo.x += dx * step / 2;
+    playerInfo.y += dy * step / 2;
+    enemyInfo.x -= dx * step / 2;
+    enemyInfo.y -= dy * step / 2;
+
+    currentPlayer.draw(playerInfo.x, playerInfo.y);
+    // enemy.draw(enemyInfo.x, enemyInfo.y);
 
     //redraw enemy & player's circles
     // currentPlayer.draw(playerInfo.x, playerInfo.y);
