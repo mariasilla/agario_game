@@ -38,8 +38,6 @@ let foodItem;
 let currentPlayerBroadcast;
 
 
-
-
 //Socket.IO starts here
 function gameCreate() {
 

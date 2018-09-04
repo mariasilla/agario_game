@@ -36,6 +36,9 @@ function onSameSize(dx, dy, playerInfo, enemyInfo) {
 //2.
 function onRemoveEnemy(enemyInfo) {
     deletePosition(enemyInfo.x, enemyInfo.y, enemyInfo.r);
+    if (enemyInfo.playerId === socket.id) {
+        gameOver();
+    }
 
     for (let i = playersArray.length - 1; i >= 0; i--) {
 
@@ -48,16 +51,13 @@ function onRemoveEnemy(enemyInfo) {
     }
 
 };
-
-
 //3.
 function onRemoveCurrentPlayer(playerInfo) {
 
     deletePosition(playerInfo.x, playerInfo.y, playerInfo.r);
 
     if (playerInfo.playerId === socket.id) {
-        stopMove();
-        modalInit();
+        gameOver();
     }
 };
 
@@ -70,6 +70,11 @@ function modalInit() {
     window.addEventListener('mousemove', () => {
         modal.classList.add('modal--open');
     });
+};
+
+function gameOver() {
+    stopMove();
+    modalInit();
 };
 
 // player and food collision detection function 
