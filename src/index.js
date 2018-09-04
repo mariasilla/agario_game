@@ -32,9 +32,11 @@ Ball.prototype.draw = function () {
 export let socket = io();
 export let playersArray = [];
 export let currentPlayer;
-export let otherPlayer;
-let currentPlayerBroadcast;
+let otherPlayer;
+
 let foodItem;
+let currentPlayerBroadcast;
+
 
 
 
@@ -106,13 +108,13 @@ function addNewPlayer(playerInfo) {
 function onPlayerMove(playerInfo) {
 
       for (let i = playersArray.length - 1; i >= 0; i--) {
-            
-            const playerFound = getPlayerByID(playerInfo.playerId);  
+
+            const playerFound = getPlayerByID(playerInfo.playerId);
 
             addMovingPlayerCoords();
             otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, playerInfo.color);
             otherPlayer.draw();
-            
+
             function addMovingPlayerCoords() {
                   if (playerFound
                         && playerInfo.playerId !== socket.id) {

@@ -20,20 +20,18 @@ export function handleOtherPlayersCollision() {
 }; // handleOtherPlayersCollision ends here
 
 //1.
-function onSameSize(dx, dy, distance, playerInfo, enemyInfo) {
+function onSameSize(dx, dy, playerInfo, enemyInfo) {
     //from https://stackoverflow.com/questions/17600668/keeping-circles-from-overlapping
     // compute the amount you need to move
-    let step = enemyInfo.r + playerInfo.r - distance;
-    // if there's a collision, normalize the vector
-    dx /= distance; dy /= distance;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const step = enemyInfo.r + playerInfo.r - distance;
     // and then move the two centers apart
     enemyInfo.x -= dx * step / 2; enemyInfo.y -= dy * step / 2;
     playerInfo.x += dx * step / 2; playerInfo.y += dy * step / 2;
 
     //redraw enemy & player's circles
-    currentPlayer.draw(playerInfo.x, playerInfo.y);
-
-    otherPlayer.draw(enemyInfo.x, enemyInfo.y);
+    // currentPlayer.draw(playerInfo.x, playerInfo.y);
+    // otherPlayer.draw(enemyInfo.x, enemyInfo.y);
 };
 //2.
 function onRemoveEnemy(enemyInfo) {

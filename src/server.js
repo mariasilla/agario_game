@@ -63,7 +63,13 @@ io.on('connection', socket => {
         };
         foodCirclesArray.push(foodItem)
     };
-    socket.emit('food', foodCirclesArray); // FOOD ends here
+
+    // socket.on('foodArray', function (foodArray){
+        
+    // });
+
+    socket.emit('food', foodCirclesArray);
+     // FOOD ends here
 
 }); //Socket.IO ends here
 
@@ -87,16 +93,16 @@ function onMovement(movementData) {
 
                 switch (true) {
                     case (currentPlayer.r === enemy.r):
-                    bothSameSize();
-                    break;
+                        bothSameSize();
+                        break;
 
                     case (currentPlayer.r > enemy.r):
-                    playerBiggerThanEnemy();
-                    break;
+                        playerBiggerThanEnemy();
+                        break;
 
                     default:
-                    enemyIsBiggerThanPlayer();
-                    
+                        enemyIsBiggerThanPlayer();
+
                 }
 
             }
@@ -109,8 +115,8 @@ function onMovement(movementData) {
         //**************************************************
         //1.if Enemy and Player are the SAME SIZE- NEED TO CHANGE
         function bothSameSize() {
-            that.emit('sameSize', dx, dy, distance, currentPlayer, enemy);
-            that.broadcast.emit('sameSize', dx, dy, distance, currentPlayer, enemy);
+            that.emit('sameSize', dx, dy, currentPlayer, enemy);
+            that.broadcast.emit('sameSize', dx, dy, currentPlayer, enemy);
 
         };
         //2.if current Player is Bigger/ remove the Enemy
