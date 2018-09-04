@@ -37,7 +37,7 @@ io.on('connection', socket => {
         x: Math.floor(Math.random() * 700) + 50,
         y: Math.floor(Math.random() * 700) + 50,
         r: 20,
-        color: 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
+        color: 'rgb(' + random() + ',' + random() + ',' + random() + ')',
         playerId: socket.id
     };
 
@@ -84,17 +84,21 @@ function onMovement(movementData) {
         if (currentPlayer.playerId !== enemy.playerId) {
             measureDistance();
             if (distance < (currentPlayer.r) + enemy.r) {
-                if (currentPlayer.r === enemy.r) {
+
+                switch (true) {
+                    case (currentPlayer.r === enemy.r):
                     bothSameSize();
-                    console.log("Both are the Same! Collision detected!");
-                } else if (currentPlayer.r > enemy.r) {
+                    break;
+
+                    case (currentPlayer.r > enemy.r):
                     playerBiggerThanEnemy();
-                    console.log("Player is Bigger!Collision detected!");
-                }
-                else {
+                    break;
+
+                    default:
                     enemyIsBiggerThanPlayer();
-                    console.log("Enemy is Bigger!Collision detected!");
+                    
                 }
+
             }
         };
         function measureDistance() {
@@ -107,22 +111,18 @@ function onMovement(movementData) {
         function bothSameSize() {
             that.emit('sameSize', dx, dy, distance, currentPlayer, enemy);
             that.broadcast.emit('sameSize', dx, dy, distance, currentPlayer, enemy);
-        
+
         };
         //2.if current Player is Bigger/ remove the Enemy
         function playerBiggerThanEnemy() {
             that.emit('removeEnemy', enemy);
             that.broadcast.emit('removeEnemy', enemy);
-            // console.log("before col Player is Bigger: ", players);
             delete players[id];
-            // console.log("after col Player is Bigger: ", players);
         };
         //3.if Enemy is bigger than current Players
         function enemyIsBiggerThanPlayer() {
             that.emit('removeCurrentPlayer', currentPlayer);
             that.broadcast.emit('removeCurrentPlayer', currentPlayer);
-            console.log("players after col Enemy is bigger: ",players );
-            
         };
     }); // players collision loop ends here 
 };
@@ -134,35 +134,14 @@ function onDisconnect() {
     // remove this player from the players object
     delete players[this.id];
     console.log("Players After Disconnect: ", players);
-    // var i = allClients.indexOf(this);
-    // allClients.splice(i, 1);
-    // socket.broadcast.emit('userDisconnected', socket.id);
 };
 
 http.listen(3000, function () {
     console.log('listening on *:3000');
 });
 
-function random(min, max) {
+function random(min = 0, max = 255) {
     var num = Math.floor(Math.random() * (max - min + 1)) + min;
     return num;
 };
 
-
-// function onNewPlayer(data) {
-//     const newPlayer = {
-//         x: Math.floor(Math.random() * 700) + 50,
-//         y: Math.floor(Math.random() * 700) + 50,
-//         r: 20,
-//         color: 'rgb(' + random(0, 255) + ',' + random(0, 255) + ',' + random(0, 255) + ')',
-//         playerId: this.id
-//     };
-//     for (const key in players) {
-//         if (players.hasOwnProperty(key)) {
-//             this.emit("new_enemyPlayer", players[key]);
-//         }
-//     }
-//     this.broadcast.emit('new_enemyPlayer', newPlayer);
-
-//     players[socket.id] = newPlayer;
-// }

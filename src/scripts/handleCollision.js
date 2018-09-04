@@ -4,6 +4,7 @@ import deletePosition from './deleteCurrentPlayerPos.js'
 import { log } from 'util';
 
 let score = 0;
+let xtraScore = 5;
 let modal;
 
 // player and other players collision detection function 
@@ -31,6 +32,7 @@ function onSameSize(dx, dy, distance, playerInfo, enemyInfo) {
 
     //redraw enemy & player's circles
     currentPlayer.draw(playerInfo.x, playerInfo.y);
+
     otherPlayer.draw(enemyInfo.x, enemyInfo.y);
 };
 //2.
@@ -43,10 +45,9 @@ function onRemoveEnemy(enemyInfo) {
                 playersArray.splice(i, 1);
             
         }
-        console.log("after splice: ", playersArray);
-    }
-    console.log("players after col Player is Bigger", playersArray );
     
+    }
+       
 };
 
 //3.
@@ -71,21 +72,22 @@ function modalInit() {
 };
 
 // player and food collision detection function 
+//circle collision from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection
 export function handleCollisionFood() {
 
     for (let i = foodCirclesArr.length - 1; i >= 0; i--) {
 
-        let dx = currentPlayer.x - foodCirclesArr[i].x;
-        let dy = currentPlayer.y - foodCirclesArr[i].y;
+        const dx = currentPlayer.x - foodCirclesArr[i].x;
+        const dy = currentPlayer.y - foodCirclesArr[i].y;
 
-        let distance = Math.sqrt(dx * dx + dy * dy);
+        const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < (currentPlayer.r + 1) + foodCirclesArr[i].r) {
             // removeFoodItem();
             deletePosition(foodCirclesArr[i].x, foodCirclesArr[i].y, foodCirclesArr[i].r);
             growPlayerMass();
             //update player's score
-            score += 5;
+            score += xtraScore;
             document.getElementById('score').innerHTML = "Score: " + score;
             //remove foodItem from array 
             foodCirclesArr.splice(i, 1);

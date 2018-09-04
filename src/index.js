@@ -72,7 +72,7 @@ function onCreateFood(foodCirclesArray) {
 
       for (let i = 0; i < foodCirclesArray.length; i++) {
             foodItem = new Ball(foodCirclesArray[i].x, foodCirclesArray[i].y, foodCirclesArray[i].r,
-                  'rgb(' + random() + ',' + random(0, 255) + ',' + random(0, 255) + ')');
+                  'rgb(' + random() + ',' + random() + ',' + random() + ')');
             foodItem.draw();
             foodCirclesArr.push(foodItem);
       }
@@ -128,6 +128,8 @@ function onPlayerMove(playerInfo) {
 };
 
 
+
+
 function onDisconnect(disconnectedPlayer) {
       deletePosition(disconnectedPlayer.x, disconnectedPlayer.y, disconnectedPlayer.r);
 
@@ -141,11 +143,3 @@ function onDisconnect(disconnectedPlayer) {
       console.log("user disconnected: ", disconnectedPlayer.playerId);
 
 };
-
-// function spliceIfEqualID(array, idOne, idTwo) {
-//       for (let i = array.length - 1; i >= 0; i--) {
-//             if (idOne === idTwo) {
-//                   array.splice(i, 1);
-//             }
-//       }
-// }
