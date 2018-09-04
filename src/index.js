@@ -4,7 +4,7 @@ import movePlayer from './scripts/player.js';
 import { log } from 'util';
 import { random } from './scripts/random.js';
 import deletePosition from './scripts/deleteCurrentPlayerPos.js'
-
+import getPlayerByID from './scripts/getPlayerByID.js'
 
 export const canvas = document.getElementById("canvas");
 export const ctx = canvas.getContext("2d");
@@ -106,17 +106,19 @@ function addNewPlayer(playerInfo) {
 function onPlayerMove(playerInfo) {
 
       for (let i = playersArray.length - 1; i >= 0; i--) {
+            
+            const playerFound = getPlayerByID(playerInfo.playerId);  
 
-            getPlayerByID();
+            addMovingPlayerCoords();
             otherPlayer = new Ball(playerInfo.x, playerInfo.y, playerInfo.r, playerInfo.color);
             otherPlayer.draw();
-
-            function getPlayerByID() {
-                  if (playerInfo.playerId === playersArray[i].playerId
+            
+            function addMovingPlayerCoords() {
+                  if (playerFound
                         && playerInfo.playerId !== socket.id) {
 
-                        deletePosition(playersArray[i].x, playersArray[i].y, playersArray[i].r);
-                        otherPlayer = playersArray[i];
+                        deletePosition(playerFound.x, playerFound.y, playerFound.r);
+                        otherPlayer = playerFound;
                         otherPlayer.x = playerInfo.x;
                         otherPlayer.y = playerInfo.y;
                         otherPlayer.r = playerInfo.r;
@@ -126,9 +128,6 @@ function onPlayerMove(playerInfo) {
 
       }; //for loop ends here
 };
-
-
-
 
 function onDisconnect(disconnectedPlayer) {
       deletePosition(disconnectedPlayer.x, disconnectedPlayer.y, disconnectedPlayer.r);

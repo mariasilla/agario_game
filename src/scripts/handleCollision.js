@@ -1,4 +1,4 @@
-import { ctx, foodCirclesArr, extraMass, currentPlayer, otherPlayer, socket, playersArray } from '../index.js';
+import { foodCirclesArr, extraMass, currentPlayer, otherPlayer, socket, playersArray } from '../index.js';
 import movePlayer from './player.js';
 import deletePosition from './deleteCurrentPlayerPos.js'
 import { log } from 'util';
@@ -38,22 +38,25 @@ function onSameSize(dx, dy, distance, playerInfo, enemyInfo) {
 //2.
 function onRemoveEnemy(enemyInfo) {
     deletePosition(enemyInfo.x, enemyInfo.y, enemyInfo.r);
+
     for (let i = playersArray.length - 1; i >= 0; i--) {
 
         if (enemyInfo.playerId === playersArray[i].playerId) {
 
-                playersArray.splice(i, 1);
-            
+            playersArray.splice(i, 1);
+
         }
-    
+
     }
-       
+
 };
+
 
 //3.
 function onRemoveCurrentPlayer(playerInfo) {
 
     deletePosition(playerInfo.x, playerInfo.y, playerInfo.r);
+
     if (playerInfo.playerId === socket.id) {
         stopMove();
         modalInit();
