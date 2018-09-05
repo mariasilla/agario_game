@@ -51,7 +51,8 @@ function onSameSize(dx, dy, playerInfo, enemyInfo) {
 function onRemoveEnemy(enemyInfo) {
     deletePosition(enemyInfo.x, enemyInfo.y, enemyInfo.r);
     if (enemyInfo.playerId === socket.id) {
-        gameOver();
+        stopMove();
+        modalInit();
     }
 
     for (let i = playersArray.length - 1; i >= 0; i--) {
@@ -71,7 +72,8 @@ function onRemoveCurrentPlayer(playerInfo) {
     deletePosition(playerInfo.x, playerInfo.y, playerInfo.r);
 
     if (playerInfo.playerId === socket.id) {
-        gameOver();
+        stopMove();
+        modalInit();
     }
 };
 
@@ -86,10 +88,6 @@ function modalInit() {
     });
 };
 
-function gameOver() {
-    stopMove();
-    modalInit();
-};
 
 // player and food collision detection function 
 //circle collision from https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection

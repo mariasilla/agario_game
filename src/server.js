@@ -63,13 +63,7 @@ io.on('connection', socket => {
         };
         foodCirclesArray.push(foodItem)
     };
-
-    // socket.on('foodArray', function (foodArray){
-        
-    // });
-
-    socket.emit('food', foodCirclesArray);
-     // FOOD ends here
+    socket.emit('food', foodCirclesArray); // FOOD ends here
 
 }); //Socket.IO ends here
 
@@ -93,16 +87,16 @@ function onMovement(movementData) {
 
                 switch (true) {
                     case (currentPlayer.r === enemy.r):
-                        bothSameSize();
-                        break;
+                    bothSameSize();
+                    break;
 
                     case (currentPlayer.r > enemy.r):
-                        playerBiggerThanEnemy();
-                        break;
+                    playerBiggerThanEnemy();
+                    break;
 
                     default:
-                        enemyIsBiggerThanPlayer();
-
+                    enemyIsBiggerThanPlayer();
+                    
                 }
 
             }
