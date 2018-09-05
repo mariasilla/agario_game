@@ -41,17 +41,12 @@ io.on('connection', socket => {
         playerId: socket.id
     };
 
-
-    // send the players object(all players info) to the new player
     socket.emit('currentPlayers', players);
-    // console.log(players);
 
-    //send new player's info to all other current players 
     socket.broadcast.emit('newPlayer', players[socket.id]); //CURRENT PLAYER 
 
-    // when a player MOVES, update the player's data
     socket.on('playerMovement', onMovement);
-    //DISCONNECT CURRENT PLAYER - when a player Disconnects, remove them from the players object
+
     socket.on('disconnect', onDisconnect);
 
     //FOOD
@@ -63,7 +58,7 @@ io.on('connection', socket => {
         };
         foodCirclesArray.push(foodItem)
     };
-    socket.emit('food', foodCirclesArray); // FOOD ends here
+    socket.emit('food', foodCirclesArray);
 
 }); //Socket.IO ends here
 
@@ -75,7 +70,6 @@ function onMovement(movementData) {
     players[this.id].r = movementData.r;
     players[this.id].color = movementData.color;
 
-    // emit a message to all players about the player that moved
     this.broadcast.emit('playerMoved', players[this.id]);
     Object.keys(players).forEach(function (id) {
         enemy = players[id];
@@ -87,16 +81,16 @@ function onMovement(movementData) {
 
                 switch (true) {
                     case (currentPlayer.r === enemy.r):
-                    bothSameSize();
-                    break;
+                        bothSameSize();
+                        break;
 
                     case (currentPlayer.r > enemy.r):
-                    playerBiggerThanEnemy();
-                    break;
+                        playerBiggerThanEnemy();
+                        break;
 
                     default:
-                    enemyIsBiggerThanPlayer();
-                    
+                        enemyIsBiggerThanPlayer();
+
                 }
 
             }
@@ -106,34 +100,31 @@ function onMovement(movementData) {
             dy = currentPlayer.y - enemy.y;
             distance = Math.sqrt(dx * dx + dy * dy);
         };
-        //**************************************************
-        //1.if Enemy and Player are the SAME SIZE- NEED TO CHANGE
+
         function bothSameSize() {
             that.emit('sameSize', dx, dy, currentPlayer, enemy);
             that.broadcast.emit('sameSize', dx, dy, currentPlayer, enemy);
 
         };
-        //2.if current Player is Bigger/ remove the Enemy
+
         function playerBiggerThanEnemy() {
             that.emit('removeEnemy', enemy);
             that.broadcast.emit('removeEnemy', enemy);
             delete players[id];
         };
-        //3.if Enemy is bigger than current Players
+
         function enemyIsBiggerThanPlayer() {
             that.emit('removeCurrentPlayer', currentPlayer);
             that.broadcast.emit('removeCurrentPlayer', currentPlayer);
         };
-    }); // players collision loop ends here 
+    });
 };
 
 function onDisconnect() {
-    // emit a message to all players to remove this player
     console.log('user DISCONNECTED1: ' + this.id);
     this.broadcast.emit('userDisconnected', players[this.id]);
-    // remove this player from the players object
     delete players[this.id];
-    console.log("Players After Disconnect: ", players);
+    console.log("Players After Disconnecting: ", players);
 };
 
 http.listen(3000, function () {

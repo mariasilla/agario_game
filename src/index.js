@@ -56,9 +56,8 @@ function gameCreate() {
       // SOCKET DISCONNECT
       socket.on('userDisconnected', onDisconnect); //socket.on disconnect ends here
 
-};//Socket.IO ends here
+};
 
-// add player event listeners  
 canvas.addEventListener("mousemove", movePlayer, false);
 
 //function to initiate the game
@@ -66,7 +65,6 @@ function gameInit() {
       gameCreate();
 }
 
-//if mouse is over middle of canvas, start the game 
 gameInit();
 
 function onCreateFood(foodCirclesArray) {
@@ -101,9 +99,6 @@ function addNewPlayer(playerInfo) {
       playersArray.push(playerInfo);
 };
 
-// when a player moves, update the player data
-//find a player in the players array 
-//with the id that matches the id of the player whose coordinates are broadcasted from the server
 function onPlayerMove(playerInfo) {
 
       for (let i = playersArray.length - 1; i >= 0; i--) {
@@ -127,7 +122,7 @@ function onPlayerMove(playerInfo) {
                   };
             }
 
-      }; //for loop ends here
+      };
 };
 
 function onDisconnect(disconnectedPlayer) {
